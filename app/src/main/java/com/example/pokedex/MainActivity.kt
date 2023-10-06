@@ -1,9 +1,12 @@
 package com.example.pokedex
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,65 +28,17 @@ import com.example.pokedex.ui.theme.PokedexTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            PokedexTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("GUYS")
-                    DemoScreen()
-                }
-            }
-        }
-    }
-}
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-@Composable
-fun DemoScreen() {
-    var isOn by remember {
-        mutableStateOf(false)
+        setContentView(R.layout.activity_main)
     }
 
-    Box(Modifier.fillMaxSize(), Alignment.TopCenter) {
-        //Box(modifier = Modifier.size(40.dp), Alignment.TopCenter) {
-        SearchButton(isOn) {
-            isOn = !isOn
-        }
-    }
-        Box(Modifier.fillMaxSize(), Alignment.TopEnd) {
-        FilterButton(isOn) {
-            isOn = !isOn
-        }
-    }
-}
-@Composable
-fun SearchButton(isOn: Boolean, onClick: () -> Unit) {
 
-    Button(onClick = onClick) {
-        if (isOn) {
-            Text(text = "Off")
-        } else {
-            Text("🔍")
-        }
-    }
-}
+    fun loadSearch(view : View){
+       val intent = Intent(this,FilterActivity::class.java)
 
-@Composable
-fun FilterButton(isOn: Boolean, onClick: () -> Unit) {
-
-    Button(onClick = onClick) {
-        if (isOn) {
-            Text(text = "Off")
-        } else {
-            Text("On")
-        }
+        startActivity(intent)
     }
+    fun loadFilter(view : View){
+        //val intent = Intent(this,FilterActivity::class.java)
+    }
+
 }
