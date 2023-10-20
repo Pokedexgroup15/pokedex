@@ -82,7 +82,10 @@ fun DemoScreen() {
 @Composable
 fun SearchButton(isOn: Boolean, onClick: () -> Unit) {
     val context = LocalContext.current
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"))
+    //val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"))
+    val intent = Intent(context, FilterActivity::class.java)
+
+
     Button(onClick = onClick) {
 
         if (isOn) {
