@@ -26,6 +26,10 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -172,13 +176,18 @@ fun pokemonPictureAndLogo(modifier: Modifier){
             contentDescription = "Test",
             modifier = Modifier.fillMaxSize()
         )
+        var isFavorite by remember { mutableStateOf(false) }
         Icon(
-            imageVector = Icons.Default.Face,
-            contentDescription = "Icon",
+            painter = painterResource(id = R.drawable.pokeball_bw),
+            contentDescription = "Favorite option",
+            tint = if (isFavorite) Color.Red else Color.Black,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .size(22.dp)
+                .padding(5.dp)
+                .size(25.dp)
+                .clickable { isFavorite = !isFavorite }
         )
+
     }
 
 }
