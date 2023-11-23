@@ -9,8 +9,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.pokedex.UserInterface.BottomBar
-import com.example.pokedex.UserInterface.Favorites
+import com.example.pokedex.UserInterface.favoritePage.Favorites
 import com.example.pokedex.UserInterface.ShowcasePage
+import com.example.pokedex.UserInterface.favoritePage.FavoritesViewModel
 import com.example.pokedex.UserInterface.homePage
 
 
