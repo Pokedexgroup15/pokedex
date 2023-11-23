@@ -11,10 +11,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.ModifierLocalReadScope
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,7 +45,6 @@ fun pokemonPage(){
     }
 }
 
-@Preview
 @Composable
 fun EvolutionBar(){
     Row(
@@ -66,7 +68,7 @@ fun EvolutionBar(){
     {
         EvolutionCircleImage()
         EvolutionArrowImage()
-        EvolutionCircleImage()
+        GradientEvolutionCircleImage()
         EvolutionArrowImage()
         EvolutionCircleImage()
     /*repeat(3){
@@ -81,12 +83,17 @@ fun EvolutionCircleImage() {
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .size(100.dp)
+            .clip(CircleShape)
     ) {
         Image(
             painter = painterResource(id = R.drawable.evolutionscircle),
             contentDescription = "Evolution",
-            modifier = Modifier.size(100.dp)
+            modifier = Modifier.fillMaxSize()
+                .size(100.dp),
+            contentScale = ContentScale.Crop
+            //modifier = Modifier.size(100.dp)
         )
+        EvolutionsPicture()
     }
 }
 
@@ -111,5 +118,33 @@ fun DropDownArrowImage(modifier: Modifier = Modifier){
             .offset(y = 2.dp),
         contentDescription = null
     )
+}
+
+@Composable
+fun EvolutionsPicture(){
+    Image(
+        painter = painterResource(id = R.drawable.raichu),
+        //modifier = Modifier,
+          //  .size(65.dp)
+            //.offset(y = -10.dp)
+            //.offset(x = 3.dp),
+        contentDescription = null
+    )
+}
+
+@Composable
+fun GradientEvolutionCircleImage(){
+    Box(contentAlignment = Alignment.Center,
+        modifier = Modifier
+        .size(100.dp)){
+    Image(
+        painter = painterResource(id = R.drawable.gradientrings),
+        modifier = Modifier
+            .size(95.dp)
+            .offset(y = -8.dp),
+        contentDescription = null
+    )
+    EvolutionsPicture()
+    }
 }
 

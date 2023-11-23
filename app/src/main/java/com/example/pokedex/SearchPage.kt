@@ -111,7 +111,7 @@ fun Pokemonlists(Pokemons:List<Pokemon>
 ) {
 
 
-    LazyColumn() {
+    LazyColumn {
 
         item {
             Spacer(modifier = Modifier.height(39.dp))
