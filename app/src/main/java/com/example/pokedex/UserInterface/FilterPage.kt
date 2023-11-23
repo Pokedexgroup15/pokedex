@@ -22,7 +22,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pokedex.MainActivity
+import com.example.pokedex.Pokemon
+import com.example.pokedex.PokemonObject
 import com.example.pokedex.R
 
 
@@ -31,13 +34,14 @@ class FilterPage : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val pokemonList: List<Pokemon> = PokemonObject.pokeList
         setContent {
-            FilterPageContent()
+            FilterPageContent(pokemonList = pokemonList)
         }
     }
 }
 @Composable
-fun FilterPageContent() {
+fun FilterPageContent(pokemonList: List<Pokemon>) {
     var selectedGeneration by remember { mutableStateOf(-1) }
     var selectedName by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current // Get the current context(CLASS FOLKS)
@@ -70,12 +74,12 @@ fun FilterPageContent() {
         //SortUp()
 
         SortButtons(
-            //pokemonList = //pokemon list from api
+            pokemonList = pokemonList,//pokemon list from api
             onLowToHighClick = {
-                //pokemonList = lowToHighSort(pokemonList)
+                lowToHighSort(pokemonList)
                 },
             onHighToLowClick = {
-                //pokemonList = highToLowSort(pokemonList)
+                highToLowSort(pokemonList)
             }
         )
         TypeButton()
@@ -113,7 +117,7 @@ fun FilterPageContent() {
 
 @Composable
 fun SortButtons(
-    //pokemonList: List<Pokemon>,
+    pokemonList: List<Pokemon>,
     onLowToHighClick: () -> Unit,
     onHighToLowClick: () -> Unit
 ) {
@@ -162,15 +166,15 @@ enum class SortOption {
     HighToLow
 }
 
-/*fun lowToHighSort(pokemonList: List<Pokemon>): List<Pokemon> {
-    return pokemonList.sortedBy { it.number }
+fun lowToHighSort(pokemonList: List<Pokemon>): List<Pokemon> {
+    return pokemonList.sortedBy { it.id }
 }
 
 fun highToLowSort(pokemonList: List<Pokemon>): List<Pokemon> {
-    return pokemonList.sortedByDescending { it.number }
+    return pokemonList.sortedByDescending { it.id }
 }
 
- */
+
 
 
 @Composable
