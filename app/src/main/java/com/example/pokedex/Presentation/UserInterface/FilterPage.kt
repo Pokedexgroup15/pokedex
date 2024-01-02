@@ -27,9 +27,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.pokedex.FilterViewModel
+import com.example.pokedex.Presentation.FilterViewModel
 import com.example.pokedex.R
-import com.example.pokedex.navigation.Route
+import com.example.pokedex.Presentation.navigation.Route
 import kotlin.math.round
 
 class FilterPage : ComponentActivity() {
