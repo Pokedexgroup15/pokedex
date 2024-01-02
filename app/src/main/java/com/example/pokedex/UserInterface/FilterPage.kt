@@ -68,7 +68,9 @@ class FilterPage : ComponentActivity() {
                 ) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "backArrow"
+                        contentDescription = "backArrow",
+                        modifier = Modifier
+                            .size(120.dp)
                     )
                 }
 
