@@ -49,7 +49,7 @@ import coil.compose.AsyncImage
 import com.example.pokedex.Presentation.theme.Font
 import com.example.pokedex.Data.Pokemon
 import com.example.pokedex.R
-import com.example.pokedex.navigation.Route
+import com.example.pokedex.Presentation.navigation.Route
 import com.example.pokedex.viweModel.searchPageViewModel
 
 

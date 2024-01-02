@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import com.example.pokedex.Data.Pokemon
 import com.example.pokedex.Presentation.theme.PokedexTheme
 import kotlinx.coroutines.*
-import com.example.pokedex.navigation.navStart
+import com.example.pokedex.Presentation.navigation.navStart
 import com.example.pokedex.viweModel.ApiViewModel
 
 

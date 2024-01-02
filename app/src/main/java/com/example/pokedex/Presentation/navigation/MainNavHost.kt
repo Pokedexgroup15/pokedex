@@ -1,4 +1,4 @@
-package com.example.pokedex.navigation
+package com.example.pokedex.Presentation.navigation
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
