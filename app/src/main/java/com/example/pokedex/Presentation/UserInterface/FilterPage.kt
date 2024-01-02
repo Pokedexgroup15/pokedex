@@ -1,6 +1,7 @@
 package com.example.pokedex.Presentation.UserInterface
 
 import android.os.Bundle
+import android.text.Layout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -8,13 +9,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+//import androidx.compose.foundation.layout.ColumnScopeInstance.align
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -60,21 +64,32 @@ class FilterPage : ComponentActivity() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(38.dp)
+                    .height(86.dp),
+                verticalAlignment = Alignment.CenterVertically
+
             ) {
                 Box(
                     modifier = Modifier
-                        .size(32.dp)
+                        .size(36.dp)
+                        //.padding(5.dp)
                         .clickable {
                             navController.navigate(Route.POKEDEX.path)
                         }
+
                 ) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = "backArrow",
                         modifier = Modifier
-                            .size(120.dp)
+                            .padding(start=6.dp)
+                            .align(Alignment.CenterEnd)
+                            .size(46.dp)
+
                     )
+                    //Spacer(modifier = Modifier.fillMaxWidth())
+
+
+
                 }
 
                 Spacer(modifier = Modifier.width(30.dp))
@@ -84,6 +99,20 @@ class FilterPage : ComponentActivity() {
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
                 )
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                )
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "backArrow",
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clickable {
+
+                        })
+                        //.align(Aligment.CenterVertically))
+
             }
 
 

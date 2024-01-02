@@ -65,7 +65,7 @@ fun homePage(navController: NavHostController,viewModel: searchPageViewModel) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(96.dp),
+                .height(86.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Spacer(modifier = Modifier.width(71.dp))
@@ -166,8 +166,6 @@ fun pokemonBox(modifier: Modifier,
     Box(
         modifier = modifier
             .clickable {
-
-
                viewModel.setPokemon(pokemon)
                 navController.navigate(Route.Pokemon.path)
             }

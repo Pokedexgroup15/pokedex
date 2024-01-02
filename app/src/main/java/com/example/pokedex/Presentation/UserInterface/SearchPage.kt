@@ -70,7 +70,7 @@ fun SearchPageFun(navController: NavHostController, viewModel: searchPageViewMod
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(0xFFE0E0E0), RoundedCornerShape(15.dp))
-                .height(56.dp),
+                .height(86.dp),
 
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -80,7 +80,8 @@ fun SearchPageFun(navController: NavHostController, viewModel: searchPageViewMod
                         val intent = Intent(context, MainActivity::class.java)
                         context.startActivity(intent)
 
-                    })
+                    }
+                      .size(36.dp))
 
             TextField(
                 value = name,
@@ -124,7 +125,7 @@ fun Pokemonlists(pokeList:List<Pokemon>,
 
 
         item {
-            Spacer(modifier = Modifier.height(39.dp))
+            Spacer(modifier = Modifier.height(32.dp))
         }
         items(pokeList) { currentPokemon ->
 

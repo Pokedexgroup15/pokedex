@@ -84,6 +84,8 @@ import com.example.pokedex.viweModel.searchPageViewModel
                     )
                 }
             }
+
+
             Divider(
                 color = Color.Black,
                 thickness = 1.5.dp,

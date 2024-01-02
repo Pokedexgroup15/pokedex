@@ -44,7 +44,7 @@ fun Favorites(navHostController: NavHostController, viewModel: searchPageViewMod
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(96.dp),
+                .height(86.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Spacer(modifier = Modifier.width(71.dp))
