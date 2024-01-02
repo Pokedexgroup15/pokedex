@@ -3,6 +3,7 @@ package com.example.pokedex
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.pokedex.UserInterface.FilterPage
 import com.example.pokedex.UserInterface.SortOption
 
 // ViewModel
