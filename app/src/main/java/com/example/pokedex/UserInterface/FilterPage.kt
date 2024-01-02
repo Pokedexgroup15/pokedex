@@ -9,6 +9,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -20,6 +21,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
@@ -28,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.pokedex.FilterViewModel
 import com.example.pokedex.R
 import com.example.pokedex.navigation.Route
+import kotlin.math.round
 
 class FilterPage : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,55 +77,85 @@ class FilterPage : ComponentActivity() {
                     )
                 }
 
-                Spacer(modifier = Modifier.width(71.dp))
+                Spacer(modifier = Modifier.width(30.dp))
 
                 Text(
-                    text = "Filters",
+                    text = "Filters and sorting",
                     fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
+
 
             //SortUp()
             Column (
                 modifier = Modifier.verticalScroll(rememberScrollState(), true)
             ){
-
-
-                SortButtons(
-                    //pokemonList = //pokemon list from api
-                    onLowToHighClick = {
-                        //pokemonList = lowToHighSort(pokemonList)
-                    },
-                    onHighToLowClick = {
-                        //pokemonList = highToLowSort(pokemonList)
-                    }
+                Box (modifier = Modifier
+                    .border(1.dp, Color.LightGray, shape = RoundedCornerShape(20.dp)),
                 )
-                TypeButton()
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                for (generation in 1..9) {
-                    GenerationButton(
-                        generation = generation,
-                        selectedGeneration = selectedGeneration,
-                        onGenerationSelected = {
-                            if (selectedGeneration == it) {
-                                selectedGeneration = -1
-                            } else {
-                                selectedGeneration = it
-                            }
-                        },
-                        isGenerationSelected = selectedGeneration == generation,
-                        isNameInGeneration = isNameInGeneration(selectedName, generation)
-                    )
-
-                    if (selectedGeneration == generation) {
-                        GenerationNameList(
-                            generation = generation,
-                            selectedName = selectedName,
-                            onNameSelected = { selectedName = it }
+                {
+                    Column {
+                        Text(
+                            text = "Sorting",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .padding(10.dp)
                         )
+                        SortButtons(
+                            //pokemonList = //pokemon list from api
+                            onLowToHighClick = {
+                                //pokemonList = lowToHighSort(pokemonList)
+                            },
+                            onHighToLowClick = {
+                                //pokemonList = highToLowSort(pokemonList)
+                            }
+                        )
+                    }
+                }
+
+
+                Box (modifier = Modifier
+                        .border(1.dp, Color.LightGray, shape = RoundedCornerShape(20.dp)),
+                    ) {
+
+                    Column {
+                        Text(
+                            text = "Filters",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .padding(10.dp)
+                        )
+                        TypeButton()
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        for (generation in 1..9) {
+                            GenerationButton(
+                                generation = generation,
+                                selectedGeneration = selectedGeneration,
+                                onGenerationSelected = {
+                                    if (selectedGeneration == it) {
+                                        selectedGeneration = -1
+                                    } else {
+                                        selectedGeneration = it
+                                    }
+                                },
+                                isGenerationSelected = selectedGeneration == generation,
+                                isNameInGeneration = isNameInGeneration(selectedName, generation)
+                            )
+
+                            if (selectedGeneration == generation) {
+                                GenerationNameList(
+                                    generation = generation,
+                                    selectedName = selectedName,
+                                    onNameSelected = { selectedName = it }
+                                )
+                            }
+                        }
                     }
                 }
             }
