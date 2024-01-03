@@ -1,4 +1,4 @@
-package com.example.pokedex.Domain
+package com.example.pokedex.domain
 
 
 interface PokemonRepository {

@@ -1,4 +1,4 @@
-package com.example.pokedex.Presentation.UserInterface.HomePage
+package com.example.pokedex.presentation.userInterface.HomePage
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

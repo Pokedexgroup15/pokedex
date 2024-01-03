@@ -2,7 +2,7 @@ package com.example.pokedex.viweModel
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.pokedex.Domain.Pokemon
+import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.PokemonObject
 import kotlinx.coroutines.*
 import java.net.URL

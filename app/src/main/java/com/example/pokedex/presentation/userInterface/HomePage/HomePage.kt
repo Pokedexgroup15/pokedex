@@ -1,4 +1,4 @@
-package com.example.pokedex.Presentation.UserInterface.HomePage
+package com.example.pokedex.presentation.userInterface.HomePage
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
@@ -46,10 +45,10 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import com.example.pokedex.Presentation.theme.Font
-import com.example.pokedex.Domain.Pokemon
+import com.example.pokedex.presentation.theme.Font
+import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.R
-import com.example.pokedex.Presentation.navigation.Route
+import com.example.pokedex.presentation.navigation.Route
 import com.example.pokedex.viweModel.searchPageViewModel
 
 

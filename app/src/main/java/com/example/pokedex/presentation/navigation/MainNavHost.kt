@@ -1,4 +1,4 @@
-package com.example.pokedex.Presentation.navigation
+package com.example.pokedex.presentation.navigation
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -11,11 +11,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.pokedex.ShowcasePage
 
-import com.example.pokedex.Presentation.UserInterface.HomePage.BottomBar
-import com.example.pokedex.Presentation.UserInterface.Favourite.Favorites
-import com.example.pokedex.Presentation.UserInterface.FilterPage.FilterPageContent
-import com.example.pokedex.Presentation.UserInterface.HomePage.homePage
-import com.example.pokedex.Presentation.UserInterface.SearchPage.SearchPageFun
+import com.example.pokedex.presentation.userInterface.HomePage.BottomBar
+import com.example.pokedex.presentation.userInterface.Favourite.Favorites
+import com.example.pokedex.presentation.userInterface.FilterPage.FilterPageContent
+import com.example.pokedex.presentation.userInterface.FilterPage.FilterViewModel
+import com.example.pokedex.presentation.userInterface.HomePage.homePage
+import com.example.pokedex.presentation.userInterface.SearchPage.SearchPageFun
 
 import com.example.pokedex.viweModel.searchPageViewModel
 
@@ -23,6 +24,8 @@ import com.example.pokedex.viweModel.searchPageViewModel
 @Composable
 fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
     val viewModel = viewModel<searchPageViewModel>()
+    val filterviewModel = viewModel<FilterViewModel>()
+
     NavHost(
         navController = navController,
         startDestination = Route.POKEDEX.path,
@@ -38,7 +41,7 @@ fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier)
            Favorites(navController, viewModel)
         }
         composable(Route.Filter.path) {
-            FilterPageContent()
+            FilterPageContent(navController,filterviewModel)
         }
         composable(Route.Pokemon.path)
             {

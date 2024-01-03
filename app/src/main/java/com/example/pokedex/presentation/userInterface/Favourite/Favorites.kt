@@ -1,4 +1,4 @@
-package com.example.pokedex.Presentation.UserInterface.Favourite
+package com.example.pokedex.presentation.userInterface.Favourite
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,7 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.pokedex.Presentation.UserInterface.HomePage.PokemonList
+import com.example.pokedex.presentation.userInterface.HomePage.PokemonList
 import com.example.pokedex.R
 import com.example.pokedex.viweModel.searchPageViewModel
 

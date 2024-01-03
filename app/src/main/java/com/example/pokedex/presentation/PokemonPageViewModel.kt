@@ -1,7 +1,7 @@
 package com.example.pokedex.viweModel
 
 import androidx.lifecycle.ViewModel
-import com.example.pokedex.Domain.Pokemon
+import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.PokemonObject
 
 //    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
@@ -12,6 +12,9 @@ class searchPageViewModel : ViewModel() {
     var PokemonsFave = PokemonObject.faveList
 
     var Pokemons = PokemonObject.pokeList
+
+    var repository = RepositoryImpl()
+
 
 
 

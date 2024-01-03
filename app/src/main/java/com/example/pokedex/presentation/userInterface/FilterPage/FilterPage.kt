@@ -1,7 +1,6 @@
-package com.example.pokedex.Presentation.UserInterface.FilterPage
+package com.example.pokedex.presentation.userInterface.FilterPage
 
 import android.os.Bundle
-import android.text.Layout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -25,16 +24,13 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.pokedex.Presentation.FilterViewModel
 import com.example.pokedex.R
-import com.example.pokedex.Presentation.navigation.Route
-import kotlin.math.round
+import com.example.pokedex.presentation.navigation.Route
 
 class FilterPage : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
