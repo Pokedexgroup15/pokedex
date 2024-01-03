@@ -47,7 +47,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.pokedex.presentation.userInterface.HomePage.EvolutionBar
+import com.example.pokedex.presentation.userInterface.HomePage.getTypeIconwithID
 import com.example.pokedex.viweModel.searchPageViewModel
+
 
     @Composable
     fun ShowcasePage(navHostController: NavHostController,viewModel: searchPageViewModel) {
@@ -66,26 +68,46 @@ import com.example.pokedex.viweModel.searchPageViewModel
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.Start
+                    .padding(5.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 IconButton(onClick = { val intent = Intent(context, MainActivity::class.java)
                     context.startActivity(intent) }) {
                     Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                 }
-                Spacer(modifier = Modifier.width(14.dp))
+                //Spacer(modifier = Modifier.width(14.dp))
                 //Texten skal retrieve en string fra PokeAPI'en.
 
-                pokemon?.let {
+                viewModel.getPokemon()?.let {
                     Text(
                         text = it.name,
                         fontSize = 30.sp,
                         fontWeight = FontWeight.Bold
                     )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        if (pokemon != null) {
+                            Image(
+                                painter = painterResource(id = getTypeIconwithID(pokemon.type1)),
+                                contentDescription = "type1",
+                                modifier = Modifier.size(30.dp)
+                            )
+                        }
+                        if (pokemon != null) {
+                            if (pokemon.type2 != "null") {
+                                Image(
+                                    painter = painterResource(id = getTypeIconwithID(pokemon.type2)),
+                                    contentDescription = "type2",
+                                    modifier = Modifier.size(30.dp)
+                                )
+                            }
+                        }
+                    }
                 }
             }
-
-
             Divider(
                 color = Color.Black,
                 thickness = 1.5.dp,
