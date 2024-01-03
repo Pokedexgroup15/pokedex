@@ -35,7 +35,9 @@ import androidx.navigation.compose.rememberNavController
 //import com.example.pokedex.Presentation.UserInterface
 import com.example.pokedex.Presentation.ResetViewModel
 import com.example.pokedex.R
-import com.example.pokedex.Presentation.navigation.Route
+
+import com.example.pokedex.presentation.navigation.Route
+import com.example.pokedex.presentation.userInterface.FilterPage.FilterViewModel
 import kotlin.math.round
 
 class FilterPage : ComponentActivity() {
@@ -228,178 +230,176 @@ fun SortButtons(
     }
 }
 
-    enum class SortOption {
-        LowToHigh,
-        HighToLow
+enum class SortOption {
+    LowToHigh,
+    HighToLow
+}
+@Composable
+fun TypeButton(sharedViewModel: ResetViewModel) {
+    var isMenuVisible by remember { mutableStateOf(true) }
+    var selectedTypes by remember { mutableStateOf(emptyList<Int>()) }
+
+    Button(
+        onClick = { isMenuVisible = true },
+        modifier = Modifier.padding(16.dp)
+    ) {
+        Text(text = "Type")
     }
-    @Composable
-    fun TypeButton(sharedViewModel: ResetViewModel) {
-        var isMenuVisible by remember { mutableStateOf(true) }
-        var selectedTypes by remember { mutableStateOf(emptyList<Int>()) }
 
-        Button(
-            onClick = { isMenuVisible = true },
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text(text = "Type")
-        }
+    if (isMenuVisible) {
+        val types = listOf(
+            R.drawable.bugicon,
+            R.drawable.dark,
+            R.drawable.dragon,
+            R.drawable.electric,
+            R.drawable.fairy,
+            R.drawable.fighting,
+            R.drawable.fire,
+            R.drawable.flying,
+            R.drawable.ghost,
+            R.drawable.grass,
+            R.drawable.ground,
+            R.drawable.iceicla,
+            R.drawable.normal,
+            R.drawable.poison,
+            R.drawable.psychic,
+            R.drawable.rock,
+            R.drawable.steel,
+            R.drawable.water
+        )
+        val columnsPerRow = 3
+        val groupedTypes = types.chunked(columnsPerRow)
 
-        if (isMenuVisible) {
-            val types = listOf(
-                R.drawable.bugicon,
-                R.drawable.dark,
-                R.drawable.dragon,
-                R.drawable.electric,
-                R.drawable.fairy,
-                R.drawable.fighting,
-                R.drawable.fire,
-                R.drawable.flying,
-                R.drawable.ghost,
-                R.drawable.grass,
-                R.drawable.ground,
-                R.drawable.iceicla,
-                R.drawable.normal,
-                R.drawable.poison,
-                R.drawable.psychic,
-                R.drawable.rock,
-                R.drawable.steel,
-                R.drawable.water
-            )
-            val columnsPerRow = 3
-            val groupedTypes = types.chunked(columnsPerRow)
-
-            Column {
-                for (columnTypes in groupedTypes) {
-                    Row {
-                        for (type in columnTypes) {
-                            TypeItemButton(type, sharedViewModel.selectedTypes.value) { selected ->
-                                sharedViewModel.selectedTypes.value = selected
-                            }
-                            Spacer(modifier = Modifier.width(10.dp))
+        Column {
+            for (columnTypes in groupedTypes) {
+                Row {
+                    for (type in columnTypes) {
+                        TypeItemButton(type, sharedViewModel.selectedTypes.value) { selected ->
+                            sharedViewModel.selectedTypes.value = selected
                         }
+                        Spacer(modifier = Modifier.width(10.dp))
                     }
                 }
             }
         }
     }
+}
 
-    @Composable
-    fun TypeItemButton(type: Int, selectedTypes: List<Int>, onTypeSelected: (List<Int>) -> Unit) {
-        val isButtonClicked = selectedTypes.contains(type)
+@Composable
+fun TypeItemButton(type: Int, selectedTypes: List<Int>, onTypeSelected: (List<Int>) -> Unit) {
+    val isButtonClicked = selectedTypes.contains(type)
 
-        Box(
+    Box(
+        modifier = Modifier
+            .size(140.dp, 31.dp)
+            .border(
+                width = 2.dp,
+                color = if (isButtonClicked) Color.Green else Color.Gray,
+                shape = RectangleShape
+            )
+            //Only 2 can be selected.
+            .clickable {
+                onTypeSelected(
+                    if (isButtonClicked) selectedTypes - type
+                    else {
+                        if (selectedTypes.size < 2) {
+                            selectedTypes + type
+                        } else {
+                            selectedTypes
+                        }
+                    }
+                )
+            }
+    ) {
+        Image(
+            painter = painterResource(id = type),
+            contentDescription = type.toString(),
             modifier = Modifier
-                .size(140.dp, 31.dp)
-                .border(
-                    width = 2.dp,
-                    color = if (isButtonClicked) Color.Green else Color.Gray,
-                    shape = RectangleShape
-                )
-                //Only 2 can be selected.
+                .fillMaxSize()
+                .padding(3.5.dp)
+        )
+    }
+}
+
+
+@Composable
+fun GenerationButton(
+    generation: Int,
+    selectedGeneration: Int,
+    onGenerationSelected: (Int) -> Unit,
+    isGenerationSelected: Boolean,
+    isNameInGeneration: Boolean
+) {
+    Button(
+        onClick = { onGenerationSelected(generation) },
+        modifier = Modifier.padding(16.dp)
+    ) {
+        //Maybe my memory is like a goldfish, but this memory works!
+        val buttonText = "Generation $generation" + if (isNameInGeneration) " ✅" else ""
+        Text(text = buttonText)
+    }
+}
+
+@Composable
+fun GenerationNameList(
+    generation: Int,
+    selectedName: String?,
+    onNameSelected: (String) -> Unit
+) {
+    val namesForGeneration = when (generation) {
+        1 -> listOf("Red", "Green", "Blue", "Yellow")
+        2 -> listOf("Gold", "Silver", "Crystal")
+        3 -> listOf("Ruby", "Sapphire", "Emerald", "FireRed", "LeafGreen")
+        4 -> listOf("Diamond", "Pearl", "Platinum", "HeartGold", "SoulSilver")
+        5 -> listOf("Black", "White", "Black 2", "White 2")
+        6 -> listOf("X", "Y", "Omega Ruby", "Alpha Sapphire")
+        7 -> listOf("Sun", "Moon", "Ultra Sun", "Ultra Moon")
+        8 -> listOf("Sword", "Shield", "Brilliant Diamond", "Shining Pearl", "Legends: Arceus")
+        9 -> listOf("Scarlet", "Violet")
+        else -> emptyList()
+    }
+
+    Column(
+        modifier = Modifier.padding(16.dp)
+    ) {
+        namesForGeneration.forEach { name ->
+            val isSelected = name == selectedName
+            val textModifier = Modifier
                 .clickable {
-                    onTypeSelected(
-                        if (isButtonClicked) selectedTypes - type
-                        else {
-                            if (selectedTypes.size < 2) {
-                                selectedTypes + type
-                            } else {
-                                selectedTypes
-                            }
-                        }
-                    )
+                    onNameSelected(name)
                 }
-        ) {
-            Image(
-                painter = painterResource(id = type),
-                contentDescription = type.toString(),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(3.5.dp)
+                .padding(4.dp)
+                .background(if (isSelected) Color.Red else Color.Transparent)
+            Text(
+                text = name,
+                modifier = textModifier,
+                fontSize = 16.sp,
+                color = if (isSelected) Color.White else Color.Black
             )
         }
     }
+}
 
 
-    @Composable
-    fun GenerationButton(
-        generation: Int,
-        selectedGeneration: Int,
-        onGenerationSelected: (Int) -> Unit,
-        isGenerationSelected: Boolean,
-        isNameInGeneration: Boolean
-    ) {
-        Button(
-            onClick = { onGenerationSelected(generation) },
-            modifier = Modifier.padding(16.dp)
-        ) {
-            //Maybe my memory is like a goldfish, but this memory works!
-            val buttonText = "Generation $generation" + if (isNameInGeneration) " ✅" else ""
-            Text(text = buttonText)
-        }
+//Laver et memory state, der checker for gens og dens indhold af navn til at rykke checkmarket hen til den generation. RememberState, but fancy.
+fun isNameInGeneration(name: String?, generation: Int): Boolean {
+    return when (generation) {
+        1 -> listOf("Red", "Green", "Blue", "Yellow").contains(name)
+        2 -> listOf("Gold", "Silver", "Crystal").contains(name)
+        3 -> listOf("Ruby", "Sapphire", "Emerald", "FireRed", "LeafGreen").contains(name)
+        4 -> listOf("Diamond", "Pearl", "Platinum", "HeartGold", "SoulSilver").contains(name)
+        5 -> listOf("Black", "White", "Black 2", "White 2").contains(name)
+        6 -> listOf("X", "Y", "Omega Ruby", "Alpha Sapphire").contains(name)
+        7 -> listOf("Sun", "Moon", "Ultra Sun", "Ultra Moon").contains(name)
+        8 -> listOf(
+            "Sword",
+            "Shield",
+            "Brilliant Diamond",
+            "Shining Pearl",
+            "Legends: Arceus"
+        ).contains(name)
+
+        9 -> listOf("Scarlet", "Violet").contains(name)
+        else -> false
     }
-
-    @Composable
-    fun GenerationNameList(
-        generation: Int,
-        selectedName: String?,
-        onNameSelected: (String) -> Unit
-    ) {
-        val namesForGeneration = when (generation) {
-            1 -> listOf("Red", "Green", "Blue", "Yellow")
-            2 -> listOf("Gold", "Silver", "Crystal")
-            3 -> listOf("Ruby", "Sapphire", "Emerald", "FireRed", "LeafGreen")
-            4 -> listOf("Diamond", "Pearl", "Platinum", "HeartGold", "SoulSilver")
-            5 -> listOf("Black", "White", "Black 2", "White 2")
-            6 -> listOf("X", "Y", "Omega Ruby", "Alpha Sapphire")
-            7 -> listOf("Sun", "Moon", "Ultra Sun", "Ultra Moon")
-            8 -> listOf("Sword", "Shield", "Brilliant Diamond", "Shining Pearl", "Legends: Arceus")
-            9 -> listOf("Scarlet", "Violet")
-            else -> emptyList()
-        }
-
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            namesForGeneration.forEach { name ->
-                val isSelected = name == selectedName
-                val textModifier = Modifier
-                    .clickable {
-                        onNameSelected(name)
-                    }
-                    .padding(4.dp)
-                    .background(if (isSelected) Color.Red else Color.Transparent)
-                Text(
-                    text = name,
-                    modifier = textModifier,
-                    fontSize = 16.sp,
-                    color = if (isSelected) Color.White else Color.Black
-                )
-            }
-        }
-    }
-
-
-    //Laver et memory state, der checker for gens og dens indhold af navn til at rykke checkmarket hen til den generation. RememberState, but fancy.
-    fun isNameInGeneration(name: String?, generation: Int): Boolean {
-        return when (generation) {
-            1 -> listOf("Red", "Green", "Blue", "Yellow").contains(name)
-            2 -> listOf("Gold", "Silver", "Crystal").contains(name)
-            3 -> listOf("Ruby", "Sapphire", "Emerald", "FireRed", "LeafGreen").contains(name)
-            4 -> listOf("Diamond", "Pearl", "Platinum", "HeartGold", "SoulSilver").contains(name)
-            5 -> listOf("Black", "White", "Black 2", "White 2").contains(name)
-            6 -> listOf("X", "Y", "Omega Ruby", "Alpha Sapphire").contains(name)
-            7 -> listOf("Sun", "Moon", "Ultra Sun", "Ultra Moon").contains(name)
-            8 -> listOf(
-                "Sword",
-                "Shield",
-                "Brilliant Diamond",
-                "Shining Pearl",
-                "Legends: Arceus"
-            ).contains(name)
-
-            9 -> listOf("Scarlet", "Violet").contains(name)
-            else -> false
-        }
-    }
-
-//Check Check Git works?
+}
