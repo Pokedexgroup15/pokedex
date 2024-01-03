@@ -1,4 +1,4 @@
-package com.example.pokedex.Data
+package com.example.pokedex.Domain
 import android.util.Log
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json

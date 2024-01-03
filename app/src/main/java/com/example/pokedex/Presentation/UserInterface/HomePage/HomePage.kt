@@ -1,4 +1,4 @@
-package com.example.pokedex.Presentation.UserInterface
+package com.example.pokedex.Presentation.UserInterface.HomePage
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -47,7 +47,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.pokedex.Presentation.theme.Font
-import com.example.pokedex.Data.Pokemon
+import com.example.pokedex.Domain.Pokemon
 import com.example.pokedex.R
 import com.example.pokedex.Presentation.navigation.Route
 import com.example.pokedex.viweModel.searchPageViewModel

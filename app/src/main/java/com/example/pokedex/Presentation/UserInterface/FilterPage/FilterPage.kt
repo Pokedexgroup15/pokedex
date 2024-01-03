@@ -1,4 +1,4 @@
-package com.example.pokedex.Presentation.UserInterface
+package com.example.pokedex.Presentation.UserInterface.FilterPage
 
 import android.os.Bundle
 import android.text.Layout
