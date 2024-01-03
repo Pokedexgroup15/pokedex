@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.pokedex.Presentation.FilterViewModel
+import com.example.pokedex.Presentation.ResetViewModel
 import com.example.pokedex.ShowcasePage
 
 import com.example.pokedex.Presentation.UserInterface.BottomBar
@@ -43,7 +44,7 @@ fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier)
            Favorites(navController, viewModel)
         }
         composable(Route.Filter.path) {
-            FilterPageContent(navController, FilterViewModel())
+            FilterPageContent(navController, FilterViewModel(), ResetViewModel())
         }
         composable(Route.Pokemon.path)
             {
