@@ -32,7 +32,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.pokedex.Presentation.FilterViewModel
+//import com.example.pokedex.Presentation.UserInterface
 import com.example.pokedex.Presentation.ResetViewModel
 import com.example.pokedex.R
 import com.example.pokedex.Presentation.navigation.Route
@@ -55,7 +55,6 @@ class FilterPage : ComponentActivity() {
         }
     }
 }
-
 @Composable
 fun FilterPageContent(navController: NavHostController, viewModel: FilterViewModel, resetViewModel: ResetViewModel) {
 
