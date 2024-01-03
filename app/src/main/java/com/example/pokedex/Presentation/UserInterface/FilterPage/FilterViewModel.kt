@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.pokedex.Presentation.UserInterface.FilterPage.SortOption
 
+
 // ViewModel
 class FilterViewModel : ViewModel() {
     private val _selectedSortOption = mutableStateOf<SortOption?>(null)

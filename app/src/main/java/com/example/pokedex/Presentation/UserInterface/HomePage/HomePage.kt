@@ -56,9 +56,6 @@ import com.example.pokedex.viweModel.searchPageViewModel
 @Composable
 fun homePage(navController: NavHostController,viewModel: searchPageViewModel) {
 
-
-
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -68,7 +65,7 @@ fun homePage(navController: NavHostController,viewModel: searchPageViewModel) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(96.dp),
+                .height(86.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Spacer(modifier = Modifier.width(71.dp))
@@ -139,27 +136,29 @@ fun PokemonList(navController: NavHostController,viewModel: searchPageViewModel,
         }
     }
 }
-val types = listOf(
-    R.drawable.bug,
-    R.drawable.dar,
-    R.drawable.dra,
-    R.drawable.ele,
-    R.drawable.fai,
-    R.drawable.fig,
-    R.drawable.fir,
-    R.drawable.fly,
-    R.drawable.gho,
-    R.drawable.gra,
-    R.drawable.gro,
-    R.drawable.ice,
-    R.drawable.nor,
-    R.drawable.poi,
-    R.drawable.psy,
-    R.drawable.roc,
-    R.drawable.ste,
-    R.drawable.wat
-)
-
+fun getTypeIconwithID(type: String): Int {
+    return when (type) {
+        "bug" -> R.drawable.bug
+        "dar" -> R.drawable.dar
+        "dra" -> R.drawable.dra
+        "electric" -> R.drawable.ele
+        "fairy" -> R.drawable.fai
+        "fighting" -> R.drawable.fig
+        "fire" -> R.drawable.fir
+        "flying" -> R.drawable.fly
+        "ghost" -> R.drawable.gho
+        "grass" -> R.drawable.gra
+        "ground" -> R.drawable.gro
+        "ice" -> R.drawable.ice
+        "normal" -> R.drawable.nor
+        "poison" -> R.drawable.poi
+        "psychic" -> R.drawable.psy
+        "rock" -> R.drawable.roc
+        "steel" -> R.drawable.ste
+        "water" -> R.drawable.wat
+        else -> R.drawable.t //Transparent empty png FYI.
+    }
+}
 @Composable
 fun pokemonBox(modifier: Modifier,
                navController: NavHostController, pokemon: Pokemon, viewModel: searchPageViewModel) {
@@ -167,8 +166,6 @@ fun pokemonBox(modifier: Modifier,
     Box(
         modifier = modifier
             .clickable {
-
-
                viewModel.setPokemon(pokemon)
                 navController.navigate(Route.Pokemon.path)
             }
@@ -178,7 +175,7 @@ fun pokemonBox(modifier: Modifier,
             modifier = Modifier.fillMaxSize()
         ) {
             Text(
-                text = "#"+pokemon.id,
+                text = "#" + pokemon.id,
                 fontSize = 12.sp,
                 fontFamily = Font.rudaFontFamily,
                 fontWeight = FontWeight.W400,
@@ -200,38 +197,28 @@ fun pokemonBox(modifier: Modifier,
                     textAlign = TextAlign.Start
                 )
                 // later should replace with a for each
+                Row {
+                    Image(
+                        painter = painterResource(id = getTypeIconwithID(pokemon.type1)),
+                        contentDescription = "type",
+                        modifier = Modifier.size(25.dp)
+                    )
 
-Row() {
-
-    val TypeString = ""
-
-// Using a for loop
-    for (i in 0 until minOf(3, TypeString.length)) {
-        val currentChar = TypeString[i]
-        if (TypeString.equals(types)) {
-
-        }
-    }
-    Image(
-        imageVector = Icons.Default.Face,
-        contentDescription = "type",
-        modifier = Modifier.size(25.dp)
-    )
-    Icon(
-        imageVector = Icons.Default.Face,
-        contentDescription = "type",
-        modifier = Modifier.size(25.dp)
-    )
-}
+                    if (pokemon.type2 != "null") {
+                        Image(
+                            painter = painterResource(id = getTypeIconwithID(pokemon.type2)),
+                            contentDescription = "type",
+                            modifier = Modifier.size(25.dp)
+                        )
+                    }
+                }
             }
-
-
             val picturemodifier = Modifier
                 .weight(1f)
                 .fillMaxSize()
                 .weight(1f)
                 .fillMaxSize()
-            println(pokemon.name)
+            //println(pokemon.name)
             pokemonPictureAndLogo(modifier = picturemodifier,pokemon,   viewModel)
         }
 
