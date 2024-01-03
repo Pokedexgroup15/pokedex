@@ -6,9 +6,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.pokedex.Presentation.ResetViewModel
 import com.example.pokedex.ShowcasePage
 
 import com.example.pokedex.presentation.userInterface.HomePage.BottomBar
@@ -41,7 +44,7 @@ fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier)
            Favorites(navController, viewModel)
         }
         composable(Route.Filter.path) {
-            FilterPageContent(navController,filterviewModel)
+            FilterPageContent(navController, FilterViewModel(), ResetViewModel())
         }
         composable(Route.Pokemon.path)
             {
@@ -54,7 +57,6 @@ fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun navStart() {
-
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomBar(navController) }
