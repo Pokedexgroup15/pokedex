@@ -1,8 +1,5 @@
 package com.example.steps
 
-import com.example.pokedex.Presentation.UserInterface.SortOption
-
-import com.example.pokedex.viweModel.ApiViewModel
 import io.cucumber.java.PendingException
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then

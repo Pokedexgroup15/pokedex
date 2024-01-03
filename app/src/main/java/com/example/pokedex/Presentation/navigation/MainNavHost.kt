@@ -6,19 +6,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.pokedex.ShowcasePage
 
-import com.example.pokedex.Presentation.UserInterface.BottomBar
-import com.example.pokedex.Presentation.UserInterface.Favorites
-import com.example.pokedex.Presentation.UserInterface.FilterPage
-import com.example.pokedex.Presentation.UserInterface.FilterPageContent
-import com.example.pokedex.Presentation.UserInterface.homePage
-import com.example.pokedex.Presentation.UserInterface.SearchPageFun
+import com.example.pokedex.Presentation.UserInterface.HomePage.BottomBar
+import com.example.pokedex.Presentation.UserInterface.Favourite.Favorites
+import com.example.pokedex.Presentation.UserInterface.FilterPage.FilterPageContent
+import com.example.pokedex.Presentation.UserInterface.HomePage.homePage
+import com.example.pokedex.Presentation.UserInterface.SearchPage.SearchPageFun
 
 import com.example.pokedex.viweModel.searchPageViewModel
 
@@ -26,7 +23,6 @@ import com.example.pokedex.viweModel.searchPageViewModel
 @Composable
 fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
     val viewModel = viewModel<searchPageViewModel>()
-
     NavHost(
         navController = navController,
         startDestination = Route.POKEDEX.path,
@@ -55,6 +51,7 @@ fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun navStart() {
+
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomBar(navController) }
