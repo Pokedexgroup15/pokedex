@@ -1,4 +1,4 @@
-package com.example.pokedex.Presentation
+package com.example.pokedex.presentation.userInterface.FilterPage
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
