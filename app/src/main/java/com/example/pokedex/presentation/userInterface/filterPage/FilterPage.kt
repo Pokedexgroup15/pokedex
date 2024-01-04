@@ -224,7 +224,7 @@ fun SortButtons(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.Center
     ) {
         Button(
             shape = RoundedCornerShape(5.dp),
@@ -241,6 +241,7 @@ fun SortButtons(
         ) {
             Text(text = "Low to High")
         }
+        Spacer(modifier = Modifier.width(50.dp))
 
         Button(
             shape = RoundedCornerShape(5.dp),
