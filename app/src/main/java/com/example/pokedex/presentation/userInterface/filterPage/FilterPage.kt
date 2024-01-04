@@ -203,7 +203,7 @@ fun SortButtons(
             modifier = Modifier
                 .border(
                     width = 4.dp,
-                    color = if (sharedViewModel.selectedSortOption.value == SortOption.LowToHigh) Color.DarkGray else Color.White,
+                    color = if (sharedViewModel.selectedSortOption.value == SortOption.LowToHigh) Color.DarkGray else Color.Transparent,
                 )
         ) {
             Text(text = "Low to High")
@@ -218,7 +218,7 @@ fun SortButtons(
             modifier = Modifier
                 .border(
                     width = 4.dp,
-                    color = if (sharedViewModel.selectedSortOption.value == SortOption.HighToLow) Color.DarkGray else Color.White,
+                    color = if (sharedViewModel.selectedSortOption.value == SortOption.HighToLow) Color.DarkGray else Color.Transparent,
                 )
         ) {
             Text(text = "High to Low")
