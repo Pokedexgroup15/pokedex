@@ -117,7 +117,7 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                 Column {
                     Text(
                         text = "Sorting",
-                        fontSize = 20.sp,
+                        fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
                             .padding(10.dp)
@@ -142,15 +142,38 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                 Column {
                     Text(
                         text = "Filters",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .padding(10.dp)
+                    )
+                    Divider(
+                        color = Color.LightGray,
+                        thickness = 1.5.dp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                    )
+
+                    Text(
+                        text = "Type",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
                             .padding(10.dp)
                     )
+
                     TypeButton(sharedViewModel = resetViewModel)
 
                     Spacer(modifier = Modifier.height(16.dp))
 
+                    Divider(
+                        color = Color.LightGray,
+                        thickness = 1.5.dp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                    )
                     for (generation in 1..9) {
                         GenerationButton(
                             generation = generation,
@@ -195,7 +218,7 @@ fun SortButtons(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Button(
-            shape = RectangleShape,
+            shape = RoundedCornerShape(5.dp),
             onClick = {
                 sharedViewModel.selectedSortOption.value = SortOption.LowToHigh
                 onLowToHighClick()
@@ -203,6 +226,7 @@ fun SortButtons(
             modifier = Modifier
                 .border(
                     width = 4.dp,
+                    shape = RoundedCornerShape(5.dp),
                     color = if (sharedViewModel.selectedSortOption.value == SortOption.LowToHigh) Color.DarkGray else Color.Transparent,
                 )
         ) {
@@ -210,7 +234,7 @@ fun SortButtons(
         }
 
         Button(
-            shape = RectangleShape,
+            shape = RoundedCornerShape(5.dp),
             onClick = {
                 sharedViewModel.selectedSortOption.value = SortOption.HighToLow
                 onHighToLowClick()
@@ -218,6 +242,7 @@ fun SortButtons(
             modifier = Modifier
                 .border(
                     width = 4.dp,
+                    shape = RoundedCornerShape(5.dp),
                     color = if (sharedViewModel.selectedSortOption.value == SortOption.HighToLow) Color.DarkGray else Color.Transparent,
                 )
         ) {
@@ -235,12 +260,14 @@ fun TypeButton(sharedViewModel: ResetViewModel) {
     var isMenuVisible by remember { mutableStateOf(true) }
     var selectedTypes by remember { mutableStateOf(emptyList<Int>()) }
 
-    Button(
+    /*Button(
         onClick = { isMenuVisible = true },
         modifier = Modifier.padding(16.dp)
     ) {
         Text(text = "Type")
     }
+
+     */
 
     if (isMenuVisible) {
         val types = listOf(
@@ -268,12 +295,17 @@ fun TypeButton(sharedViewModel: ResetViewModel) {
 
         Column {
             for (columnTypes in groupedTypes) {
-                Row {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp), // Add padding to the row itself
+                    horizontalArrangement = Arrangement.SpaceBetween // This will add equal spacing between the items
+                ) {
                     for (type in columnTypes) {
                         TypeItemButton(type, sharedViewModel.selectedTypes.value) { selected ->
                             sharedViewModel.selectedTypes.value = selected
                         }
-                        Spacer(modifier = Modifier.width(10.dp))
+                        Spacer(modifier = Modifier.width(2.dp))
                     }
                 }
             }
@@ -287,11 +319,11 @@ fun TypeItemButton(type: Int, selectedTypes: List<Int>, onTypeSelected: (List<In
 
     Box(
         modifier = Modifier
-            .size(140.dp, 31.dp)
+            .size(119.dp, 32.dp)
             .border(
-                width = 2.dp,
-                color = if (isButtonClicked) Color.Green else Color.Gray,
-                shape = RectangleShape
+                width = 3.dp,
+                color = if (isButtonClicked) Color.DarkGray else Color.LightGray,
+                shape = RoundedCornerShape(5.dp)
             )
             //Only 2 can be selected.
             .clickable {
