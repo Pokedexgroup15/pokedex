@@ -55,7 +55,7 @@ import com.example.pokedex.presentation.searchPageViewModel
 
 
     @Composable
-    fun ShowcasePage(navHostController: NavHostController,viewModel: searchPageViewModel) {
+    fun ShowcasePage(navController: NavHostController,viewModel: searchPageViewModel) {
         val context = LocalContext.current
         var selectedGender by remember { mutableStateOf(Gender.NONE) }
         val pokemon = viewModel.getPokemon()
@@ -212,7 +212,7 @@ import com.example.pokedex.presentation.searchPageViewModel
                 ){
                     Text(text = "", modifier = Modifier.align(Alignment.CenterHorizontally))
                     Spacer(modifier = Modifier.weight(4f))
-                    EvolutionBar()
+                    EvolutionBar(navController)
                     Spacer(modifier = Modifier.weight(1f))
                 }
             }
