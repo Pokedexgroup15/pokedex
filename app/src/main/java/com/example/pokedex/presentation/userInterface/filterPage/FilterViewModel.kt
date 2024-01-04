@@ -1,9 +1,8 @@
-package com.example.pokedex.presentation.userInterface.FilterPage
+package com.example.pokedex.presentation.userInterface.filterPage
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.pokedex.Presentation.UserInterface.FilterPage.SortOption
 
 
 // ViewModel

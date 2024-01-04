@@ -1,4 +1,4 @@
-package com.example.pokedex.presentation.userInterface.Favourite
+package com.example.pokedex.presentation.userInterface.favourite
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

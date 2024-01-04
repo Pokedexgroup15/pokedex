@@ -1,4 +1,4 @@
-package com.example.pokedex.Presentation.UserInterface.FilterPage
+package com.example.pokedex.presentation.userInterface.filterPage
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -29,11 +29,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 //import com.example.pokedex.Presentation.UserInterface
-import com.example.pokedex.presentation.userInterface.FilterPage.ResetViewModel
 import com.example.pokedex.R
 
 import com.example.pokedex.presentation.navigation.Route
-import com.example.pokedex.presentation.userInterface.FilterPage.FilterViewModel
 
 class FilterPage : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
