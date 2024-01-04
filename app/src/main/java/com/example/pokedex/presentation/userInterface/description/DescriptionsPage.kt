@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -35,12 +36,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -223,21 +226,55 @@ import com.example.pokedex.presentation.searchPageViewModel
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
-                    .height(220.dp)
-                    .background(Color.LightGray)
-                    .clip(CircleShape)
+                    .padding(16.dp),
             ) {
-                if (pokemon != null) {
+                Image(
+                    painter = painterResource(id = R.drawable.rectangle),
+                    contentDescription = null,
+                    modifier = Modifier.matchParentSize(),
+                    contentScale = ContentScale.FillBounds
+                )
+                pokemon?.let {
                     Text(
-                        text = pokemon.pokedexText[0],
+                        text = it.pokedexText[0],
                         modifier = Modifier
                             .padding(16.dp)
                             .align(Alignment.CenterStart),
-                        color = Color.White
+                        color = Color.Black,
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.Left
                     )
                 }
             }
+            Divider(
+                color = Color.Black,
+                thickness = 1.5.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp))
+            Box(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .height(120.dp)
+                    .background(Color.LightGray)
+                    .clip(RoundedCornerShape(12.dp))
+            ) {
+                Text(
+                    text = "CatchRate",
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(16.dp),
+                    color = Color.Black,
+                    fontSize = 18.sp
+                )
+            }
+            Divider(
+                    color = Color.Black,
+            thickness = 1.5.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp))
         }
     }
     @Composable
