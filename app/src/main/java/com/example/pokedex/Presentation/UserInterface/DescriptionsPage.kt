@@ -249,7 +249,7 @@ import com.example.pokedex.viweModel.searchPageViewModel
 
 
 enum class Gender {
-    MALE, FEMALE, MIXED, NONE, UNKNOWN // None because some rare exist. Maybe gray should be added.
+    MALE, FEMALE, MIXED, NONE // None because some rare exist. Maybe gray should be added.
 }
 
 @Composable

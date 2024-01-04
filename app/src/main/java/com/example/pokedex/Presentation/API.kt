@@ -59,11 +59,11 @@ class ApiViewModel: ViewModel() {
                     val gender=when{
                         genderRate<0 -> Gender.NONE
                         genderRate ==0 -> Gender.MALE
-                        genderRate == 8 -> Gender.FEMALE
                         genderRate in 1..3 ->Gender.MALE
                         genderRate == 4 -> Gender.MIXED
                         genderRate in 5..7 -> Gender.FEMALE
-                        else -> Gender.UNKNOWN
+                        genderRate == 8 -> Gender.FEMALE
+                        else -> null
                     }
 
                     PokemonObject.pokeList.add(Pokemon(pokeName.replaceFirstChar { it.uppercase() }, pokeDefaultPictureFront, pokeId,type1,type2, pokedexTextList,gender))
