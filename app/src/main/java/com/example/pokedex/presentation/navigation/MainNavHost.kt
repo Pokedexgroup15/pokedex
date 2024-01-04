@@ -13,11 +13,9 @@ import com.example.pokedex.presentation.userInterface.filterPage.ResetViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.FilterPageContent
 import com.example.pokedex.ShowcasePage
 import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
-import com.example.pokedex.presentation.userInterface.filterPage.ResetViewModel
 
 import com.example.pokedex.presentation.userInterface.HomePage.BottomBar
 import com.example.pokedex.presentation.userInterface.favourite.Favorites
-import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 
 import com.example.pokedex.presentation.userInterface.HomePage.homePage
 import com.example.pokedex.presentation.userInterface.SearchPage.SearchPageFun
