@@ -5,7 +5,6 @@ package com.example.pokedex
 import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,10 +28,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -52,10 +47,11 @@ import com.example.pokedex.viweModel.searchPageViewModel
     @Composable
     fun ShowcasePage(navHostController: NavHostController,viewModel: searchPageViewModel) {
         val context = LocalContext.current
-        var selectedGender by remember { mutableStateOf(Gender.NONE) }
         val pokemon = viewModel.getPokemon()
         val maleColor = Color(49,59,169)
         val femaleColor = Color(143,68,124)
+        val mixedColor= Color(0xFFF5F5DC)
+        val genderlessColor = Color.LightGray
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -85,7 +81,6 @@ import com.example.pokedex.viweModel.searchPageViewModel
                 }
             }
 
-
             Divider(
                 color = Color.Black,
                 thickness = 1.5.dp,
@@ -93,16 +88,18 @@ import com.example.pokedex.viweModel.searchPageViewModel
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
             )
+            val backgroundColor=when (pokemon?.gender){
+               Gender.MALE ->maleColor
+                Gender.MIXED -> mixedColor
+               Gender.FEMALE-> femaleColor
+               Gender.NONE-> genderlessColor
+                else -> Color.Transparent
+            }
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(
-                        when (selectedGender) {
-                            Gender.MALE -> maleColor
-                            Gender.FEMALE -> femaleColor
-                            else -> Color.Transparent // Or grey depends on logic.
-                        }
-                    )
+                    .background(backgroundColor)
             ) {
                 if (pokemon != null) {
                     AsyncImage(
@@ -135,17 +132,37 @@ import com.example.pokedex.viweModel.searchPageViewModel
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.Start
             ) {
-                GenderIcon(
-                    imageResId = R.drawable.male,
-                    selectedGender = Gender.MALE,
-                    onGenderSelected = { selectedGender = it }
-                )
+                when(pokemon?.gender){
+                    Gender.MIXED -> {
+                        GenderIcon(imageResId = R.drawable.male)
+                        GenderIcon(imageResId = R.drawable.female)
+                        Text(
+                            text = "50% 50%",
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+                    Gender.MALE -> {
+                        GenderIcon(imageResId = R.drawable.male)
+                    }
+                    Gender.FEMALE -> {
+                        GenderIcon(imageResId = R.drawable.female)
+                    }
+                    Gender.NONE -> {
+                        Text(text = "Genderless", modifier= Modifier.align(Alignment.CenterVertically))
+                    }
+                    else -> null
+                }
+               // GenderIcon(
+                   // imageResId = R.drawable.male,
+                  //  selectedGender = Gender.MALE,
+                  //  onGenderSelected = { selectedGender = it }
+               // )
 
-                GenderIcon(
-                    imageResId = R.drawable.female,
-                    selectedGender = Gender.FEMALE,
-                    onGenderSelected = { selectedGender = it }
-                )
+               // GenderIcon(
+                  //  imageResId = R.drawable.female,
+                  //selectedGender = Gender.FEMALE,
+                   // onGenderSelected = { selectedGender = it }
+               // )
                 Spacer(modifier = Modifier.weight(1f))
 
                 Box(
@@ -218,28 +235,21 @@ import com.example.pokedex.viweModel.searchPageViewModel
             }
         }
     }
-    @Composable
-    fun GenderIcon(
-        imageResId: Int,
-        selectedGender: Gender,
-        onGenderSelected: (Gender) -> Unit
-    ) {
+   @Composable
+   fun GenderIcon(imageResId: Int) {
         Image(
             painter = painterResource(id = imageResId),
-            contentDescription = null,
+            contentDescription = "Gender icon",
             modifier = Modifier
                 .size(36.dp)
-                .clickable { onGenderSelected(selectedGender) }
-                .border(
-                    width = 2.dp,
-                    color = if (selectedGender != Gender.NONE) Color.White else Color.Transparent,
-                )
         )
     }
 
 
+
+
 enum class Gender {
-    MALE, FEMALE, NONE // None because some rare exist. Maybe gray should be added.
+    MALE, FEMALE, MIXED, NONE, UNKNOWN // None because some rare exist. Maybe gray should be added.
 }
 
 @Composable

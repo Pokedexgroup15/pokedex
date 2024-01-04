@@ -1,12 +1,15 @@
 package com.example.pokedex.viweModel
 
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.pokedex.Data.Pokemon
+import com.example.pokedex.Gender
 import com.example.pokedex.PokemonObject
-import kotlinx.coroutines.*
-import java.net.URL
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.net.URL
 
 class ApiViewModel: ViewModel() {
 //    load image
@@ -52,7 +55,18 @@ class ApiViewModel: ViewModel() {
 
                         Log.d("info",""+pokeName+" "+pokeDefaultPictureFront+" "+ pokeId+" "+  type1+" "+type2)
 
-                    PokemonObject.pokeList.add(Pokemon(pokeName.replaceFirstChar { it.uppercase() }, pokeDefaultPictureFront, pokeId,type1,type2, pokedexTextList))
+                    val genderRate=pokemonJsonSpecies.getInt("gender_rate")
+                    val gender=when{
+                        genderRate<0 -> Gender.NONE
+                        genderRate ==0 -> Gender.MALE
+                        genderRate == 8 -> Gender.FEMALE
+                        genderRate in 1..3 ->Gender.MALE
+                        genderRate == 4 -> Gender.MIXED
+                        genderRate in 5..7 -> Gender.FEMALE
+                        else -> Gender.UNKNOWN
+                    }
+
+                    PokemonObject.pokeList.add(Pokemon(pokeName.replaceFirstChar { it.uppercase() }, pokeDefaultPictureFront, pokeId,type1,type2, pokedexTextList,gender))
 //                cacheJson.put(""+pokeId,pokeName)
                 }
 
