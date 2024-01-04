@@ -9,13 +9,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.pokedex.presentation.userInterface.FilterPage.ResetViewModel
-import com.example.pokedex.Presentation.UserInterface.FilterPage.FilterPageContent
+import com.example.pokedex.presentation.userInterface.filterPage.ResetViewModel
+import com.example.pokedex.presentation.userInterface.filterPage.FilterPageContent
 import com.example.pokedex.ShowcasePage
 
 import com.example.pokedex.presentation.userInterface.HomePage.BottomBar
-import com.example.pokedex.presentation.userInterface.Favourite.Favorites
-import com.example.pokedex.presentation.userInterface.FilterPage.FilterViewModel
+import com.example.pokedex.presentation.userInterface.favourite.Favorites
+import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 
 import com.example.pokedex.presentation.userInterface.HomePage.homePage
 import com.example.pokedex.presentation.userInterface.SearchPage.SearchPageFun
@@ -34,23 +34,22 @@ fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier)
         modifier = modifier
     ) {
         composable(Route.POKEDEX.path) {
-           homePage(navController,viewModel)
+           homePage(navController,viewModel, filterviewModel)
         }
         composable(Route.Search.path) {
             SearchPageFun(navController,viewModel )
         }
         composable(Route.FAVORITES.path) {
-           Favorites(navController, viewModel)
+           Favorites(navController, viewModel, filterviewModel)
         }
         composable(Route.Filter.path) {
             FilterPageContent(navController, FilterViewModel(), ResetViewModel())
         }
-        composable(Route.Pokemon.path)
-            {
-                ShowcasePage(navController, viewModel)
-            }
+        composable(Route.Pokemon.path) {
+            ShowcasePage(navController, viewModel)
         }
     }
+}
 
 
 @OptIn(ExperimentalMaterial3Api::class)

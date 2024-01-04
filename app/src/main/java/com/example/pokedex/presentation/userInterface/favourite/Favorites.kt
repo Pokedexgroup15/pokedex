@@ -1,4 +1,4 @@
-package com.example.pokedex.presentation.userInterface.Favourite
+package com.example.pokedex.presentation.userInterface.favourite
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.pokedex.presentation.userInterface.HomePage.PokemonList
 import com.example.pokedex.R
+import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 import com.example.pokedex.viweModel.searchPageViewModel
 
 
@@ -33,8 +34,8 @@ import com.example.pokedex.viweModel.searchPageViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 //@Preview(showBackground = true)
 @Composable
-fun Favorites(navHostController: NavHostController, viewModel: searchPageViewModel) {
-
+fun Favorites(navHostController: NavHostController, viewModel: searchPageViewModel, filterViewModel: FilterViewModel) {
+    val sortedPokemons = filterViewModel.getSortedPokemonList()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -60,11 +61,7 @@ fun Favorites(navHostController: NavHostController, viewModel: searchPageViewMod
             )
             Spacer(modifier = Modifier.width(34.dp))
             Icon(imageVector = Icons.Default.Search, contentDescription = "search")
-
-
-
-
         }
-        PokemonList(navController = navHostController, viewModel =viewModel, isFavorite = true)
+        PokemonList(navController = navHostController, viewModel =viewModel, isFavorite = true, pokemons1 = sortedPokemons, filterViewModel = filterViewModel)
     }
 }

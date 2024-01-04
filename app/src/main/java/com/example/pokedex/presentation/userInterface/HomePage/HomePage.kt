@@ -39,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -50,10 +51,14 @@ import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.R
 import com.example.pokedex.presentation.navigation.Route
 import com.example.pokedex.viweModel.searchPageViewModel
+import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
+import kotlin.io.path.fileVisitor
 
 
 @Composable
-fun homePage(navController: NavHostController,viewModel: searchPageViewModel) {
+fun homePage(navController: NavHostController,viewModel: searchPageViewModel, filterViewModel: FilterViewModel) {
+    val sortedPokemons = filterViewModel.getSortedPokemonList()
+    //PokemonList(navController = navController, viewModel = viewModel, pokemons = sortedPokemons, isFavorite = false)
 
     Column(
         modifier = Modifier
@@ -92,14 +97,17 @@ fun homePage(navController: NavHostController,viewModel: searchPageViewModel) {
 
                 })
         }
-        PokemonList(navController,viewModel,false)
+        //PokemonList(navController,viewModel,false, sortedPokemons)
+        PokemonList(navController = navController, pokemons1 = sortedPokemons, viewModel = viewModel, isFavorite = false, filterViewModel = filterViewModel)
     }
 }
 
 
 @Composable
-fun PokemonList(navController: NavHostController,viewModel: searchPageViewModel,isFavorite: Boolean) {
+
+fun PokemonList(navController: NavHostController,viewModel: searchPageViewModel, filterViewModel: FilterViewModel, isFavorite: Boolean, pokemons1: List<Pokemon>) {
     val pokemons = viewModel.getMockData(isFavorite)
+    val pokemons1 = filterViewModel.getSortedPokemonList()
 
     LazyColumn(
         modifier = Modifier.fillMaxSize()
@@ -323,7 +331,8 @@ private data class Tab(
 fun homePreview(){
     val navController = rememberNavController()
     val viewModel = viewModel<searchPageViewModel>()
+    val filterViewModel = viewModel<FilterViewModel>()
 
-    homePage(navController = navController,viewModel)
+    homePage(navController = navController,viewModel,filterViewModel)
 
 }
