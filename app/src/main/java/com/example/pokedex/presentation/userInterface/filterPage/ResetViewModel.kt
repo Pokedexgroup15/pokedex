@@ -10,11 +10,11 @@ class ResetViewModel : ViewModel() {
     val selectedGeneration = mutableStateOf(-1)
     val selectedName = mutableStateOf<String?>(null)
 
+
     fun resetFilters() {
         selectedSortOption.value = null
         selectedTypes.value = emptyList()
         selectedGeneration.value = -1
         selectedName.value = null
-        // Add more reset logic as needed
     }
 }

@@ -122,11 +122,15 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                     )
                     SortButtons(
                         sharedViewModel = resetViewModel,
+
                         onLowToHighClick = {
-                            // Logic with API
+
+
+                                           // Additional logic if needed
                         },
                         onHighToLowClick = {
-                            // Logic with API
+
+                            // Additional logic if needed
                         }
                     )
                 }
@@ -157,6 +161,7 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                                     resetViewModel.selectedGeneration.value = -1
                                 } else {
                                     resetViewModel.selectedGeneration.value = it
+
                                 }
                             },
                             isGenerationSelected = resetViewModel.selectedGeneration.value == generation,
@@ -168,6 +173,7 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                                 generation = generation,
                                 selectedName = resetViewModel.selectedName.value,
                                 onNameSelected = { resetViewModel.selectedName.value = it }
+
                             )
                         }
                     }
@@ -211,6 +217,7 @@ fun SortButtons(
             onClick = {
                 sharedViewModel.selectedSortOption.value = SortOption.HighToLow
                 onHighToLowClick()
+
             },
             modifier = Modifier
                 .border(

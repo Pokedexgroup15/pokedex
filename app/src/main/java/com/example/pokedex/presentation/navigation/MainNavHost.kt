@@ -28,6 +28,8 @@ import com.example.pokedex.viweModel.searchPageViewModel
 fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
     val viewModel = viewModel<searchPageViewModel>()
     val filterviewModel = viewModel<FilterViewModel>()
+    val resetViewModel = viewModel<ResetViewModel>()
+
 
     NavHost(
         navController = navController,
@@ -44,7 +46,7 @@ fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier)
            Favorites(navController, viewModel)
         }
         composable(Route.Filter.path) {
-            FilterPageContent(navController, FilterViewModel(), ResetViewModel())
+            FilterPageContent(navController, FilterViewModel(), resetViewModel)
         }
         composable(Route.Pokemon.path)
             {
