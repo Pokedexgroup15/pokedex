@@ -48,7 +48,7 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.pokedex.presentation.userInterface.HomePage.EvolutionBar
 import com.example.pokedex.presentation.userInterface.HomePage.getTypeIconwithID
-import com.example.pokedex.viweModel.searchPageViewModel
+import com.example.pokedex.presentation.searchPageViewModel
 
 
     @Composable

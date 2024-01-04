@@ -39,7 +39,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -50,15 +49,17 @@ import com.example.pokedex.presentation.theme.Font
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.R
 import com.example.pokedex.presentation.navigation.Route
-import com.example.pokedex.viweModel.searchPageViewModel
+import com.example.pokedex.presentation.searchPageViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
-import kotlin.io.path.fileVisitor
+import com.example.pokedex.presentation.userInterface.filterPage.SortOption
 
 
 @Composable
-fun homePage(navController: NavHostController,viewModel: searchPageViewModel, filterViewModel: FilterViewModel) {
-    val sortedPokemons = filterViewModel.getSortedPokemonList()
+fun homePage(navController: NavHostController, viewModel: searchPageViewModel, filterViewModel: FilterViewModel) {
+    //val sortedPokemons = filterViewModel.getSortedPokemonList()
     //PokemonList(navController = navController, viewModel = viewModel, pokemons = sortedPokemons, isFavorite = false)
+    val currentSortOption = filterViewModel.selectedSortOption.value
+
 
     Column(
         modifier = Modifier
@@ -97,17 +98,20 @@ fun homePage(navController: NavHostController,viewModel: searchPageViewModel, fi
 
                 })
         }
-        //PokemonList(navController,viewModel,false, sortedPokemons)
-        PokemonList(navController = navController, pokemons1 = sortedPokemons, viewModel = viewModel, isFavorite = false, filterViewModel = filterViewModel)
+        //PokemonList(navController,viewModel, false)
+            //PokemonList(navController,viewModel, filterViewModel = FilterViewModel(), false, pokemons1 =filterViewModel.getSortedPokemonList() )
+        //PokemonList(navController = navController, viewModel = viewModel, isFavorite = false, filterViewModel = filterViewModel)
+        PokemonList(navController = navController, viewModel = viewModel, isFavorite = false, sortOption = currentSortOption)
     }
 }
 
 
 @Composable
 
-fun PokemonList(navController: NavHostController,viewModel: searchPageViewModel, filterViewModel: FilterViewModel, isFavorite: Boolean, pokemons1: List<Pokemon>) {
-    val pokemons = viewModel.getMockData(isFavorite)
-    val pokemons1 = filterViewModel.getSortedPokemonList()
+fun PokemonList(navController: NavHostController, viewModel: searchPageViewModel, isFavorite: Boolean, sortOption: SortOption?) {
+    //val pokemons = viewModel.getMockData(isFavorite)
+    //val pokemons1 = filterViewModel.getSortedPokemonList()
+    val pokemons = viewModel.getMockData(isFavorite, sortOption)
 
     LazyColumn(
         modifier = Modifier.fillMaxSize()
@@ -168,7 +172,8 @@ fun getTypeIconwithID(type: String): Int {
 }
 @Composable
 fun pokemonBox(modifier: Modifier,
-               navController: NavHostController, pokemon: Pokemon, viewModel: searchPageViewModel) {
+               navController: NavHostController, pokemon: Pokemon, viewModel: searchPageViewModel
+) {
     val context = LocalContext.current
     Box(
         modifier = modifier
@@ -259,8 +264,6 @@ fun pokemonPictureAndLogo(modifier: Modifier, pokemon: Pokemon, viewModel: searc
 
 
                 }
-
-
         )
     }
 

@@ -125,10 +125,11 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                     SortButtons(
                         sharedViewModel = resetViewModel,
                         onLowToHighClick = {
-                            // Logic with API
+                            resetViewModel.Pokemons.sortBy { it.id }
                         },
                         onHighToLowClick = {
-                            // Logic with API
+                            resetViewModel.Pokemons.sortByDescending {it.id}
+
                         }
                     )
                 }

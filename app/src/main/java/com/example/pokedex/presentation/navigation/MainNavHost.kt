@@ -20,7 +20,9 @@ import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 import com.example.pokedex.presentation.userInterface.HomePage.homePage
 import com.example.pokedex.presentation.userInterface.SearchPage.SearchPageFun
 
-import com.example.pokedex.viweModel.searchPageViewModel
+import com.example.pokedex.presentation.searchPageViewModel
+import com.example.pokedex.presentation.userInterface.filterPage.SortOption
+import com.example.pokedex.viweModel.RepositoryImpl
 
 
 @Composable
@@ -34,7 +36,12 @@ fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier)
         modifier = modifier
     ) {
         composable(Route.POKEDEX.path) {
-           homePage(navController,viewModel, filterviewModel)
+            //if(filterviewModel.sortPokemonList(SortOption.LowToHigh) dash then do dash)
+
+
+
+
+            homePage(navController,viewModel, filterviewModel)
         }
         composable(Route.Search.path) {
             SearchPageFun(navController,viewModel )

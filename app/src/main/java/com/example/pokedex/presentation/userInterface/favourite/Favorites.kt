@@ -27,7 +27,8 @@ import androidx.navigation.NavHostController
 import com.example.pokedex.presentation.userInterface.HomePage.PokemonList
 import com.example.pokedex.R
 import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
-import com.example.pokedex.viweModel.searchPageViewModel
+import com.example.pokedex.presentation.searchPageViewModel
+import com.example.pokedex.presentation.userInterface.filterPage.SortOption
 
 
 //Placeholder
@@ -35,7 +36,7 @@ import com.example.pokedex.viweModel.searchPageViewModel
 //@Preview(showBackground = true)
 @Composable
 fun Favorites(navHostController: NavHostController, viewModel: searchPageViewModel, filterViewModel: FilterViewModel) {
-    val sortedPokemons = filterViewModel.getSortedPokemonList()
+    val currentSortOption = filterViewModel.selectedSortOption.value
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -62,6 +63,6 @@ fun Favorites(navHostController: NavHostController, viewModel: searchPageViewMod
             Spacer(modifier = Modifier.width(34.dp))
             Icon(imageVector = Icons.Default.Search, contentDescription = "search")
         }
-        PokemonList(navController = navHostController, viewModel =viewModel, isFavorite = true, pokemons1 = sortedPokemons, filterViewModel = filterViewModel)
+        PokemonList(navController = navHostController, viewModel = viewModel, isFavorite = true, sortOption = currentSortOption)
     }
 }

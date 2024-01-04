@@ -47,7 +47,7 @@ import com.example.pokedex.MainActivity
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.presentation.navigation.Route
 
-import com.example.pokedex.viweModel.searchPageViewModel
+import com.example.pokedex.presentation.searchPageViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)

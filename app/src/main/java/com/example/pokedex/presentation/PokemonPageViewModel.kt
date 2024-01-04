@@ -1,8 +1,11 @@
-package com.example.pokedex.viweModel
+package com.example.pokedex.presentation
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.PokemonObject
+import com.example.pokedex.presentation.userInterface.filterPage.SortOption
+import com.example.pokedex.viweModel.RepositoryImpl
 
 //    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 
@@ -16,14 +19,22 @@ class searchPageViewModel : ViewModel() {
     var repository = RepositoryImpl()
 
 
+    fun getMockData(isFavorite: Boolean, sortOption: SortOption? = null): List<Pokemon> {
 
+        val list = if (isFavorite) PokemonsFave else Pokemons
 
-    fun getMockData(isFavorite:Boolean): List<Pokemon> {
-
-        if (!isFavorite)
-            return Pokemons
-        else return PokemonsFave
+        // Apply sorting if a sort option is provided
+        return sortOption?.let { sortPokemonList(list, it) } ?: list
     }
+    private fun sortPokemonList(pokemonList: List<Pokemon>, sortOption: SortOption): List<Pokemon> {
+        return when (sortOption) {
+            SortOption.LowToHigh -> pokemonList.sortedBy { it.id }
+            SortOption.HighToLow -> pokemonList.sortedByDescending { it.id }
+        }
+    }
+
+
+
 
     fun getPokemon(): Pokemon?{
         return selectedPokemon
