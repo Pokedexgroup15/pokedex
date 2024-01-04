@@ -19,7 +19,5 @@ class ResetViewModel : ViewModel() {
         selectedTypes.value = emptyList()
         selectedGeneration.value = -1
         selectedName.value = null
-
-        // Add more reset logic as needed
     }
 }

@@ -12,6 +12,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.pokedex.presentation.userInterface.filterPage.ResetViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.FilterPageContent
 import com.example.pokedex.ShowcasePage
+import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
+import com.example.pokedex.presentation.userInterface.filterPage.ResetViewModel
 
 import com.example.pokedex.presentation.userInterface.HomePage.BottomBar
 import com.example.pokedex.presentation.userInterface.favourite.Favorites
@@ -29,6 +31,8 @@ import com.example.pokedex.viweModel.RepositoryImpl
 fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
     val viewModel = viewModel<searchPageViewModel>()
     val filterviewModel = viewModel<FilterViewModel>()
+    val resetViewModel = viewModel<ResetViewModel>()
+
 
     NavHost(
         navController = navController,
@@ -50,7 +54,7 @@ fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier)
            Favorites(navController, viewModel, filterviewModel)
         }
         composable(Route.Filter.path) {
-            FilterPageContent(navController, FilterViewModel(), ResetViewModel())
+            FilterPageContent(navController, FilterViewModel(), resetViewModel)
         }
         composable(Route.Pokemon.path) {
             ShowcasePage(navController, viewModel)
