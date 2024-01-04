@@ -174,6 +174,15 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                             .fillMaxWidth()
                             .padding(vertical = 4.dp)
                     )
+                    Column {
+                        Text(
+                            text = "Generation",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .padding(10.dp)
+                        )
+                    }
                     for (generation in 1..9) {
                         GenerationButton(
                             generation = generation,
