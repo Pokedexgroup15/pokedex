@@ -138,7 +138,9 @@ import com.example.pokedex.viweModel.searchPageViewModel
                         GenderIcon(imageResId = R.drawable.female)
                         Text(
                             text = "50% 50%",
-                            modifier = Modifier.align(Alignment.CenterVertically)
+                            modifier = Modifier.align(Alignment.CenterVertically),
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold
                         )
                     }
                     Gender.MALE -> {
@@ -148,7 +150,10 @@ import com.example.pokedex.viweModel.searchPageViewModel
                         GenderIcon(imageResId = R.drawable.female)
                     }
                     Gender.NONE -> {
-                        Text(text = "Genderless", modifier= Modifier.align(Alignment.CenterVertically))
+                        Text(text = "GENDERLESS",
+                            modifier= Modifier.align(Alignment.CenterVertically),
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold)
                     }
                     else -> null
                 }
@@ -249,7 +254,7 @@ import com.example.pokedex.viweModel.searchPageViewModel
 
 
 enum class Gender {
-    MALE, FEMALE, MIXED, NONE // None because some rare exist. Maybe gray should be added.
+    MALE, FEMALE, MIXED, NONE, UNKNOWN// None because some rare exist. Maybe gray should be added.
 }
 
 @Composable

@@ -63,7 +63,7 @@ class ApiViewModel: ViewModel() {
                         genderRate == 4 -> Gender.MIXED
                         genderRate in 5..7 -> Gender.FEMALE
                         genderRate == 8 -> Gender.FEMALE
-                        else -> null
+                        else -> {Gender.UNKNOWN}
                     }
 
                     PokemonObject.pokeList.add(Pokemon(pokeName.replaceFirstChar { it.uppercase() }, pokeDefaultPictureFront, pokeId,type1,type2, pokedexTextList,gender))
