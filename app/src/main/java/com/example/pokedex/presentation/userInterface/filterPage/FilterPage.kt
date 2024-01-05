@@ -3,11 +3,14 @@ package com.example.pokedex.presentation.userInterface.filterPage
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 //import androidx.compose.foundation.layout.ColumnScopeInstance.align
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -54,10 +57,13 @@ class FilterPage : ComponentActivity() {
 }
 @Composable
 fun FilterPageContent(navController: NavHostController, viewModel: FilterViewModel, resetViewModel: ResetViewModel) {
+    var isGenerationVisible by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         Row(
             modifier = Modifier
@@ -65,113 +71,92 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                 .height(86.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
+            Row(
                 modifier = Modifier
-                    .size(36.dp)
-                    .clickable {
-                        navController.navigate(Route.POKEDEX.path)
-                    }
+                    .fillMaxWidth()
+                    .height(86.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "backArrow",
-                    modifier = Modifier
-                        .padding(start = 6.dp)
-                        .align(Alignment.CenterEnd)
-                        .size(46.dp)
-                )
             }
-
-            Spacer(modifier = Modifier.width(30.dp))
-
-            Text(
-                text = "Filters and sorting",
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold,
-            )
-
-            Box(
-                modifier = Modifier
-                    .size(36.dp)
-            )
-
-            Icon(
-                imageVector = Icons.Default.Delete,
-                contentDescription = "resetButton",
-                modifier = Modifier
-                    .size(36.dp)
-                    .clickable {
-                        resetViewModel.resetFilters()
-                    }
-            )
         }
 
-        // SortUp()
-        Column(
-            modifier = Modifier.verticalScroll(rememberScrollState(), true)
+        Box(
+            modifier = Modifier
+                .border(1.dp, Color.LightGray, shape = RoundedCornerShape(20.dp)),
         ) {
-            Box(
-                modifier = Modifier
-                    .border(1.dp, Color.LightGray, shape = RoundedCornerShape(20.dp)),
-            ) {
-                Column {
-                    Text(
-                        text = "Sorting",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .padding(10.dp)
-                    )
-                    SortButtons(
-                        sharedViewModel = resetViewModel,
-                        onLowToHighClick = {
-                            resetViewModel.Pokemons.sortBy { it.id }
-                        },
-                        onHighToLowClick = {
-                            resetViewModel.Pokemons.sortByDescending {it.id}
-
-                        }
-                    )
-                }
+            Column {
+                Text(
+                    text = "Sorting",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(10.dp)
+                )
+                SortButtons(
+                    sharedViewModel = resetViewModel,
+                    onLowToHighClick = {
+                        resetViewModel.Pokemons.sortBy { it.id }
+                    },
+                    onHighToLowClick = {
+                        resetViewModel.Pokemons.sortByDescending { it.id }
+                    }
+                )
             }
+        }
 
-            Box(
-                modifier = Modifier
-                    .border(1.dp, Color.LightGray, shape = RoundedCornerShape(20.dp)),
-            ) {
-                Column {
-                    Text(
-                        text = "Filters",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
+        Box(
+            modifier = Modifier
+                .border(1.dp, Color.LightGray, shape = RoundedCornerShape(20.dp)),
+        ) {
+            Column {
+                Text(
+                    text = "Filters",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(10.dp)
+                )
+                TypeButton(sharedViewModel = resetViewModel)
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Generation Button
+                Button(
+                    onClick = { isGenerationVisible = !isGenerationVisible },
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(text = "Generations")
+                }
+
+                // AnimatedVisibility for Generation Buttons
+                AnimatedVisibility(visible = isGenerationVisible) {
+                    Column(
                         modifier = Modifier
-                            .padding(10.dp)
-                    )
-                    TypeButton(sharedViewModel = resetViewModel)
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    for (generation in 1..9) {
-                        GenerationButton(
-                            generation = generation,
-                            selectedGeneration = resetViewModel.selectedGeneration.value,
-                            onGenerationSelected = {
-                                if (resetViewModel.selectedGeneration.value == it) {
-                                    resetViewModel.selectedGeneration.value = -1
-                                } else {
-                                    resetViewModel.selectedGeneration.value = it
-                                }
-                            },
-                            isGenerationSelected = resetViewModel.selectedGeneration.value == generation,
-                            isNameInGeneration = isNameInGeneration(resetViewModel.selectedName.value, generation)
-                        )
-
-                        if (resetViewModel.selectedGeneration.value == generation) {
-                            GenerationNameList(
+                            .fillMaxWidth()
+                            .border(1.dp, Color.LightGray, shape = RoundedCornerShape(20.dp)),
+                    ) {
+                        for (generation in 1..9) {
+                            GenerationButton(
                                 generation = generation,
-                                selectedName = resetViewModel.selectedName.value,
-                                onNameSelected = { resetViewModel.selectedName.value = it }
+                                selectedGeneration = resetViewModel.selectedGeneration.value,
+                                onGenerationSelected = {
+                                    if (resetViewModel.selectedGeneration.value == it) {
+                                        resetViewModel.selectedGeneration.value = -1
+                                    } else {
+                                        resetViewModel.selectedGeneration.value = it
+                                    }
+                                },
+                                isGenerationSelected = resetViewModel.selectedGeneration.value == generation,
+                                isNameInGeneration = isNameInGeneration(resetViewModel.selectedName.value, generation)
                             )
+
+                            if (resetViewModel.selectedGeneration.value == generation) {
+                                GenerationNameList(
+                                    generation = generation,
+                                    selectedName = resetViewModel.selectedName.value,
+                                    onNameSelected = { resetViewModel.selectedName.value = it }
+                                )
+                            }
                         }
                     }
                 }
@@ -179,8 +164,6 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
         }
     }
 }
-
-
 
 @Composable
 fun SortButtons(
