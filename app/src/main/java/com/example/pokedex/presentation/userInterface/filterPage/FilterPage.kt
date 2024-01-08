@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.material3.Text
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 //import androidx.compose.foundation.layout.ColumnScopeInstance.align
@@ -33,6 +34,7 @@ import com.example.pokedex.presentation.userInterface.filterPage.ResetViewModel
 import com.example.pokedex.R
 
 import com.example.pokedex.presentation.navigation.Route
+import com.example.pokedex.presentation.theme.Font
 import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 
 class FilterPage : ComponentActivity() {
@@ -87,7 +89,7 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
             Text(
                 text = "Filters and sorting",
                 fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
+                fontFamily = Font.rudaFontFamily
             )
 
             Box(
@@ -118,6 +120,7 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                     Text(
                         text = "Sorting",
                         fontSize = 24.sp,
+                        fontFamily = Font.rudaFontFamily,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
                             .padding(10.dp)
@@ -144,6 +147,7 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                         text = "Filters",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
+                        fontFamily = Font.rudaFontFamily,
                         modifier = Modifier
                             .padding(10.dp)
                     )
@@ -159,6 +163,7 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                         text = "Type",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
+                        fontFamily = Font.rudaFontFamily,
                         modifier = Modifier
                             .padding(10.dp)
                     )
@@ -179,6 +184,7 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                             text = "Generation",
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
+                            fontFamily = Font.rudaFontFamily,
                             modifier = Modifier
                                 .padding(10.dp)
                         )
@@ -243,7 +249,10 @@ fun SortButtons(
                     color = if (sharedViewModel.selectedSortOption.value == SortOption.LowToHigh) Color(0xFF006CB8) else Color.Transparent,
                 )
         ) {
-            Text(text = "Low to High")
+            Text(
+                text = "Low to High",
+                fontFamily = Font.rudaFontFamily
+            )
         }
         Spacer(modifier = Modifier.width(50.dp))
 
@@ -263,7 +272,10 @@ fun SortButtons(
                     color = if (sharedViewModel.selectedSortOption.value == SortOption.HighToLow) Color(0xFF006CB8) else Color.Transparent,
                 )
         ) {
-            Text(text = "High to Low")
+            Text(
+                text = "High to Low",
+                fontFamily = Font.rudaFontFamily
+            )
         }
     }
 }
@@ -384,7 +396,10 @@ fun GenerationButton(
     ) {
         //Maybe my memory is like a goldfish, but this memory works!
         val buttonText = "Generation $generation" + if (isNameInGeneration) " ✅" else ""
-        Text(text = buttonText)
+        Text(
+            text = buttonText,
+            fontFamily = Font.rudaFontFamily
+        )
     }
 }
 
