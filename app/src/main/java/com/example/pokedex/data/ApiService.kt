@@ -1,29 +1,24 @@
 package com.example.pokedex.viweModel
 
-import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.PokemonObject
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.*
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
-import java.net.URL
-import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
-import retrofit2.http.Query
+
 object RetrofitBase {
 
     val baseUrl = "https://pokeapi.co/api/v2/"
 
     fun getInstance(): Retrofit {
         return Retrofit.Builder().baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create())                 .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 }
@@ -32,18 +27,58 @@ interface PokeApi{
 
     suspend fun getPokemonInfo(@Path("id") pathId: Int) : Response<PokemonInfo>
 }
+interface PokeApiSpecies{
+    @GET("pokemon-species/{id}")
+
+    suspend fun getPokemonSpeciesInfo(@Path("id") pathId: Int) : Response<PokemonSpecies>
+}
+
+
+data class PokemonSpecies(
+    val flavor_text_entries: List<flavor_texts>
+)
+
+data class flavor_texts(
+val flavor_text: String
+)
 
 
 data class PokemonInfo(
     val id: Int,
-    val name: String
-//    val types:String
+    val name: String,
+    val types: List<subType>,
+    val sprites: sprite
 )
 
-//data class PokemonTypes(
-// val 0: String,
-// val 1: String
-//)
+data class sprite(
+    val other: Other
+)
+data class Other(
+    @SerializedName("official-artwork")
+    val text :Offical
+)
+data class Offical(
+    @SerializedName("front_default")
+    val frontdefault: String
+    )
+
+
+
+
+
+data class subType(
+    val slot: Int,
+    val type:Type
+
+)
+data class Type(
+    val name: String,
+    val url:String
+)
+
+
+
+
 
 
 class RepositoryImpl: ViewModel() {
@@ -54,24 +89,36 @@ class RepositoryImpl: ViewModel() {
 
 
           val quotesApi = RetrofitBase.getInstance().create(PokeApi::class.java)
+      val speciesApi = RetrofitBase.getInstance().create(PokeApiSpecies::class.java)
 
 
         viewModelScope.launch(Dispatchers.IO){
 //            val fileName = "json/pokemonCache.json"
 //            var file = File(fileName)
 //            var cacheJson = JSONObject(file.readText())
-            val limit = start+end
 //            val jsonData =URL("https://pokeapi.co/api/v2/pokemon?limit=$limit&offset=$start").readText()
 //            val pokemonJson = JSONObject(jsonData)
             var i : Int = start
             GlobalScope.launch {
                 while(i <= end) {
                 val result = quotesApi.getPokemonInfo(i)
-                result.body()?.let { Log.d("test", it.name)
-//                PokemonObject.pokeList.add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, pokeDefaultPictureFront, it.id,type1,type2, pokedexTextList))
+                val result2 = speciesApi.getPokemonSpeciesInfo(i)
+                    result2.body()?.let { Log.d("test5", it.flavor_text_entries[0].flavor_text)
+                    var pokedexEntry:String
+                    pokedexEntry = it.flavor_text_entries[0].flavor_text
 
+                result.body()?.let { Log.d("test5", it.types[0].type.name+" "+it.name)
+                    var type2: String
+                    if(it.types.size>1){
+                         type2 = it.types[1].type.name
+                    }
+                    else  type2 = "null"
+                    PokemonObject.pokeList.add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, it.sprites.other.text.frontdefault, it.id,it.types[0].type.name,type2, pokedexEntry))
+}}
                     i++
-                }}
+                }
+
+
             }
 //            while(i <= end){
 //                // launching a new coroutine

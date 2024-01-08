@@ -230,7 +230,7 @@ import com.example.pokedex.presentation.searchPageViewModel
             ) {
                 if (pokemon != null) {
                     Text(
-                        text = pokemon.pokedexText[0],
+                        text = pokemon.pokedexText,
                         modifier = Modifier
                             .padding(16.dp)
                             .align(Alignment.CenterStart),
