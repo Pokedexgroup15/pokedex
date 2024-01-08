@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
@@ -252,22 +253,64 @@ import com.example.pokedex.presentation.searchPageViewModel
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp))
-            Box(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .height(120.dp)
-                    .background(Color.LightGray)
-                    .clip(RoundedCornerShape(12.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "CatchRate",
+                Image(
+                    painter = painterResource(id = R.drawable.catchrate),
+                    contentDescription = null,
                     modifier = Modifier
-                        .align(Alignment.Center)
-                        .padding(16.dp),
-                    color = Color.Black,
-                    fontSize = 18.sp
+                        .size(35.dp)
+
                 )
+
+                Box(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .width(40.dp)
+                        .height(40.dp)
+                        .offset(x = 4.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(Color.Blue),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "38.3",
+                        color = Color.White,
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.growthrate),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(35.dp)
+
+                )
+
+                Box(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .width(40.dp)
+                        .height(40.dp)
+                        .offset(x = 4.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(Color.Blue),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "12.5",
+                        color = Color.White,
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
             Divider(
                     color = Color.Black,
