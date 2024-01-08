@@ -87,7 +87,7 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
             Text(
                 text = "Filters and sorting",
                 fontSize = 30.sp,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Bold
             )
 
             Box(
@@ -227,16 +227,20 @@ fun SortButtons(
         horizontalArrangement = Arrangement.Center
     ) {
         Button(
-            shape = RoundedCornerShape(5.dp),
+            shape = RoundedCornerShape(15.dp),
             onClick = {
                 sharedViewModel.selectedSortOption.value = SortOption.LowToHigh
                 onLowToHighClick()
             },
+            //colors = ButtonDefaults.buttonColors(backgroundColor = if (sharedViewModel.selectedSortOption.value == SortOption.LowToHigh) Color.DarkGray else Color.LightGray),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF58ABF6) // Set to your desired color
+            ),
             modifier = Modifier
                 .border(
                     width = 4.dp,
-                    shape = RoundedCornerShape(5.dp),
-                    color = if (sharedViewModel.selectedSortOption.value == SortOption.LowToHigh) Color.DarkGray else Color.Transparent,
+                    shape = RoundedCornerShape(20.dp),
+                    color = if (sharedViewModel.selectedSortOption.value == SortOption.LowToHigh) Color(0xFF006CB8) else Color.Transparent,
                 )
         ) {
             Text(text = "Low to High")
@@ -244,16 +248,19 @@ fun SortButtons(
         Spacer(modifier = Modifier.width(50.dp))
 
         Button(
-            shape = RoundedCornerShape(5.dp),
+            shape = RoundedCornerShape(15.dp),
             onClick = {
                 sharedViewModel.selectedSortOption.value = SortOption.HighToLow
                 onHighToLowClick()
             },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF58ABF6) // Set to your desired color
+            ),
             modifier = Modifier
                 .border(
                     width = 4.dp,
-                    shape = RoundedCornerShape(5.dp),
-                    color = if (sharedViewModel.selectedSortOption.value == SortOption.HighToLow) Color.DarkGray else Color.Transparent,
+                    shape = RoundedCornerShape(20.dp),
+                    color = if (sharedViewModel.selectedSortOption.value == SortOption.HighToLow) Color(0xFF006CB8) else Color.Transparent,
                 )
         ) {
             Text(text = "High to Low")
@@ -370,6 +377,9 @@ fun GenerationButton(
 ) {
     Button(
         onClick = { onGenerationSelected(generation) },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color(0xFF58ABF6) // Set to your desired color
+        ),
         modifier = Modifier.padding(16.dp)
     ) {
         //Maybe my memory is like a goldfish, but this memory works!
