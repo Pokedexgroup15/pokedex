@@ -295,6 +295,7 @@ import com.example.pokedex.presentation.searchPageViewModel
                             .offset(x = 20.dp)
                             .clip(RoundedCornerShape(6.dp))
                             .background(Color.LightGray)
+                            .padding(3.dp)
                     ){
                         Text(
                             text = "This is the catch rate of the Pokemon.",
@@ -345,6 +346,7 @@ import com.example.pokedex.presentation.searchPageViewModel
                             .offset(x = 20.dp)
                             .clip(RoundedCornerShape(6.dp))
                             .background(Color.LightGray)
+                            .padding(3.dp)
                     ){
                         Text(
                             text = "This is the growth rate of the Pokemon.",
