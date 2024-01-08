@@ -6,5 +6,7 @@ data class Pokemon(
   val id: Int,
   val type1: String,
   val type2: String,
-  val pokedexText: ArrayList<String>
+  val pokedexText: ArrayList<String>,
+  val evolution:ArrayList<String>
+
  )

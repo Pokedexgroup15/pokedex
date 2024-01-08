@@ -25,6 +25,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         RepositoryImpl().addPokemon(1,40,true,true)
 
+
         setContent {
             PokedexTheme {
                 Surface(

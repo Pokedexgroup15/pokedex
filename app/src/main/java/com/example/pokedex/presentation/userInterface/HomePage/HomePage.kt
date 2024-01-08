@@ -114,6 +114,7 @@ fun PokemonList(navController: NavHostController,viewModel: searchPageViewModel,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 chunkedPokemons.forEach { pokemon ->
+                    println(pokemon.evolution.toString())
                     pokemonBox(
                         modifier = Modifier
                             .weight(1f)

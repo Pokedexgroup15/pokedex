@@ -33,6 +33,7 @@ class searchPageViewModel : ViewModel() {
     }
 
 
+
     fun toggleFavourite(pokemon: Pokemon){
         if (PokemonsFave.contains(pokemon))
             PokemonsFave.remove(pokemon)
