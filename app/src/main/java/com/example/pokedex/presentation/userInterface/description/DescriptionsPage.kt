@@ -65,6 +65,7 @@ import com.example.pokedex.presentation.searchPageViewModel
         val femaleColor = Color(143,68,124)
         var catchRateTextBox by remember { mutableStateOf(false) }
         var growthRateTextBox by remember { mutableStateOf(false) }
+        var Favorized by remember { mutableStateOf(viewModel.PokemonsFave.contains(pokemon)) }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -184,14 +185,21 @@ import com.example.pokedex.presentation.searchPageViewModel
                     Icon(
                         painter = painterResource(id = R.drawable.pokeball_bw),
                         contentDescription = "Favorite option",
-                        tint = if (viewModel.PokemonsFave.contains(pokemon)) Color.Red else Color.Black,
+                        //tint = if (viewModel.PokemonsFave.contains(pokemon)) Color.Red else Color.Black,
+                        tint = if(Favorized) Color.Red else Color.Black,
                         modifier = Modifier
                             .size(25.dp)
                             .clickable {
-                                if (viewModel.PokemonsFave.contains(pokemon))
-                                    viewModel.PokemonsFave.remove(pokemon)
-                                else
+                                Favorized = !Favorized
+                                if (Favorized) {
                                     pokemon?.let { viewModel.PokemonsFave.add(it) }
+                                } else {
+                                    viewModel.PokemonsFave.remove(pokemon)
+                                    //if (viewModel.PokemonsFave.contains(pokemon))
+                                    //  viewModel.PokemonsFave.remove(pokemon)
+                                    //else
+                                    //  pokemon?.let { viewModel.PokemonsFave.add(it) }
+                                }
                             }
                             .requiredSize(36.dp, 36.dp)
                             .align(Alignment.BottomEnd)
@@ -371,17 +379,32 @@ import com.example.pokedex.presentation.searchPageViewModel
         selectedGender: Gender,
         onGenderSelected: (Gender) -> Unit
     ) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clickable { onGenderSelected(selectedGender) }
+                .padding(2.dp)
+                .border(
+                    width = 2.dp,
+                    color = if (selectedGender != Gender.NONE) Color.White else Color.Transparent,
+                    //shape = CircleShape
+                )
+                .padding(2.dp),
+        ) {
         Image(
             painter = painterResource(id = imageResId),
             contentDescription = null,
             modifier = Modifier
-                .size(36.dp)
-                .clickable { onGenderSelected(selectedGender) }
-                .border(
-                    width = 2.dp,
-                    color = if (selectedGender != Gender.NONE) Color.White else Color.Transparent,
-                )
-        )
+                .fillMaxSize(),
+            //.padding(3.dp)
+            //.size(36.dp)
+            //.clickable { onGenderSelected(selectedGender) }
+            //.border(
+            //  width = 2.dp,
+            //color = if (selectedGender != Gender.NONE) Color.White else Color.Transparent,),
+            contentScale = ContentScale.Fit
+            )
+        }
     }
 
 
