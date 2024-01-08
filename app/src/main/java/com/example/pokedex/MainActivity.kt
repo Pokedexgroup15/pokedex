@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        RepositoryImpl().addPokemon(1,20,true,true)
+        RepositoryImpl().addPokemon(1,1000,true,true)
         setContent {
             PokedexTheme {
                 Surface(
