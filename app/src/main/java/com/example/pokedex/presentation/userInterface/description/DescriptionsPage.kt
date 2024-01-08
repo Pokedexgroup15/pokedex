@@ -248,11 +248,8 @@ import com.example.pokedex.presentation.searchPageViewModel
                 )
                 pokemon?.let {
                     Text(
-<<<<<<< HEAD
                         text = pokemon.pokedexText,
-=======
-                        text = it.pokedexText[0],
->>>>>>> 01a8e0322de38b3f0530e27a77f04eb926c485dc
+
                         modifier = Modifier
                             .padding(16.dp)
                             .align(Alignment.CenterStart),
