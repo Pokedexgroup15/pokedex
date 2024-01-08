@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -62,6 +63,8 @@ import com.example.pokedex.presentation.searchPageViewModel
         val pokemon = viewModel.getPokemon()
         val maleColor = Color(49,59,169)
         val femaleColor = Color(143,68,124)
+        var catchRateTextBox by remember { mutableStateOf(false) }
+        var growthRateTextBox by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -261,6 +264,7 @@ import com.example.pokedex.presentation.searchPageViewModel
                     contentDescription = null,
                     modifier = Modifier
                         .size(35.dp)
+                        .clickable { catchRateTextBox = !catchRateTextBox }
 
                 )
 
@@ -281,6 +285,25 @@ import com.example.pokedex.presentation.searchPageViewModel
                         fontWeight = FontWeight.Bold
                     )
                 }
+
+                if(catchRateTextBox) {
+                    Box(
+                        modifier = Modifier
+                            .padding(2.dp)
+                            .width(120.dp)
+                            .height(80.dp)
+                            .offset(x = 20.dp)
+                            .clip(RoundedCornerShape(6.dp))
+                            .background(Color.LightGray)
+                    ){
+                        Text(
+                            text = "This is the catch rate of the Pokemon.",
+                            color = Color.White,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
             }
 
             Row(
@@ -291,6 +314,8 @@ import com.example.pokedex.presentation.searchPageViewModel
                     contentDescription = null,
                     modifier = Modifier
                         .size(35.dp)
+                        .clickable { growthRateTextBox = !growthRateTextBox }
+
 
                 )
 
@@ -310,6 +335,24 @@ import com.example.pokedex.presentation.searchPageViewModel
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold
                     )
+                }
+                if(growthRateTextBox) {
+                    Box(
+                        modifier = Modifier
+                            .padding(2.dp)
+                            .width(120.dp)
+                            .height(80.dp)
+                            .offset(x = 20.dp)
+                            .clip(RoundedCornerShape(6.dp))
+                            .background(Color.LightGray)
+                    ){
+                        Text(
+                            text = "This is the growth rate of the Pokemon.",
+                            color = Color.White,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
             Divider(
