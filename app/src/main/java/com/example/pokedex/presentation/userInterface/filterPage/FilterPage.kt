@@ -175,6 +175,7 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                         growRateButton(sharedViewModel = resetViewModel)
                         Spacer(modifier = Modifier.height(16.dp))
 
+                        /*
                         Divider(
                             color = Color.LightGray,
                             thickness = 1.5.dp,
@@ -191,7 +192,7 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                             modifier = Modifier
                                 .padding(10.dp)
                         )
-
+*/
 
                         Divider(
                             color = Color.LightGray,
