@@ -34,6 +34,30 @@ interface PokeApiSpecies{
     suspend fun getPokemonSpeciesInfo(@Path("id") pathId: Int) : Response<PokemonSpecies>
 }
 
+interface PokeEveChain{
+    @GET("https://pokeapi.co/api/v2/evolution-chain/{id}")
+
+    suspend fun getPokemonEveInfo(@Path("id") pathId: Int) : Response<PokemonEve>
+}
+
+data class PokemonEve(
+    val chain: Chain
+
+)
+
+data class Chain(
+    val is_baby: Boolean,
+    val species: Species,
+    val evolves_to: List<Evol>
+)
+data class Evol(
+    val species: Species,
+    val evolves_to: List<Evol>
+)
+
+data class Species(
+    val name: String
+)
 
 data class PokemonSpecies(
     val flavor_text_entries: List<flavor_texts>,
@@ -99,10 +123,9 @@ class RepositoryImpl: ViewModel() {
 
   fun addPokemon(start:Int, end:Int, onlyDefaults:Boolean, cleanCopy:Boolean){
 
-
-          val quotesApi = RetrofitBase.getInstance().create(PokeApi::class.java)
-      val speciesApi = RetrofitBase.getInstance().create(PokeApiSpecies::class.java)
-
+    val quotesApi = RetrofitBase.getInstance().create(PokeApi::class.java)
+    val speciesApi = RetrofitBase.getInstance().create(PokeApiSpecies::class.java)
+    val eveApi = RetrofitBase.getInstance().create(PokeEveChain::class.java)
 
         viewModelScope.launch(Dispatchers.IO){
 //            val fileName = "json/pokemonCache.json"
@@ -115,7 +138,39 @@ class RepositoryImpl: ViewModel() {
                 while(i <= end) {
                 val result = quotesApi.getPokemonInfo(i)
                 val result2 = speciesApi.getPokemonSpeciesInfo(i)
-                    result2.body()?.let {
+
+                if(i<549){
+                    val result3 = eveApi.getPokemonEveInfo(i)
+                    result3.body()?.let {
+
+                        PokemonObject.eveList[i][0].add(it.chain.species.name)
+
+                        var i2: Int =0
+                        var i3: Int =0
+
+                        while( i2<it.chain.evolves_to.size){
+                            PokemonObject.eveList[i][1].add(it.chain.evolves_to[i2].species.name)
+                            while( i3<it.chain.evolves_to[i2].evolves_to.size) {
+
+                                PokemonObject.eveList[i][2].add(it.chain.evolves_to[i2].evolves_to[i3].species.name)
+                                i3++
+                            }
+                            i2++
+                        }
+                        Log.d("eve",PokemonObject.eveList[i][0].toString() +" -> "+PokemonObject.eveList[i][1].toString()+" -> "+ PokemonObject.eveList[i][2])
+                        PokemonObject.eveList
+
+
+
+
+
+                    }
+
+
+                }
+
+                    result2.body()?.let { Log.d("test5", it.flavor_text_entries[0].flavor_text)
+
                     var pokedexEntry:String
                         var i2:Int = 0
                         while(i2<it.flavor_text_entries.size-1){
