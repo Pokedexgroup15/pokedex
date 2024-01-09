@@ -8,6 +8,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.material3.Text
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -39,6 +40,7 @@ import com.example.pokedex.presentation.userInterface.filterPage.ResetViewModel
 import com.example.pokedex.R
 
 import com.example.pokedex.presentation.navigation.Route
+import com.example.pokedex.presentation.theme.Font
 import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 
 class FilterPage : ComponentActivity() {
@@ -226,36 +228,52 @@ fun SortButtons(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.Center
     ) {
         Button(
-            shape = RectangleShape,
+            shape = RoundedCornerShape(15.dp),
             onClick = {
                 sharedViewModel.selectedSortOption.value = SortOption.LowToHigh
                 onLowToHighClick()
             },
+            //colors = ButtonDefaults.buttonColors(backgroundColor = if (sharedViewModel.selectedSortOption.value == SortOption.LowToHigh) Color.DarkGray else Color.LightGray),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF58ABF6) // Set to your desired color
+            ),
             modifier = Modifier
                 .border(
                     width = 4.dp,
-                    color = if (sharedViewModel.selectedSortOption.value == SortOption.LowToHigh) Color.DarkGray else Color.Transparent,
+                    shape = RoundedCornerShape(20.dp),
+                    color = if (sharedViewModel.selectedSortOption.value == SortOption.LowToHigh) Color(0xFF006CB8) else Color.Transparent,
                 )
         ) {
-            Text(text = "Low to High")
+            Text(
+                text = "Low to High",
+                fontFamily = Font.rudaFontFamily
+            )
         }
+        Spacer(modifier = Modifier.width(50.dp))
 
         Button(
-            shape = RectangleShape,
+            shape = RoundedCornerShape(15.dp),
             onClick = {
                 sharedViewModel.selectedSortOption.value = SortOption.HighToLow
                 onHighToLowClick()
             },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF58ABF6) // Set to your desired color
+            ),
             modifier = Modifier
                 .border(
                     width = 4.dp,
-                    color = if (sharedViewModel.selectedSortOption.value == SortOption.HighToLow) Color.DarkGray else Color.Transparent,
+                    shape = RoundedCornerShape(20.dp),
+                    color = if (sharedViewModel.selectedSortOption.value == SortOption.HighToLow) Color(0xFF006CB8) else Color.Transparent,
                 )
         ) {
-            Text(text = "High to Low")
+            Text(
+                text = "High to Low",
+                fontFamily = Font.rudaFontFamily
+            )
         }
     }
 }
@@ -269,12 +287,14 @@ fun TypeButton(sharedViewModel: ResetViewModel) {
     var isMenuVisible by remember { mutableStateOf(true) }
     var selectedTypes by remember { mutableStateOf(emptyList<Int>()) }
 
-    Button(
+    /*Button(
         onClick = { isMenuVisible = true },
         modifier = Modifier.padding(16.dp)
     ) {
         Text(text = "Type")
     }
+
+     */
 
     if (isMenuVisible) {
         val types = listOf(
@@ -302,12 +322,17 @@ fun TypeButton(sharedViewModel: ResetViewModel) {
 
         Column {
             for (columnTypes in groupedTypes) {
-                Row {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp), // Add padding to the row itself
+                    horizontalArrangement = Arrangement.SpaceBetween // This will add equal spacing between the items
+                ) {
                     for (type in columnTypes) {
                         TypeItemButton(type, sharedViewModel.selectedTypes.value) { selected ->
                             sharedViewModel.selectedTypes.value = selected
                         }
-                        Spacer(modifier = Modifier.width(10.dp))
+                        Spacer(modifier = Modifier.width(2.dp))
                     }
                 }
             }
@@ -321,11 +346,12 @@ fun TypeItemButton(type: Int, selectedTypes: List<Int>, onTypeSelected: (List<In
 
     Box(
         modifier = Modifier
-            .size(140.dp, 31.dp)
+            .size(119.dp, 32.dp)
             .border(
-                width = 2.dp,
-                color = if (isButtonClicked) Color.Green else Color.Gray,
-                shape = RectangleShape
+                width = 3.dp,
+                color = if (isButtonClicked) Color(0xFF006CB8) else Color.LightGray,
+                //shape = RoundedCornerShape(5.dp)
+                shape = RoundedCornerShape(15.dp)
             )
             //Only 2 can be selected.
             .clickable {
@@ -347,6 +373,7 @@ fun TypeItemButton(type: Int, selectedTypes: List<Int>, onTypeSelected: (List<In
             modifier = Modifier
                 .fillMaxSize()
                 .padding(3.5.dp)
+                .clip(shape = RoundedCornerShape(size = 12.dp))
         )
     }
 }
@@ -362,11 +389,17 @@ fun GenerationButton(
 ) {
     Button(
         onClick = { onGenerationSelected(generation) },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color(0xFF58ABF6)
+        ),
         modifier = Modifier.padding(16.dp)
     ) {
         //Maybe my memory is like a goldfish, but this memory works!
         val buttonText = "Generation $generation" + if (isNameInGeneration) " ✅" else ""
-        Text(text = buttonText)
+        Text(
+            text = buttonText,
+            fontFamily = Font.rudaFontFamily
+        )
     }
 }
 

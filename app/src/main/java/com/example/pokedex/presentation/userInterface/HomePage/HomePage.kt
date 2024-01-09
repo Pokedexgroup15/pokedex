@@ -76,6 +76,7 @@ fun homePage(navController: NavHostController, viewModel: searchPageViewModel, f
             Spacer(modifier = Modifier.width(71.dp))
             Text(
                 text = "Pokédex",
+                fontFamily = Font.rudaFontFamily,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold
             )
