@@ -1,5 +1,5 @@
-package com.example.pokedex.Presentation.UserInterface
-
+package com.example.pokedex.presentation.userInterface.favourite
+import com.example.pokedex.presentation.theme.Font.Companion
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -20,21 +20,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.pokedex.presentation.userInterface.HomePage.PokemonList
 import com.example.pokedex.R
-import com.example.pokedex.viweModel.searchPageViewModel
+import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
+import com.example.pokedex.presentation.searchPageViewModel
+import com.example.pokedex.presentation.userInterface.filterPage.SortOption
 
 
 //Placeholder
 @OptIn(ExperimentalMaterial3Api::class)
 //@Preview(showBackground = true)
 @Composable
-fun Favorites(navHostController: NavHostController, viewModel: searchPageViewModel) {
-
+fun Favorites(navHostController: NavHostController, viewModel: searchPageViewModel, filterViewModel: FilterViewModel) {
+    val currentSortOption = filterViewModel.selectedSortOption.value
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -48,23 +51,15 @@ fun Favorites(navHostController: NavHostController, viewModel: searchPageViewMod
             verticalAlignment = Alignment.CenterVertically
         ) {
             Spacer(modifier = Modifier.width(71.dp))
+
             Text(
                 text = "Favorites",
                 fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
+
+                fontWeight = FontWeight.Bold,
+                fontFamily = Companion.rudaFontFamily
             )
-            Spacer(modifier = Modifier.width(81.dp))
-            Image(
-                painter = painterResource(id = R.drawable.img_filter),
-                contentDescription = "filter", modifier = Modifier.size(24.dp)
-            )
-            Spacer(modifier = Modifier.width(34.dp))
-            Icon(imageVector = Icons.Default.Search, contentDescription = "search")
-
-
-
-
         }
-        PokemonList(navController = navHostController, viewModel =viewModel, isFavorite = true)
+        PokemonList(navController = navHostController, viewModel = viewModel, isFavorite = true, sortOption = currentSortOption)
     }
 }

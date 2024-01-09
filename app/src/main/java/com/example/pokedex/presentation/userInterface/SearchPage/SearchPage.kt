@@ -1,4 +1,4 @@
-package com.example.pokedex.Presentation.UserInterface
+package com.example.pokedex.presentation.userInterface.SearchPage
 
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -44,10 +44,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.pokedex.MainActivity
-import com.example.pokedex.Data.Pokemon
-import com.example.pokedex.Presentation.navigation.Route
+import com.example.pokedex.domain.Pokemon
+import com.example.pokedex.presentation.navigation.Route
 
-import com.example.pokedex.viweModel.searchPageViewModel
+import com.example.pokedex.presentation.searchPageViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)

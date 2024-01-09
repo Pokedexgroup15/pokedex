@@ -1,4 +1,4 @@
-package com.example.pokedex.Presentation.UserInterface
+package com.example.pokedex.presentation.userInterface.HomePage
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
@@ -29,6 +28,10 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,15 +49,21 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import com.example.pokedex.Presentation.theme.Font
-import com.example.pokedex.Data.Pokemon
+import com.example.pokedex.presentation.theme.Font
+import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.R
-import com.example.pokedex.Presentation.navigation.Route
-import com.example.pokedex.viweModel.searchPageViewModel
+import com.example.pokedex.presentation.navigation.Route
+import com.example.pokedex.presentation.searchPageViewModel
+import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
+import com.example.pokedex.presentation.userInterface.filterPage.SortOption
 
 
 @Composable
-fun homePage(navController: NavHostController,viewModel: searchPageViewModel) {
+fun homePage(navController: NavHostController, viewModel: searchPageViewModel, filterViewModel: FilterViewModel) {
+    //val sortedPokemons = filterViewModel.getSortedPokemonList()
+    //PokemonList(navController = navController, viewModel = viewModel, pokemons = sortedPokemons, isFavorite = false)
+    val currentSortOption = filterViewModel.selectedSortOption.value
+
 
     Column(
         modifier = Modifier
@@ -71,6 +80,7 @@ fun homePage(navController: NavHostController,viewModel: searchPageViewModel) {
             Spacer(modifier = Modifier.width(71.dp))
             Text(
                 text = "Pokédex",
+                fontFamily = Font.rudaFontFamily,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -93,14 +103,20 @@ fun homePage(navController: NavHostController,viewModel: searchPageViewModel) {
 
                 })
         }
-        PokemonList(navController,viewModel,false)
+        //PokemonList(navController,viewModel, false)
+            //PokemonList(navController,viewModel, filterViewModel = FilterViewModel(), false, pokemons1 =filterViewModel.getSortedPokemonList() )
+        //PokemonList(navController = navController, viewModel = viewModel, isFavorite = false, filterViewModel = filterViewModel)
+        PokemonList(navController = navController, viewModel = viewModel, isFavorite = false, sortOption = currentSortOption)
     }
 }
 
 
 @Composable
-fun PokemonList(navController: NavHostController,viewModel: searchPageViewModel,isFavorite: Boolean) {
-    val pokemons = viewModel.getMockData(isFavorite)
+
+fun PokemonList(navController: NavHostController, viewModel: searchPageViewModel, isFavorite: Boolean, sortOption: SortOption?) {
+    //val pokemons = viewModel.getMockData(isFavorite)
+    //val pokemons1 = filterViewModel.getSortedPokemonList()
+    val pokemons = viewModel.getMockData(isFavorite, sortOption)
 
     LazyColumn(
         modifier = Modifier.fillMaxSize()
@@ -161,7 +177,8 @@ fun getTypeIconwithID(type: String): Int {
 }
 @Composable
 fun pokemonBox(modifier: Modifier,
-               navController: NavHostController, pokemon: Pokemon, viewModel: searchPageViewModel) {
+               navController: NavHostController, pokemon: Pokemon, viewModel: searchPageViewModel
+) {
     val context = LocalContext.current
     Box(
         modifier = modifier
@@ -227,6 +244,7 @@ fun pokemonBox(modifier: Modifier,
 
 @Composable
 fun pokemonPictureAndLogo(modifier: Modifier, pokemon: Pokemon, viewModel: searchPageViewModel){
+    var Favorized by remember { mutableStateOf(viewModel.PokemonsFave.contains(pokemon))}
     Box(
         modifier=modifier
 
@@ -242,18 +260,21 @@ fun pokemonPictureAndLogo(modifier: Modifier, pokemon: Pokemon, viewModel: searc
             painter = painterResource(id = R.drawable.pokeball_notfave),
             //imageVector = Icons.Default.Favorite,
             contentDescription = "pokeball",
-            tint=if (viewModel.PokemonsFave.contains(pokemon)) Color.Red else Color.Black,
+            //tint=if (viewModel.PokemonsFave.contains(pokemon)) Color.Red else Color.Black,
+            tint = if(Favorized) Color.Red else Color.Black,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .size(22.dp)
                 .clickable {
+                    Favorized = !Favorized
+                    if (Favorized) {
+                        pokemon?.let { viewModel.PokemonsFave.add(it) }
+                    } else {viewModel.PokemonsFave.remove(pokemon)
+                        //viewModel.toggleFavourite(pokemon)
 
-                    viewModel.toggleFavourite(pokemon)
 
-
+                    }
                 }
-
-
         )
     }
 
@@ -324,7 +345,8 @@ private data class Tab(
 fun homePreview(){
     val navController = rememberNavController()
     val viewModel = viewModel<searchPageViewModel>()
+    val filterViewModel = viewModel<FilterViewModel>()
 
-    homePage(navController = navController,viewModel)
+    homePage(navController = navController,viewModel,filterViewModel)
 
 }

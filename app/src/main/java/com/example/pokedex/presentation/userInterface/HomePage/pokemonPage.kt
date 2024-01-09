@@ -1,5 +1,6 @@
-package com.example.pokedex.Presentation.UserInterface
+package com.example.pokedex.presentation.userInterface.HomePage
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,12 +22,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.pokedex.R
 
 
-@Preview
+
 @Composable
-fun pokemonPage(){
+fun pokemonPage(navController: NavHostController){
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.BottomCenter
@@ -38,14 +40,14 @@ fun pokemonPage(){
         ){
             Text(text = "", modifier = Modifier.align(Alignment.CenterHorizontally))
             Spacer(modifier = Modifier.weight(4f))
-            EvolutionBar()
+            EvolutionBar(navController)
             Spacer(modifier = Modifier.weight(1f))
         }
     }
 }
 
 @Composable
-fun EvolutionBar(){
+fun EvolutionBar(navController: NavHostController){
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -65,11 +67,11 @@ fun EvolutionBar(){
         horizontalArrangement = Arrangement.Center
     )
     {
-        EvolutionCircleImage()
+        EvolutionCircleImage(navController)
         EvolutionArrowImage()
-        EvolutionCircleImage()
+        EvolutionCircleImage(navController)
         EvolutionArrowImage()
-        EvolutionCircleImage()
+        EvolutionCircleImage(navController)
         /*repeat(3){
             EvolutionCircleImage()
             }*/
@@ -77,12 +79,15 @@ fun EvolutionBar(){
 }
 
 @Composable
-fun EvolutionCircleImage() {
+fun EvolutionCircleImage(navController: NavHostController) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .size(110.dp)
             .clip(CircleShape)
+            .clickable(){
+                navController.navigate("DescriptionsPage")
+            }
     ) {
         Image(
             painter = painterResource(id = R.drawable.evolutionscircle),
