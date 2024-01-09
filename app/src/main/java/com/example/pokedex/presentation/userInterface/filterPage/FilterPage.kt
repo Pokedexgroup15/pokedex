@@ -88,6 +88,7 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                             text = "Sorting",
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
+                            fontFamily = Font.rudaFontFamily,
                             modifier = Modifier
                                 .padding(10.dp)
                         )
@@ -114,21 +115,60 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                     Column {
                         Text(
                             text = "Filters",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = Font.rudaFontFamily,
+                            modifier = Modifier
+                                .padding(10.dp)
+                        )
+                        Divider(
+                            color = Color.LightGray,
+                            thickness = 1.5.dp,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp)
+                        )
+
+                        Text(
+                            text = "Type",
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
+                            fontFamily = Font.rudaFontFamily,
                             modifier = Modifier
                                 .padding(10.dp)
                         )
                         TypeButton(sharedViewModel = resetViewModel)
 
                         Spacer(modifier = Modifier.height(16.dp))
+                        Divider(
+                            color = Color.LightGray,
+                            thickness = 1.5.dp,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp)
+                        )
+                        Column {
+                            Text(
+                                text = "Generation",
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = Font.rudaFontFamily,
+                                modifier = Modifier
+                                    .padding(10.dp)
+                            )
+                        }
+
+
 
                         // Generation Button
                         Button(
                             onClick = { isGenerationVisible = !isGenerationVisible },
-                            modifier = Modifier.padding(16.dp)
+                            modifier = Modifier.padding(16.dp),
+                                    colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(0xFF58ABF6))
+
                         ) {
-                            Text(text = "Generations")
+                            Text(text = "Generations", fontFamily = Font.rudaFontFamily,)
                         }
 
                         // Checks clickable Gen button and opens up generation loop buttons and stuff.
@@ -199,6 +239,7 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                 text = "Filters and sorting",
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
+                fontFamily = Font.rudaFontFamily,
                 modifier = Modifier
                     .weight(1f)
                 // Space Slot here for headline folks!
