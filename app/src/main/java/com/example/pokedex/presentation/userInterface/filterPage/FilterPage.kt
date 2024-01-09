@@ -449,7 +449,7 @@ fun GenerationButton(
     ) {
         //Maybe my memory is like a goldfish, but this memory works!
         //val checkedMark = "\u2713"
-        val buttonText = "Generation $generation" + if (isNameInGeneration) " \u2713" else ""
+        val buttonText = "Generation $generation" + if (isNameInGeneration) "   \u2713" else ""
         Text(
             text = buttonText,
             fontFamily = Font.rudaFontFamily
@@ -485,13 +485,13 @@ fun GenerationNameList(
                 .clickable {
                     onNameSelected(name)
                 }
-                .padding(4.dp)
+                //.padding(4.dp)
                 .border(
                     width = 3.dp,
                     shape = RoundedCornerShape(20.dp),
                     color = (if (isSelected) Color(0xFF006CB8) else Color.Transparent)
                 )
-                .padding(5.dp)
+                .padding(8.dp)
             Text(
                 text = name,
                 modifier = textModifier,
