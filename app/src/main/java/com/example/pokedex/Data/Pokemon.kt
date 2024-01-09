@@ -9,5 +9,7 @@ import com.example.pokedex.Gender
   val type1: String,
   val type2: String,
   val pokedexText: ArrayList<String>,
-  val gender: Gender
+  val gender: Gender,
+  val maleRatio: Double,
+  val femaleRatio: Double
  )

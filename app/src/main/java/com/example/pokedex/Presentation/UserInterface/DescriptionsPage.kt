@@ -5,6 +5,7 @@ package com.example.pokedex
 import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -88,12 +90,13 @@ import com.example.pokedex.viweModel.searchPageViewModel
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
             )
-            val backgroundColor=when (pokemon?.gender){
-               Gender.MALE ->maleColor
-                Gender.MIXED -> mixedColor
-               Gender.FEMALE-> femaleColor
-               Gender.NONE-> genderlessColor
+            val backgroundColor = when {
+                pokemon?.gender==Gender.MIXED->mixedColor
+                pokemon?.gender==Gender.NONE -> genderlessColor
+                pokemon?.maleRatio ?: 0.0 > 50 -> maleColor
+                pokemon?.femaleRatio?: 0.0 >50 -> femaleColor
                 else -> Color.Transparent
+
             }
 
             Box(
@@ -130,44 +133,12 @@ import com.example.pokedex.viweModel.searchPageViewModel
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
+                verticalAlignment=Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
             ) {
-                when(pokemon?.gender){
-                    Gender.MIXED -> {
-                        GenderIcon(imageResId = R.drawable.male)
-                        GenderIcon(imageResId = R.drawable.female)
-                        Text(
-                            text = "50% 50%",
-                            modifier = Modifier.align(Alignment.CenterVertically),
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                    Gender.MALE -> {
-                        GenderIcon(imageResId = R.drawable.male)
-                    }
-                    Gender.FEMALE -> {
-                        GenderIcon(imageResId = R.drawable.female)
-                    }
-                    Gender.NONE -> {
-                        Text(text = "GENDERLESS",
-                            modifier= Modifier.align(Alignment.CenterVertically),
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold)
-                    }
-                    else -> null
-                }
-               // GenderIcon(
-                   // imageResId = R.drawable.male,
-                  //  selectedGender = Gender.MALE,
-                  //  onGenderSelected = { selectedGender = it }
-               // )
+               
+               pokemon?.let { GenderDisplay(gender = it.gender, maleRatio =it.maleRatio, femaleRatio = it.femaleRatio) }
 
-               // GenderIcon(
-                  //  imageResId = R.drawable.female,
-                  //selectedGender = Gender.FEMALE,
-                   // onGenderSelected = { selectedGender = it }
-               // )
                 Spacer(modifier = Modifier.weight(1f))
 
                 Box(
@@ -240,17 +211,52 @@ import com.example.pokedex.viweModel.searchPageViewModel
             }
         }
     }
-   @Composable
-   fun GenderIcon(imageResId: Int) {
-        Image(
-            painter = painterResource(id = imageResId),
-            contentDescription = "Gender icon",
-            modifier = Modifier
-                .size(36.dp)
-        )
+    
+    @Composable
+    fun GenderDisplay(gender:Gender,maleRatio: Double,femaleRatio: Double){
+        Row(horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically){
+            if (gender != Gender.NONE) {
+                if (maleRatio > 0) {
+                    GenderIcon(imageResId = R.drawable.male, ratio = maleRatio, color = Color(0xFF51BAEE) )
+                }
+                if (femaleRatio > 0.0) {
+                    Spacer(modifier = Modifier.width(4.dp))
+                    GenderIcon(imageResId = R.drawable.female, ratio = femaleRatio, color = Color(0xFFFF007F))
+                }
+            } else {
+                Text(text = " ")
+            }
+        }
     }
 
 
+   @Composable
+   fun GenderIcon(imageResId: Int, ratio: Double, color: Color) {
+       Column (horizontalAlignment = Alignment.CenterHorizontally){
+           Box(
+               contentAlignment = Alignment.Center, modifier = Modifier
+                   .border(width = 1.dp, color, shape = RoundedCornerShape(50))
+                   .padding(3.dp)
+           ) {
+               Text(
+                   text = "${ratio}%",
+                   fontSize = 16.sp,
+                   fontWeight = FontWeight.Bold,
+                   modifier = Modifier
+                       .align(Alignment.TopCenter)
+               )
+           }
+           Spacer(modifier = Modifier.height(4.dp))
+           Image(
+               painter = painterResource(id = imageResId),
+               contentDescription = "Gender icon",
+               modifier = Modifier
+                   .size(36.dp)
+           )
+       }
+
+   }
+   
 
 
 enum class Gender {

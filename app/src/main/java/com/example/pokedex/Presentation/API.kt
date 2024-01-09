@@ -56,17 +56,21 @@ class ApiViewModel: ViewModel() {
                         Log.d("info",""+pokeName+" "+pokeDefaultPictureFront+" "+ pokeId+" "+  type1+" "+type2)
 
                     val genderRate=pokemonJsonSpecies.getInt("gender_rate")
-                    val gender=when{
-                        genderRate<0 -> Gender.NONE
-                        genderRate ==0 -> Gender.MALE
-                        genderRate in 1..3 ->Gender.MALE
-                        genderRate == 4 -> Gender.MIXED
-                        genderRate in 5..7 -> Gender.FEMALE
-                        genderRate == 8 -> Gender.FEMALE
-                        else -> {Gender.UNKNOWN}
+                    val (gender, maleRatio, femaleRatio)=when (genderRate){
+                        -1 -> Triple(Gender.NONE, 0.0, 0.0)
+                        0 -> Triple(Gender.MALE,100.0, 0.0)
+                        8 ->Triple(Gender.FEMALE,0.0, 100.0)
+                        in 1..7->{
+                            val femalePercentage= genderRate *12.5
+                            val malePercentage= 100.0 -femalePercentage
+                            val gender =if (genderRate<4) Gender.MALE else if (genderRate >4 ) Gender.FEMALE else Gender.MIXED
+                            Triple(gender,malePercentage,femalePercentage)
+
+                        }
+                        else -> Triple(Gender.UNKNOWN, 0.0,0.0)
                     }
 
-                    PokemonObject.pokeList.add(Pokemon(pokeName.replaceFirstChar { it.uppercase() }, pokeDefaultPictureFront, pokeId,type1,type2, pokedexTextList,gender))
+                    PokemonObject.pokeList.add(Pokemon(pokeName.replaceFirstChar { it.uppercase() }, pokeDefaultPictureFront, pokeId,type1,type2, pokedexTextList,gender, maleRatio,femaleRatio))
 //                cacheJson.put(""+pokeId,pokeName)
                 }
 
