@@ -28,6 +28,7 @@ import com.example.pokedex.presentation.userInterface.HomePage.PokemonList
 import com.example.pokedex.R
 import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 import com.example.pokedex.presentation.searchPageViewModel
+import com.example.pokedex.presentation.theme.Font
 import com.example.pokedex.presentation.userInterface.filterPage.SortOption
 
 
@@ -53,15 +54,18 @@ fun Favorites(navHostController: NavHostController, viewModel: searchPageViewMod
             Text(
                 text = "Favorites",
                 fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                fontFamily = Font.rudaFontFamily
             )
-            Spacer(modifier = Modifier.width(81.dp))
+            /*Spacer(modifier = Modifier.width(81.dp))
             Image(
                 painter = painterResource(id = R.drawable.img_filter),
                 contentDescription = "filter", modifier = Modifier.size(24.dp)
             )
             Spacer(modifier = Modifier.width(34.dp))
             Icon(imageVector = Icons.Default.Search, contentDescription = "search")
+
+             */
         }
         PokemonList(navController = navHostController, viewModel = viewModel, isFavorite = true, sortOption = currentSortOption)
     }
