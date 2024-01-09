@@ -168,7 +168,6 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                 }
             }
         }
-
         // Top Bar
         Row(
             modifier = Modifier
