@@ -12,6 +12,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 //import androidx.compose.foundation.layout.ColumnScopeInstance.align
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +24,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
@@ -56,152 +58,160 @@ class FilterPage : ComponentActivity() {
         }
     }
 }
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FilterPageContent(navController: NavHostController, viewModel: FilterViewModel, resetViewModel: ResetViewModel) {
     var isGenerationVisible by remember { mutableStateOf(false) }
+    val scrollState = rememberLazyListState()
 
-    LazyColumn(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
-        // Top Bar
-        stickyHeader {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(86.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+        LazyColumn(
+            state = scrollState,
+            modifier = Modifier
+                .padding(top = 86.dp)
+                .fillMaxSize()
+        ) {
+            // Sorting Section
+            item {
                 Box(
                     modifier = Modifier
-                        .size(36.dp)
-                        .clickable {
-                            navController.navigate(Route.POKEDEX.path)
-                        }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "backArrow",
-                        modifier = Modifier
-                            .padding(start = 6.dp)
-                            .align(Alignment.CenterEnd)
-                            .size(46.dp)
-                    )
-                }
-
-                Spacer(modifier = Modifier.width(30.dp))
-
-                Text(
-                    text = "Filters and sorting",
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .weight(1f)
-                //Space Slot here for headline folks!
-                )
-
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "resetButton",
-                    modifier = Modifier
-                        .size(36.dp)
-                        .clickable {
-                            resetViewModel.resetFilters()
-                        }
-                )
-            }
-        }
-        item {
-            Box(
-                modifier = Modifier
-                    .border(1.dp, Color.LightGray, shape = RoundedCornerShape(20.dp))
-                    .padding(16.dp)
-            ) {
-                Column {
-                    Text(
-                        text = "Sorting",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .padding(10.dp)
-                    )
-                    SortButtons(
-                        sharedViewModel = resetViewModel,
-                        onLowToHighClick = {
-                            resetViewModel.Pokemons.sortBy { it.id }
-                        },
-                        onHighToLowClick = {
-                            resetViewModel.Pokemons.sortByDescending { it.id }
-                        }
-                    )
-                }
-            }
-        }
-        //Here begins filter- beneath topbar and sort.
-        item {
-            Box(
-                modifier = Modifier
-                    .border(1.dp, Color.LightGray, shape = RoundedCornerShape(20.dp))
-                    .padding(16.dp)
-            ) {
-                Column {
-                    Text(
-                        text = "Filters",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .padding(10.dp)
-                    )
-                    TypeButton(sharedViewModel = resetViewModel)
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Generation Button
-                    Button(
-                        onClick = { isGenerationVisible = !isGenerationVisible },
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text(text = "Generations")
-                    }
-                }
-            }
-        }
-        //Checks clickable Gen button and upens up generation loop buttons and stuff.
-        if (isGenerationVisible) {
-            item {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
                         .border(1.dp, Color.LightGray, shape = RoundedCornerShape(20.dp))
                         .padding(16.dp)
                 ) {
-                    for (generation in 1..9) {
-                        GenerationButton(
-                            generation = generation,
-                            selectedGeneration = resetViewModel.selectedGeneration.value,
-                            onGenerationSelected = {
-                                if (resetViewModel.selectedGeneration.value == it) {
-                                    resetViewModel.selectedGeneration.value = -1
-                                } else {
-                                    resetViewModel.selectedGeneration.value = it
-                                }
-                            },
-                            isGenerationSelected = resetViewModel.selectedGeneration.value == generation,
-                            isNameInGeneration = isNameInGeneration(resetViewModel.selectedName.value, generation)
+                    Column {
+                        Text(
+                            text = "Sorting",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .padding(10.dp)
                         )
+                        SortButtons(
+                            sharedViewModel = resetViewModel,
+                            onLowToHighClick = {
+                                resetViewModel.Pokemons.sortBy { it.id }
+                            },
+                            onHighToLowClick = {
+                                resetViewModel.Pokemons.sortByDescending { it.id }
+                            }
+                        )
+                    }
+                }
+            }
 
-                        if (resetViewModel.selectedGeneration.value == generation) {
-                            GenerationNameList(
-                                generation = generation,
-                                selectedName = resetViewModel.selectedName.value,
-                                onNameSelected = { resetViewModel.selectedName.value = it }
-                            )
+            // Filter Section
+            item {
+                Box(
+                    modifier = Modifier
+                        .border(1.dp, Color.LightGray, shape = RoundedCornerShape(20.dp))
+                        .padding(16.dp)
+                ) {
+                    Column {
+                        Text(
+                            text = "Filters",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .padding(10.dp)
+                        )
+                        TypeButton(sharedViewModel = resetViewModel)
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Generation Button
+                        Button(
+                            onClick = { isGenerationVisible = !isGenerationVisible },
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text(text = "Generations")
+                        }
+
+                        // Checks clickable Gen button and opens up generation loop buttons and stuff.
+                        if (isGenerationVisible) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .border(1.dp, Color.LightGray, shape = RoundedCornerShape(20.dp))
+                                    .padding(16.dp)
+                            ) {
+                                for (generation in 1..9) {
+                                    GenerationButton(
+                                        generation = generation,
+                                        selectedGeneration = resetViewModel.selectedGeneration.value,
+                                        onGenerationSelected = {
+                                            if (resetViewModel.selectedGeneration.value == it) {
+                                                resetViewModel.selectedGeneration.value = -1
+                                            } else {
+                                                resetViewModel.selectedGeneration.value = it
+                                            }
+                                        },
+                                        isGenerationSelected = resetViewModel.selectedGeneration.value == generation,
+                                        isNameInGeneration = isNameInGeneration(resetViewModel.selectedName.value, generation)
+                                    )
+
+                                    if (resetViewModel.selectedGeneration.value == generation) {
+                                        GenerationNameList(
+                                            generation = generation,
+                                            selectedName = resetViewModel.selectedName.value,
+                                            onNameSelected = { resetViewModel.selectedName.value = it }
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
+        }
+
+        // Top Bar
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(86.dp)
+                .background(Color.White),
+                    verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .clickable {
+                        navController.navigate(Route.POKEDEX.path)
+                    }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "backArrow",
+                    modifier = Modifier
+                        .padding(start = 6.dp)
+                        .align(Alignment.CenterEnd)
+                        .size(46.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.width(30.dp))
+
+            Text(
+                text = "Filters and sorting",
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .weight(1f)
+                // Space Slot here for headline folks!
+            )
+
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = "resetButton",
+                modifier = Modifier
+                    .size(36.dp)
+                    .clickable {
+                        resetViewModel.resetFilters()
+                    }
+            )
         }
     }
 }
