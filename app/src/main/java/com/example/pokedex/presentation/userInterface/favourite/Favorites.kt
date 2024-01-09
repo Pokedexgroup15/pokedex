@@ -1,5 +1,5 @@
 package com.example.pokedex.presentation.userInterface.favourite
-
+import com.example.pokedex.presentation.theme.Font.Companion
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,18 +51,14 @@ fun Favorites(navHostController: NavHostController, viewModel: searchPageViewMod
             verticalAlignment = Alignment.CenterVertically
         ) {
             Spacer(modifier = Modifier.width(71.dp))
+
             Text(
                 text = "Favorites",
                 fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
+
+                fontWeight = FontWeight.Bold,
+                fontFamily = Companion.rudaFontFamily
             )
-            Spacer(modifier = Modifier.width(81.dp))
-            Image(
-                painter = painterResource(id = R.drawable.img_filter),
-                contentDescription = "filter", modifier = Modifier.size(24.dp)
-            )
-            Spacer(modifier = Modifier.width(34.dp))
-            Icon(imageVector = Icons.Default.Search, contentDescription = "search")
         }
         PokemonList(navController = navHostController, viewModel = viewModel, isFavorite = true, sortOption = currentSortOption)
     }

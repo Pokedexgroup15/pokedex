@@ -43,6 +43,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
@@ -57,14 +58,13 @@ class FilterPage : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         // Initialize ViewModel
-        // Initialize ViewModel
         val viewModel = ViewModelProvider(this).get(FilterViewModel::class.java)
         val resetViewModel = ViewModelProvider(this).get(ResetViewModel::class.java)
         setContent {
             // Initialize NavController for Compose
             val navController = rememberNavController()
 
-            // Now pass the navController, viewModel, and resetViewModel instances to the FilterPageContent
+
             FilterPageContent(navController, viewModel, resetViewModel)
         }
     }
@@ -149,6 +149,45 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                         TypeButton(sharedViewModel = resetViewModel)
 
                         Spacer(modifier = Modifier.height(16.dp))
+
+                        Divider(
+                            color = Color.LightGray,
+                            thickness = 1.5.dp,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp)
+                        )
+
+                        Text(
+                            text = "GrowtRate",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = Font.rudaFontFamily,
+                            modifier = Modifier
+                                .padding(10.dp)
+                        )
+
+                        growRateButton(sharedViewModel = resetViewModel)
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Divider(
+                            color = Color.LightGray,
+                            thickness = 1.5.dp,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp)
+                        )
+
+                        Text(
+                            text = "CatchRate",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = Font.rudaFontFamily,
+                            modifier = Modifier
+                                .padding(10.dp)
+                        )
+
+
                         Divider(
                             color = Color.LightGray,
                             thickness = 1.5.dp,
@@ -168,8 +207,6 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                         }
 
 
-
-                        // Generation Button
                         Button(
                             onClick = { isGenerationVisible = !isGenerationVisible },
                             modifier = Modifier.padding(16.dp),
@@ -336,18 +373,74 @@ enum class SortOption {
     HighToLow
 }
 @Composable
+fun growRateButton(sharedViewModel: ResetViewModel) {
+    var isMenuVisibleChevron by remember { mutableStateOf(true) }
+    if (isMenuVisibleChevron) {
+
+        val catchRates = listOf("Erratic", "Fast", "Medium-Fast", "Medium-Slow", "Slow", "Fluctuating")
+        val columnsPerRow = 3
+        val groupedCatchRates = catchRates.chunked(columnsPerRow)
+
+        Column {
+            for (columnCatchRates in groupedCatchRates) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp, vertical = 3.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    for (catchRate in columnCatchRates) {
+                        GrowRateItemButton(catchRate, sharedViewModel.selectedCatchRate.value) { selected ->
+                            sharedViewModel.selectedCatchRate.value = selected
+                        }
+                        Spacer(modifier = Modifier.width(4.dp))
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun GrowRateItemButton(growRate: String, selectedGrowRate: List<String>, onGrowRateSelected: (List<String>) -> Unit) {
+    val isButtonClicked = selectedGrowRate.contains(growRate)
+
+    Box(
+        modifier = Modifier
+            .size(119.dp, 38.dp)
+            .border(
+                width = 3.dp,
+                color = if (isButtonClicked) Color(0xFF006CB8) else Color.LightGray,
+                shape = RoundedCornerShape(15.dp)
+            )
+            .clickable {
+                onGrowRateSelected(
+                    if (isButtonClicked) selectedGrowRate - growRate
+                    else selectedGrowRate + growRate
+                )
+            }
+            .padding(6.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = growRate,
+            fontFamily = Font.rudaFontFamily,
+            modifier = Modifier
+
+                .fillMaxSize()
+                .clip(shape = RoundedCornerShape(size = 12.dp)),
+            textAlign = TextAlign.Center,
+        )
+    }
+}
+
+
+@Composable
 fun TypeButton(sharedViewModel: ResetViewModel) {
     var isMenuVisible by remember { mutableStateOf(true) }
     var selectedTypes by remember { mutableStateOf(emptyList<Int>()) }
 
-    /*Button(
-        onClick = { isMenuVisible = true },
-        modifier = Modifier.padding(16.dp)
-    ) {
-        Text(text = "Type")
-    }
 
-     */
 
     if (isMenuVisible) {
         val types = listOf(
@@ -378,7 +471,7 @@ fun TypeButton(sharedViewModel: ResetViewModel) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 8.dp), // Add padding to the row itself
+                        .padding(horizontal = 8.dp, vertical = 2.dp),// Add padding to the row itself
                     horizontalArrangement = Arrangement.SpaceBetween // This will add equal spacing between the items
                 ) {
                     for (type in columnTypes) {
@@ -403,7 +496,6 @@ fun TypeItemButton(type: Int, selectedTypes: List<Int>, onTypeSelected: (List<In
             .border(
                 width = 3.dp,
                 color = if (isButtonClicked) Color(0xFF006CB8) else Color.LightGray,
-                //shape = RoundedCornerShape(5.dp)
                 shape = RoundedCornerShape(15.dp)
             )
             //Only 2 can be selected.
