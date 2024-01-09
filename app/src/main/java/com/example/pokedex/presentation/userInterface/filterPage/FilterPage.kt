@@ -3,9 +3,11 @@ package com.example.pokedex.presentation.userInterface.filterPage
 //import androidx.compose.foundation.layout.ColumnScopeInstance.align
 //import com.example.pokedex.Presentation.UserInterface
 
+import android.content.ClipData.Item
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,7 +28,9 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
@@ -40,6 +44,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -195,69 +200,108 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                                 .fillMaxWidth()
                                 .padding(vertical = 4.dp)
                         )
-                        Column {
-                            Text(
-                                text = "Generation",
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Bold,
-                                fontFamily = Font.rudaFontFamily,
-                                modifier = Modifier
-                                    .padding(10.dp)
-                            )
-                        }
-
-
-                        Button(
-                            onClick = { isGenerationVisible = !isGenerationVisible },
-                            modifier = Modifier.padding(16.dp),
-                                    colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(0xFF58ABF6))
-
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .padding(10.dp)
+                                //.clickable { isGenerationVisible = !isGenerationVisible }
                         ) {
-                            Text(text = "Generations", fontFamily = Font.rudaFontFamily)
-                        }
-
-                        // Checks clickable Gen button and opens up generation loop buttons and stuff.
-                        if (isGenerationVisible) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .border(
-                                        1.dp,
-                                        Color.LightGray,
-                                        shape = RoundedCornerShape(20.dp)
-                                    )
-                                    .padding(16.dp)
-                            ) {
-                                for (generation in 1..9) {
-                                    GenerationButton(
-                                        generation = generation,
-                                        selectedGeneration = resetViewModel.selectedGeneration.value,
-                                        onGenerationSelected = {
-                                            if (resetViewModel.selectedGeneration.value == it) {
-                                                resetViewModel.selectedGeneration.value = -1
-                                            } else {
-                                                resetViewModel.selectedGeneration.value = it
-                                            }
-                                        },
-                                        isGenerationSelected = resetViewModel.selectedGeneration.value == generation,
-                                        isNameInGeneration = isNameInGeneration(resetViewModel.selectedName.value, generation)
-                                    )
-
-                                    if (resetViewModel.selectedGeneration.value == generation) {
-                                        GenerationNameList(
-                                            generation = generation,
-                                            selectedName = resetViewModel.selectedName.value,
-                                            onNameSelected = { resetViewModel.selectedName.value = it }
+                            Column {
+                                    Row {
+                                        Text(
+                                            text = "Generations",
+                                            fontSize = 20.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            fontFamily = Font.rudaFontFamily,
+                                            modifier = Modifier
+                                                .padding(10.dp)
                                         )
+                                        //Spacer(modifier = Modifier.width(8.dp))
+
+                                        //AnimatedVisibility(visible = isGenerationVisible) {
+                                        Icon(
+                                            imageVector = Icons.Default.KeyboardArrowDown,
+                                            contentDescription = "Expand Generations",
+                                            modifier = Modifier
+                                                .size(46.dp)
+                                                .padding(10.dp)
+                                                .clickable {
+                                                    isGenerationVisible = !isGenerationVisible
+                                                }
+                                                .rotate(if (isGenerationVisible) 180f else 0f)
+                                            //modifier = Modifier.rotate(if (isGenerationVisible) 180f else 0f)
+                                        )
+                                    }
+                                //}
+                                //}
+                                /*AnimatedVisibility(visible = isGenerationVisible) {
+                                Column {
+                                    Button(
+                                        onClick = { isGenerationVisible = !isGenerationVisible },
+                                        modifier = Modifier.padding(16.dp),
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = Color(0xFF58ABF6)
+                                        )
+
+                                    ) {
+                                        Text(text = "Generations", fontFamily = Font.rudaFontFamily)
+                                    }
+                                }
+                            }
+
+                             */
+
+
+                                // Checks clickable Gen button and opens up generation loop buttons and stuff.
+                                if (isGenerationVisible) {
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .border(
+                                                1.dp,
+                                                Color.LightGray,
+                                                shape = RoundedCornerShape(20.dp)
+                                            )
+                                            .padding(16.dp)
+                                    ) {
+                                        for (generation in 1..9) {
+                                            GenerationButton(
+                                                generation = generation,
+                                                selectedGeneration = resetViewModel.selectedGeneration.value,
+                                                onGenerationSelected = {
+                                                    if (resetViewModel.selectedGeneration.value == it) {
+                                                        resetViewModel.selectedGeneration.value = -1
+                                                    } else {
+                                                        resetViewModel.selectedGeneration.value = it
+                                                    }
+                                                },
+                                                isGenerationSelected = resetViewModel.selectedGeneration.value == generation,
+                                                isNameInGeneration = isNameInGeneration(
+                                                    resetViewModel.selectedName.value,
+                                                    generation
+                                                )
+                                            )
+
+                                            if (resetViewModel.selectedGeneration.value == generation) {
+                                                GenerationNameList(
+                                                    generation = generation,
+                                                    selectedName = resetViewModel.selectedName.value,
+                                                    onNameSelected = {
+                                                        resetViewModel.selectedName.value = it
+                                                    }
+                                                )
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
+
             }
         }
+
         // Top Bar
         Row(
             modifier = Modifier
@@ -532,20 +576,46 @@ fun GenerationButton(
     isGenerationSelected: Boolean,
     isNameInGeneration: Boolean
 ) {
-    Button(
-        onClick = { onGenerationSelected(generation) },
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF58ABF6)
-        ),
-        modifier = Modifier.padding(16.dp)
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start,
+        modifier = Modifier.padding(0.dp)
     ) {
-        //Maybe my memory is like a goldfish, but this memory works!
-        //val checkedMark = "\u2713"
-        val buttonText = "Generation $generation" + if (isNameInGeneration) "   \u2713" else ""
-        Text(
-            text = buttonText,
-            fontFamily = Font.rudaFontFamily
-        )
+        Button(
+            onClick = { onGenerationSelected(generation) },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF58ABF6)
+            ),
+            modifier = Modifier.padding(5.dp)
+        ) {
+            //Maybe my memory is like a goldfish, but this memory works!
+            //val checkedMark = "\u2713"
+
+            //val buttonText = "Generation $generation" + if (isNameInGeneration) "   \u2713" else ""
+            val buttonText = "Generation $generation"
+            Text(
+                text = buttonText,
+                fontFamily = Font.rudaFontFamily
+            )
+        }
+        // Checkmark Icon
+        if (isNameInGeneration) {
+            Icon(
+                imageVector = Icons.Default.Check,
+                contentDescription = "Selected",
+                tint = Color.Black,
+                modifier = Modifier
+
+                    .border(
+                        width = 3.dp,
+                        color = Color(0xFF58ABF6),
+                        shape = RoundedCornerShape(15.dp)
+                    )
+                    .padding(
+                        3.dp
+                    )
+            )
+        }
     }
 }
 
@@ -581,7 +651,7 @@ fun GenerationNameList(
                 .border(
                     width = 3.dp,
                     shape = RoundedCornerShape(20.dp),
-                    color = (if (isSelected) Color(0xFF006CB8) else Color.Transparent)
+                    color = (if (isSelected) Color(0xFF58ABF6) else Color.Transparent)
                 )
                 .padding(8.dp)
             Text(
