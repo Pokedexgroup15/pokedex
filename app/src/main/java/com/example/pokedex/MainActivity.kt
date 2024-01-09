@@ -9,12 +9,13 @@ import androidx.compose.ui.Modifier
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.presentation.theme.PokedexTheme
 import com.example.pokedex.presentation.navigation.navStart
-import com.example.pokedex.viweModel.RepositoryImpl
+import com.example.pokedex.data.RepositoryImpl
 
 
 object PokemonObject{
     var pokeList = ArrayList<Pokemon>()
     var faveList = ArrayList<Pokemon>()
+    var eveList = Array(549) {Array(3) {ArrayList<String>()} }
 }
 
 
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        RepositoryImpl().addPokemon(1,20,true,true)
+        RepositoryImpl().addPokemon(1,1000,true,true)
         setContent {
             PokedexTheme {
                 Surface(

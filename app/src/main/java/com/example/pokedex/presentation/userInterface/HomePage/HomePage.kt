@@ -28,6 +28,10 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -240,6 +244,7 @@ fun pokemonBox(modifier: Modifier,
 
 @Composable
 fun pokemonPictureAndLogo(modifier: Modifier, pokemon: Pokemon, viewModel: searchPageViewModel){
+    var Favorized by remember { mutableStateOf(viewModel.PokemonsFave.contains(pokemon))}
     Box(
         modifier=modifier
 
@@ -255,15 +260,20 @@ fun pokemonPictureAndLogo(modifier: Modifier, pokemon: Pokemon, viewModel: searc
             painter = painterResource(id = R.drawable.pokeball_notfave),
             //imageVector = Icons.Default.Favorite,
             contentDescription = "pokeball",
-            tint=if (viewModel.PokemonsFave.contains(pokemon)) Color.Red else Color.Black,
+            //tint=if (viewModel.PokemonsFave.contains(pokemon)) Color.Red else Color.Black,
+            tint = if(Favorized) Color.Red else Color.Black,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .size(22.dp)
                 .clickable {
+                    Favorized = !Favorized
+                    if (Favorized) {
+                        pokemon?.let { viewModel.PokemonsFave.add(it) }
+                    } else {viewModel.PokemonsFave.remove(pokemon)
+                        //viewModel.toggleFavourite(pokemon)
 
-                    viewModel.toggleFavourite(pokemon)
 
-
+                    }
                 }
         )
     }

@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,12 +16,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -35,12 +38,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,12 +57,15 @@ import com.example.pokedex.presentation.searchPageViewModel
 
 
     @Composable
-    fun ShowcasePage(navHostController: NavHostController,viewModel: searchPageViewModel) {
+    fun ShowcasePage(navController: NavHostController,viewModel: searchPageViewModel) {
         val context = LocalContext.current
         var selectedGender by remember { mutableStateOf(Gender.NONE) }
         val pokemon = viewModel.getPokemon()
         val maleColor = Color(49,59,169)
         val femaleColor = Color(143,68,124)
+        var catchRateTextBox by remember { mutableStateOf(false) }
+        var growthRateTextBox by remember { mutableStateOf(false) }
+        var Favorized by remember { mutableStateOf(viewModel.PokemonsFave.contains(pokemon)) }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -177,14 +185,21 @@ import com.example.pokedex.presentation.searchPageViewModel
                     Icon(
                         painter = painterResource(id = R.drawable.pokeball_bw),
                         contentDescription = "Favorite option",
-                        tint = if (viewModel.PokemonsFave.contains(pokemon)) Color.Red else Color.Black,
+                        //tint = if (viewModel.PokemonsFave.contains(pokemon)) Color.Red else Color.Black,
+                        tint = if(Favorized) Color.Red else Color.Black,
                         modifier = Modifier
                             .size(25.dp)
                             .clickable {
-                                if (viewModel.PokemonsFave.contains(pokemon))
-                                    viewModel.PokemonsFave.remove(pokemon)
-                                else
+                                Favorized = !Favorized
+                                if (Favorized) {
                                     pokemon?.let { viewModel.PokemonsFave.add(it) }
+                                } else {
+                                    viewModel.PokemonsFave.remove(pokemon)
+                                    //if (viewModel.PokemonsFave.contains(pokemon))
+                                    //  viewModel.PokemonsFave.remove(pokemon)
+                                    //else
+                                    //  pokemon?.let { viewModel.PokemonsFave.add(it) }
+                                }
                             }
                             .requiredSize(36.dp, 36.dp)
                             .align(Alignment.BottomEnd)
@@ -209,7 +224,7 @@ import com.example.pokedex.presentation.searchPageViewModel
                 ){
                     Text(text = "", modifier = Modifier.align(Alignment.CenterHorizontally))
                     Spacer(modifier = Modifier.weight(4f))
-                    EvolutionBar()
+                    EvolutionBar(navController)
                     Spacer(modifier = Modifier.weight(1f))
                 }
             }
@@ -223,21 +238,144 @@ import com.example.pokedex.presentation.searchPageViewModel
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
-                    .height(220.dp)
-                    .background(Color.LightGray)
-                    .clip(CircleShape)
+                    .padding(16.dp),
             ) {
-                if (pokemon != null) {
+                Image(
+                    painter = painterResource(id = R.drawable.rectangle),
+                    contentDescription = null,
+                    modifier = Modifier.matchParentSize(),
+                    contentScale = ContentScale.FillBounds
+                )
+                pokemon?.let {
                     Text(
-                        text = pokemon.pokedexText[0],
+                        text = pokemon.pokedexText,
+
                         modifier = Modifier
                             .padding(16.dp)
                             .align(Alignment.CenterStart),
-                        color = Color.White
+                        color = Color.Black,
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.Left
                     )
                 }
             }
+            Divider(
+                color = Color.Black,
+                thickness = 1.5.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.catchrate),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(35.dp)
+                        .clickable { catchRateTextBox = !catchRateTextBox }
+
+                )
+
+                Box(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .width(40.dp)
+                        .height(40.dp)
+                        .offset(x = 4.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(Color.Blue),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (pokemon != null) {
+                        Text(
+                            text = pokemon.capture_rate.toString(),
+                            color = Color.White,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+
+                if(catchRateTextBox) {
+                    Box(
+                        modifier = Modifier
+                            .padding(2.dp)
+                            .width(120.dp)
+                            .height(80.dp)
+                            .offset(x = 20.dp)
+                            .clip(RoundedCornerShape(6.dp))
+                            .background(Color.LightGray)
+                            .padding(3.dp)
+                    ){
+                        Text(
+                            text = "This is the catch rate of the Pokemon.",
+                            color = Color.White,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.growthrate),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(35.dp)
+                        .clickable { growthRateTextBox = !growthRateTextBox }
+
+
+                )
+
+                Box(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .width(40.dp)
+                        .height(40.dp)
+                        .offset(x = 4.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(Color.Blue),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (pokemon != null) {
+                        Text(
+                            text = pokemon.growth_rate,
+                            color = Color.White,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+                if(growthRateTextBox) {
+                    Box(
+                        modifier = Modifier
+                            .padding(2.dp)
+                            .width(120.dp)
+                            .height(80.dp)
+                            .offset(x = 20.dp)
+                            .clip(RoundedCornerShape(6.dp))
+                            .background(Color.LightGray)
+                            .padding(3.dp)
+                    ){
+                        Text(
+                            text = "This is the growth rate of the Pokemon.",
+                            color = Color.White,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
+            Divider(
+                    color = Color.Black,
+            thickness = 1.5.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp))
         }
     }
     @Composable
@@ -246,17 +384,32 @@ import com.example.pokedex.presentation.searchPageViewModel
         selectedGender: Gender,
         onGenderSelected: (Gender) -> Unit
     ) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clickable { onGenderSelected(selectedGender) }
+                .padding(2.dp)
+                .border(
+                    width = 2.dp,
+                    color = if (selectedGender != Gender.NONE) Color.White else Color.Transparent,
+                    //shape = CircleShape
+                )
+                .padding(2.dp),
+        ) {
         Image(
             painter = painterResource(id = imageResId),
             contentDescription = null,
             modifier = Modifier
-                .size(36.dp)
-                .clickable { onGenderSelected(selectedGender) }
-                .border(
-                    width = 2.dp,
-                    color = if (selectedGender != Gender.NONE) Color.White else Color.Transparent,
-                )
-        )
+                .fillMaxSize(),
+            //.padding(3.dp)
+            //.size(36.dp)
+            //.clickable { onGenderSelected(selectedGender) }
+            //.border(
+            //  width = 2.dp,
+            //color = if (selectedGender != Gender.NONE) Color.White else Color.Transparent,),
+            contentScale = ContentScale.Fit
+            )
+        }
     }
 
 
