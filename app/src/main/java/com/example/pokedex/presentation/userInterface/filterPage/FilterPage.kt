@@ -351,7 +351,7 @@ fun TypeItemButton(type: Int, selectedTypes: List<Int>, onTypeSelected: (List<In
             .size(119.dp, 32.dp)
             .border(
                 width = 3.dp,
-                color = if (isButtonClicked) Color.DarkGray else Color.LightGray,
+                color = if (isButtonClicked) Color(0xFF006CB8) else Color.LightGray,
                 shape = RoundedCornerShape(5.dp)
             )
             //Only 2 can be selected.
@@ -390,7 +390,7 @@ fun GenerationButton(
     Button(
         onClick = { onGenerationSelected(generation) },
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF58ABF6) // Set to your desired color
+            containerColor = Color(0xFF58ABF6)
         ),
         modifier = Modifier.padding(16.dp)
     ) {
