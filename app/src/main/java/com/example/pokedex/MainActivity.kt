@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.presentation.theme.PokedexTheme
 import com.example.pokedex.presentation.navigation.navStart
-import com.example.pokedex.viweModel.RepositoryImpl
+import com.example.pokedex.data.RepositoryImpl
 
 
 object PokemonObject{

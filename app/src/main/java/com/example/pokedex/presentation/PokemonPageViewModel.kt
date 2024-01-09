@@ -1,12 +1,10 @@
 package com.example.pokedex.presentation
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.PokemonObject
 import com.example.pokedex.presentation.userInterface.filterPage.SortOption
-import com.example.pokedex.viweModel.RepositoryImpl
+import com.example.pokedex.data.RepositoryImpl
 
 //    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 
