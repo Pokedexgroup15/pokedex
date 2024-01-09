@@ -33,6 +33,30 @@ interface PokeApiSpecies{
     suspend fun getPokemonSpeciesInfo(@Path("id") pathId: Int) : Response<PokemonSpecies>
 }
 
+interface PokeEveChain{
+    @GET("https://pokeapi.co/api/v2/evolution-chain/{id}")
+
+    suspend fun getPokemonEveInfo(@Path("id") pathId: Int) : Response<PokemonEve>
+}
+
+data class PokemonEve(
+    val chain: Chain
+
+)
+
+data class Chain(
+    val is_baby: Boolean,
+    val species: Species,
+    val evolves_to: List<Evol>
+)
+data class Evol(
+    val species: Species,
+    val evolves_to: List<Evol>
+)
+
+data class Species(
+    val name: String
+)
 
 data class PokemonSpecies(
     val flavor_text_entries: List<flavor_texts>,
@@ -93,10 +117,9 @@ class RepositoryImpl: ViewModel() {
 
   fun addPokemon(start:Int, end:Int, onlyDefaults:Boolean, cleanCopy:Boolean){
 
-
-          val quotesApi = RetrofitBase.getInstance().create(PokeApi::class.java)
-      val speciesApi = RetrofitBase.getInstance().create(PokeApiSpecies::class.java)
-
+    val quotesApi = RetrofitBase.getInstance().create(PokeApi::class.java)
+    val speciesApi = RetrofitBase.getInstance().create(PokeApiSpecies::class.java)
+    val eveApi = RetrofitBase.getInstance().create(PokeEveChain::class.java)
 
         viewModelScope.launch(Dispatchers.IO){
 //            val fileName = "json/pokemonCache.json"
@@ -109,6 +132,11 @@ class RepositoryImpl: ViewModel() {
                 while(i <= end) {
                 val result = quotesApi.getPokemonInfo(i)
                 val result2 = speciesApi.getPokemonSpeciesInfo(i)
+                if(i<541){
+                    val result3 = eveApi.getPokemonEveInfo(i)
+
+                }
+
                     result2.body()?.let { Log.d("test5", it.flavor_text_entries[0].flavor_text)
                     var pokedexEntry:String
                         val capture_rate:Int
