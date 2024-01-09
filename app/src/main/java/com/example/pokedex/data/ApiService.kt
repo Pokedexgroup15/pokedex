@@ -11,6 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
+import kotlin.math.log
 
 object RetrofitBase {
 
@@ -45,7 +46,12 @@ data class Growth(
 )
 
 data class flavor_texts(
-val flavor_text: String
+    val flavor_text: String,
+    val language: Language
+)
+
+data class Language(
+    val name: String
 )
 
 
@@ -109,11 +115,23 @@ class RepositoryImpl: ViewModel() {
                 while(i <= end) {
                 val result = quotesApi.getPokemonInfo(i)
                 val result2 = speciesApi.getPokemonSpeciesInfo(i)
-                    result2.body()?.let { Log.d("test5", it.flavor_text_entries[0].flavor_text)
+                    result2.body()?.let {
                     var pokedexEntry:String
-                        val capture_rate:Int
+                        var i2:Int = 0
+                        while(i2<it.flavor_text_entries.size-1){
+                            if(it.flavor_text_entries[i2].language.name =="en"){
+//                            Log.d("lan",it.flavor_text_entries[i2].language.name)
+                                break;
+                            }
+                            i2++
+
+
+                        }
+
+                    val capture_rate:Int
                         val growth_rate:String
-                    pokedexEntry = it.flavor_text_entries[0].flavor_text
+
+                    pokedexEntry = it.flavor_text_entries[i2].flavor_text
                         capture_rate = it.capture_rate
                         growth_rate = it.growth_rate.name
                 result.body()?.let { Log.d("test5", it.types[0].type.name+" "+it.name)
