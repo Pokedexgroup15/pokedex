@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -472,12 +473,18 @@ fun GenerationNameList(
                     onNameSelected(name)
                 }
                 .padding(4.dp)
-                .background(if (isSelected) Color.Red else Color.Transparent)
+                .border(
+                    width = 3.dp,
+                    shape = RoundedCornerShape(20.dp),
+                    color = (if (isSelected) Color(0xFF006CB8) else Color.Transparent)
+                )
+                .padding(5.dp)
             Text(
                 text = name,
                 modifier = textModifier,
                 fontSize = 16.sp,
-                color = if (isSelected) Color.White else Color.Black
+                fontFamily = Font.rudaFontFamily,
+                color = if (isSelected) Color.Black else Color.Black
             )
         }
     }
