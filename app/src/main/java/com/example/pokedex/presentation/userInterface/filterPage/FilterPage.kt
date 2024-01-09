@@ -100,7 +100,7 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                     Column {
                         Text(
                             text = "Sorting",
-                            fontSize = 20.sp,
+                            fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
                             fontFamily = Font.rudaFontFamily,
                             modifier = Modifier
