@@ -287,12 +287,14 @@ import com.example.pokedex.presentation.searchPageViewModel
                         .background(Color.Blue),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = "38.3",
-                        color = Color.White,
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    if (pokemon != null) {
+                        Text(
+                            text = pokemon.capture_rate.toString(),
+                            color = Color.White,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
 
                 if(catchRateTextBox) {
@@ -339,12 +341,14 @@ import com.example.pokedex.presentation.searchPageViewModel
                         .background(Color.Blue),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = "12.5",
-                        color = Color.White,
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    if (pokemon != null) {
+                        Text(
+                            text = pokemon.growth_rate,
+                            color = Color.White,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
                 if(growthRateTextBox) {
                     Box(

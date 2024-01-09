@@ -21,8 +21,6 @@ import com.example.pokedex.presentation.userInterface.HomePage.homePage
 import com.example.pokedex.presentation.userInterface.SearchPage.SearchPageFun
 
 import com.example.pokedex.presentation.searchPageViewModel
-import com.example.pokedex.presentation.userInterface.filterPage.SortOption
-import com.example.pokedex.viweModel.RepositoryImpl
 
 
 @Composable
