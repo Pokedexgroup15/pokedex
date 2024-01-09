@@ -26,6 +26,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -440,20 +441,46 @@ fun GenerationButton(
     isGenerationSelected: Boolean,
     isNameInGeneration: Boolean
 ) {
-    Button(
-        onClick = { onGenerationSelected(generation) },
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF58ABF6)
-        ),
-        modifier = Modifier.padding(16.dp)
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start,
+        modifier = Modifier.padding(0.dp)
     ) {
-        //Maybe my memory is like a goldfish, but this memory works!
-        //val checkedMark = "\u2713"
-        val buttonText = "Generation $generation" + if (isNameInGeneration) "   \u2713" else ""
-        Text(
-            text = buttonText,
-            fontFamily = Font.rudaFontFamily
-        )
+        Button(
+            onClick = { onGenerationSelected(generation) },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF58ABF6)
+            ),
+            modifier = Modifier.padding(5.dp)
+        ) {
+            //Maybe my memory is like a goldfish, but this memory works!
+            //val checkedMark = "\u2713"
+
+            //val buttonText = "Generation $generation" + if (isNameInGeneration) "   \u2713" else ""
+            val buttonText = "Generation $generation"
+            Text(
+                text = buttonText,
+                fontFamily = Font.rudaFontFamily
+            )
+        }
+        // Checkmark Icon
+        if (isNameInGeneration) {
+            Icon(
+                imageVector = Icons.Default.Check,
+                contentDescription = "Selected",
+                tint = Color.Black,
+                modifier = Modifier
+
+                    .border(
+                        width = 3.dp,
+                        color = Color(0xFF58ABF6),
+                        shape = RoundedCornerShape(15.dp)
+                    )
+                    .padding(
+                        3.dp
+                    )
+            )
+        }
     }
 }
 
@@ -489,7 +516,7 @@ fun GenerationNameList(
                 .border(
                     width = 3.dp,
                     shape = RoundedCornerShape(20.dp),
-                    color = (if (isSelected) Color(0xFF006CB8) else Color.Transparent)
+                    color = (if (isSelected) Color(0xFF58ABF6) else Color.Transparent)
                 )
                 .padding(8.dp)
             Text(
