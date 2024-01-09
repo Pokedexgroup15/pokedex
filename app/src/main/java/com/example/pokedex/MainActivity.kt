@@ -15,6 +15,7 @@ import com.example.pokedex.data.RepositoryImpl
 object PokemonObject{
     var pokeList = ArrayList<Pokemon>()
     var faveList = ArrayList<Pokemon>()
+    var eveList = Array(549) {Array(3) {ArrayList<String>()} }
 }
 
 

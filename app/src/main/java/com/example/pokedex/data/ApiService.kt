@@ -132,8 +132,33 @@ class RepositoryImpl: ViewModel() {
                 while(i <= end) {
                 val result = quotesApi.getPokemonInfo(i)
                 val result2 = speciesApi.getPokemonSpeciesInfo(i)
-                if(i<541){
+                if(i<549){
                     val result3 = eveApi.getPokemonEveInfo(i)
+                    result3.body()?.let {
+
+                        PokemonObject.eveList[i][0].add(it.chain.species.name)
+
+                        var i2: Int =0
+                        var i3: Int =0
+
+                        while( i2<it.chain.evolves_to.size){
+                            PokemonObject.eveList[i][1].add(it.chain.evolves_to[i2].species.name)
+                            while( i3<it.chain.evolves_to[i2].evolves_to.size) {
+
+                                PokemonObject.eveList[i][2].add(it.chain.evolves_to[i2].evolves_to[i3].species.name)
+                                i3++
+                            }
+                            i2++
+                        }
+                        Log.d("eve",PokemonObject.eveList[i][0].toString() +" -> "+PokemonObject.eveList[i][1].toString()+" -> "+ PokemonObject.eveList[i][2])
+                        PokemonObject.eveList
+
+
+
+
+
+                    }
+
 
                 }
 
