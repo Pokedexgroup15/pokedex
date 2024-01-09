@@ -20,6 +20,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
@@ -352,7 +353,8 @@ fun TypeItemButton(type: Int, selectedTypes: List<Int>, onTypeSelected: (List<In
             .border(
                 width = 3.dp,
                 color = if (isButtonClicked) Color(0xFF006CB8) else Color.LightGray,
-                shape = RoundedCornerShape(5.dp)
+                //shape = RoundedCornerShape(5.dp)
+                shape = RoundedCornerShape(15.dp)
             )
             //Only 2 can be selected.
             .clickable {
@@ -374,6 +376,7 @@ fun TypeItemButton(type: Int, selectedTypes: List<Int>, onTypeSelected: (List<In
             modifier = Modifier
                 .fillMaxSize()
                 .padding(3.5.dp)
+                .clip(shape = RoundedCornerShape(size = 12.dp))
         )
     }
 }
