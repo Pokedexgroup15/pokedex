@@ -5,6 +5,8 @@ import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.PokemonObject
 import com.example.pokedex.presentation.userInterface.filterPage.SortOption
 import com.example.pokedex.data.RepositoryImpl
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 //    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 
@@ -18,12 +20,13 @@ class searchPageViewModel : ViewModel() {
     var repository = RepositoryImpl()
 
 
-    fun getMockData(isFavorite: Boolean, sortOption: SortOption? = null): List<Pokemon> {
+    fun getMockData(isFavorite: Boolean, sortOption: SortOption? = null): StateFlow<ArrayList<Pokemon>> {
 
         val list = if (isFavorite) PokemonsFave else Pokemons
 
         // Apply sorting if a sort option is provided
-        return sortOption?.let { sortPokemonList(list, it) } ?: list
+      // sortOption?.let { sortPokemonList(list, it) } ?: list
+        return Pokemons
     }
     private fun sortPokemonList(pokemonList: List<Pokemon>, sortOption: SortOption): List<Pokemon> {
         return when (sortOption) {

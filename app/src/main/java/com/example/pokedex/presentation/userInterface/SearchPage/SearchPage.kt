@@ -96,7 +96,7 @@ fun SearchPageFun(navController: NavHostController, viewModel: searchPageViewMod
                     onSearch = {
                         searchList.clear()
                         name.trim()
-                        searchList = Pokemons.filter { it.name.startsWith(name.replaceFirstChar { it.uppercase() }) }.toMutableList()
+                        searchList = Pokemons.value.filter { it.name.startsWith(name.replaceFirstChar { it.uppercase() }) }.toMutableList()
                     }
                 )
             )

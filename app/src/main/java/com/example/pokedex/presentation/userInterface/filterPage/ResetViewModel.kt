@@ -13,7 +13,7 @@ class ResetViewModel : ViewModel() {
     val selectedGeneration = mutableStateOf(-1)
     val selectedName = mutableStateOf<String?>(null)
     val selectedCatchRate = mutableStateOf<List<String>>(emptyList())
-    var Pokemons = PokemonObject.pokeList
+    var Pokemons = PokemonObject.pokeList.value
 
     fun resetFilters() {
         selectedSortOption.value = null

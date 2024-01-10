@@ -56,6 +56,7 @@ import com.example.pokedex.presentation.navigation.Route
 import com.example.pokedex.presentation.searchPageViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.SortOption
+import androidx.compose.runtime.collectAsState
 
 
 @Composable
@@ -116,7 +117,7 @@ fun homePage(navController: NavHostController, viewModel: searchPageViewModel, f
 fun PokemonList(navController: NavHostController, viewModel: searchPageViewModel, isFavorite: Boolean, sortOption: SortOption?) {
     //val pokemons = viewModel.getMockData(isFavorite)
     //val pokemons1 = filterViewModel.getSortedPokemonList()
-    val pokemons = viewModel.getMockData(isFavorite, sortOption)
+    val pokemons by viewModel.Pokemons.collectAsState()
 
     LazyColumn(
         modifier = Modifier.fillMaxSize()
