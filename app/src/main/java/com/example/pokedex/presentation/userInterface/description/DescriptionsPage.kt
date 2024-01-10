@@ -285,111 +285,6 @@ import com.example.pokedex.presentation.searchPageViewModel
                     .padding(vertical = 4.dp))
             HeadlineAndInfoBox()
             CatchAndGrowthRateBoxes(viewModel = viewModel)
-            /*Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.catchrate),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(35.dp)
-                        .clickable { catchRateTextBox = !catchRateTextBox }
-
-                )
-
-                Box(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .width(40.dp)
-                        .height(40.dp)
-                        .offset(x = 4.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(Color.Blue),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (pokemon != null) {
-                        Text(
-                            text = pokemon.capture_rate.toString(),
-                            color = Color.White,
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-
-                if(catchRateTextBox) {
-                    Box(
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .width(120.dp)
-                            .height(80.dp)
-                            .offset(x = 20.dp)
-                            .clip(RoundedCornerShape(6.dp))
-                            .background(Color.LightGray)
-                            .padding(3.dp)
-                    ){
-                        Text(
-                            text = "This is the catch rate of the Pokemon.",
-                            color = Color.White,
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.growthrate),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(35.dp)
-                        .clickable { growthRateTextBox = !growthRateTextBox }
-
-
-                )
-
-                Box(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .width(40.dp)
-                        .height(40.dp)
-                        .offset(x = 4.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(Color.Blue),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (pokemon != null) {
-                        Text(
-                            text = pokemon.growth_rate,
-                            color = Color.White,
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-                if(growthRateTextBox) {
-                    Box(
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .width(120.dp)
-                            .height(80.dp)
-                            .offset(x = 20.dp)
-                            .clip(RoundedCornerShape(6.dp))
-                            .background(Color.LightGray)
-                            .padding(3.dp)
-                    ){
-                        Text(
-                            text = "This is the growth rate of the Pokemon.",
-                            color = Color.White,
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-            }*/
             Divider(
                     color = Color.Black,
             thickness = 1.5.dp,
@@ -635,4 +530,15 @@ var infoBox by remember { mutableStateOf(false) }
                 }
             }
         }
+}
+
+@Composable
+fun Divider() {
+    Divider(
+        color = Color.Black,
+        thickness = 1.5.dp,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
+    )
 }
