@@ -3,6 +3,7 @@ package com.example.pokedex
 
 
 import android.content.Intent
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -42,14 +43,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -58,9 +65,12 @@ import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.presentation.userInterface.HomePage.EvolutionBar
 import com.example.pokedex.presentation.userInterface.HomePage.getTypeIconwithID
 import com.example.pokedex.presentation.searchPageViewModel
+import java.lang.Math.PI
+import java.lang.Math.cos
+import java.lang.Math.sin
 
 
-    @Composable
+@Composable
     fun ShowcasePage(navController: NavHostController,viewModel: searchPageViewModel) {
         val context = LocalContext.current
         var selectedGender by remember { mutableStateOf(Gender.NONE) }
@@ -303,6 +313,18 @@ import com.example.pokedex.presentation.searchPageViewModel
                     .fillMaxWidth()
                     .padding(vertical = 4.dp))
 
+
+            SpiderChart(
+                stats = mapOf(
+                    "HP" to 80f,
+                    "Attack" to 60f,
+                    "Defense" to 70f,
+                    "Special Attack" to 45f,
+                    "Special Defense" to 45f,
+                    "Speed" to 20f
+                ),
+                modifier = Modifier.padding(16.dp)
+            )
         }
     }
 @Composable
@@ -526,6 +548,75 @@ fun CatchAndGrowthRateBoxes(viewModel: searchPageViewModel) {
         }
     }
 }
+@Composable
+fun SpiderChart(stats: Map<String, Float>, modifier: Modifier = Modifier, size: Dp = 200.dp) {
+    val maxValue = 100f //size of the entire circle and rings adjust.
+    val numberOfRings = 5
+    val ringSpacing = 20.dp
+
+    Canvas(
+        modifier = modifier
+            .size(size)
+    ) {
+        val centerX = size.toPx() / 2f
+        val centerY = size.toPx() / 2f
+        val maxRadius = (size.toPx() / 3).coerceAtMost(size.toPx() / 3)
+        val ringRadius = maxRadius / numberOfRings
+
+       //draws 5 rings
+        for (i in 1..numberOfRings) {
+            drawCircle(
+                color = Color.Gray.copy(alpha = 0.3f),
+                radius = i * ringSpacing.toPx() + ringRadius,
+                center = Offset(centerX, centerY),
+                style = Stroke(2f)
+            )
+        }
+        for (i in 0 until stats.size) {
+            val angle = 2 * PI * i / stats.size.toFloat()
+            val x = centerX + maxRadius * cos(angle)
+            val y = centerY + maxRadius * sin(angle)
+            drawLine(
+                color = Color.Black,
+                start = Offset(centerX, centerY),
+                end = Offset(x.toFloat(), y.toFloat()),
+                strokeWidth = 2f
+            )
+        }
+
+        //draws based on input
+        val path = Path()
+        stats.entries.forEachIndexed { index, entry ->
+            val statValue = entry.value.coerceIn(0f, maxValue)
+            val angle = 2 * PI * index / stats.size.toFloat()
+            val x = centerX + maxRadius * statValue / maxValue * cos(angle)
+            val y = centerY + maxRadius * statValue / maxValue * sin(angle)
+
+            if (index == 0) {
+                path.moveTo(x.toFloat(), y.toFloat())
+            } else {
+                path.lineTo(x.toFloat(), y.toFloat())
+            }
+        }
+
+        //This should make it stop drawing after it ends with it's value.
+        path.close()
+
+
+        drawPath(
+            path = path,
+            color = Color(0xFF006CB8),
+            style = Fill
+        )
+
+        //outline to path
+        drawPath(
+            path = path,
+            color = Color.Black,
+            style = Stroke(2f)
+        )
+    }
+}
 
 
 val gradient = Brush.verticalGradient(
@@ -549,3 +640,4 @@ fun GradientBox() {
         )
     }
 }
+
