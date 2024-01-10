@@ -12,6 +12,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import kotlin.math.log
+import com.example.pokedex.presentation.userInterface.filterPage.ResetViewModel
 
 object RetrofitBase {
 
@@ -88,8 +89,16 @@ data class PokemonInfo(
     val name: String,
     val types: List<subType>,
     val sprites: sprite,
-    val stats: List<Stats>
+    val stats: List<Stats>,
+    val abilities: List<Abilities>
 )
+
+data class Abilities(
+    val name: String
+)
+
+
+
 
 data class Stats(
     val base_stat: Int
@@ -131,6 +140,7 @@ class RepositoryImpl: ViewModel() {
     //imageView.load("https://example.com/image.jpg")
 
   fun addPokemon(start:Int, end:Int, onlyDefaults:Boolean, cleanCopy:Boolean){
+
 
     val quotesApi = RetrofitBase.getInstance().create(PokeApi::class.java)
     val speciesApi = RetrofitBase.getInstance().create(PokeApiSpecies::class.java)
@@ -180,7 +190,7 @@ class RepositoryImpl: ViewModel() {
 
                 }
 
-                    result2.body()?.let { Log.d("test5", it.flavor_text_entries[0].flavor_text)
+                    result2.body()?.let {
 
                     var generationNum=-1
                     when(it.generation.name){
@@ -193,16 +203,11 @@ class RepositoryImpl: ViewModel() {
                         "generation-vii" ->  generationNum = 7
                         "generation-viii" ->  generationNum = 8
                         "generation-ix" ->  generationNum = 9
-//                        "generation-x" ->  generationNum = 1
-//                        "generation-xi" ->  generationNum = 1
-//                        "generation-xii" ->  generationNum = 1
-//                        "generation-xiii" ->  generationNum = 1
-//                        "generation-xiv" ->  generationNum = 1
-//                        "generation-xv" ->  generationNum = 1
                    }
 
-                    var pokedexEntry:String
+                    var pokedexEntry:String = " "
                         var i2:Int = 0
+                        if(it.flavor_text_entries.size>0){
                         while(i2<it.flavor_text_entries.size-1){
                             if(it.flavor_text_entries[i2].language.name =="en"){
 //                            Log.d("lan",it.flavor_text_entries[i2].language.name)
@@ -211,26 +216,41 @@ class RepositoryImpl: ViewModel() {
                             i2++
 
 
-                        }
+                        }}
 
                     val capture_rate:Int
                         val growth_rate:String
+                        if(it.flavor_text_entries.isNotEmpty()) {
 
-                    pokedexEntry = it.flavor_text_entries[i2].flavor_text
+                            pokedexEntry = it.flavor_text_entries[i2].flavor_text
+                        }
                         capture_rate = it.capture_rate
                         growth_rate = it.growth_rate.name
                 result.body()?.let { Log.d("test5", it.types[0].type.name+" "+it.name)
+                   var i3=0
+
+                    var abilities = ArrayList<String>()
+                   while(i3<it.abilities.size){
+                       abilities.add(it.abilities[i3].name)
+                       i3++
+                   }
+
                     var type2: String
 
                     if(it.types.size>1){
                          type2 = it.types[1].type.name
                     }
                     else  type2 = "null"
+
+                    var sprite:String =""
+                    if(it.sprites.other.text.frontdefault!= null)
+                        sprite = it.sprites.other.text.frontdefault
                     PokemonObject._pokeList.value = PokemonObject._pokeList.value.toMutableList().apply {
-                        add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, it.sprites.other.text.frontdefault, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat,generationNum))
+                        add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, sprite, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat,generationNum,abilities))
                     } as ArrayList<Pokemon>
                 }}
 
+                    PokemonObject.count++
                     i++
                 }
 

@@ -1,5 +1,6 @@
 package com.example.pokedex.domain
 
+import com.example.pokedex.data.Abilities
 import com.example.pokedex.data.Generation
 
 data class Pokemon(
@@ -17,5 +18,6 @@ data class Pokemon(
     val special_attack: Int,
     val special_defense: Int,
     val speed: Int,
-    val generation: Int
+    val generation: Int,
+    val abilities: ArrayList<String>
  )

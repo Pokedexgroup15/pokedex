@@ -58,6 +58,8 @@ import com.example.pokedex.R
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.presentation.navigation.Route
 import com.example.pokedex.presentation.theme.Font
+import com.example.pokedex.domain.FilterPokemon
+
 
 class FilterPage : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,11 +112,11 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                         SortButtons(
                             sharedViewModel = resetViewModel,
                             onLowToHighClick = {
-                                resetViewModel.Pokemons.value =resetViewModel.Pokemons.value.toMutableList().apply {
+                                resetViewModel.Pokemons =resetViewModel.Pokemons.toMutableList().apply {
                                     sortBy { it.id }  } as ArrayList<Pokemon>
                             },
                             onHighToLowClick = {
-                                resetViewModel.Pokemons.value= resetViewModel.Pokemons.value.toMutableList().apply {
+                                resetViewModel.Pokemons= resetViewModel.Pokemons.toMutableList().apply {
                                     sortByDescending { it.id }  } as ArrayList<Pokemon>
                             }
                         )
@@ -167,7 +169,7 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                         )
 
                         Text(
-                            text = "GrowtRate",
+                            text = "GrowthRate",
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             fontFamily = Font.rudaFontFamily,
@@ -271,7 +273,7 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                                         for (generation in 1..9) {
                                             GenerationButton(
                                                 generation = generation,
-                                                selectedGeneration = resetViewModel.selectedGeneration.value,
+                                                sharedViewModel = resetViewModel,
                                                 onGenerationSelected = {
                                                     if (resetViewModel.selectedGeneration.value == it) {
                                                         resetViewModel.selectedGeneration.value = -1
@@ -438,7 +440,7 @@ fun growRateButton(sharedViewModel: ResetViewModel) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     for (catchRate in columnCatchRates) {
-                        GrowRateItemButton(catchRate, sharedViewModel.selectedCatchRate.value) { selected ->
+                        GrowRateItemButton(catchRate, sharedViewModel) { selected ->
                             sharedViewModel.selectedCatchRate.value = selected
                         }
                         Spacer(modifier = Modifier.width(4.dp))
@@ -447,11 +449,12 @@ fun growRateButton(sharedViewModel: ResetViewModel) {
             }
         }
     }
+
 }
 
 @Composable
-fun GrowRateItemButton(growRate: String, selectedGrowRate: List<String>, onGrowRateSelected: (List<String>) -> Unit) {
-    val isButtonClicked = selectedGrowRate.contains(growRate)
+fun GrowRateItemButton(growRate: String, sharedViewModel: ResetViewModel, onGrowRateSelected: (List<String>) -> Unit) {
+    val isButtonClicked = sharedViewModel.selectedCatchRate.value.contains(growRate)
 
     Box(
         modifier = Modifier
@@ -463,8 +466,8 @@ fun GrowRateItemButton(growRate: String, selectedGrowRate: List<String>, onGrowR
             )
             .clickable {
                 onGrowRateSelected(
-                    if (isButtonClicked) selectedGrowRate - growRate
-                    else selectedGrowRate + growRate
+                    if (isButtonClicked) sharedViewModel.selectedCatchRate.value - growRate
+                    else sharedViewModel.selectedCatchRate.value + growRate
                 )
             }
             .padding(6.dp),
@@ -480,6 +483,9 @@ fun GrowRateItemButton(growRate: String, selectedGrowRate: List<String>, onGrowR
             textAlign = TextAlign.Center,
         )
     }
+
+      sharedViewModel.runFilter()
+
 }
 
 
@@ -523,7 +529,7 @@ fun TypeButton(sharedViewModel: ResetViewModel) {
                     horizontalArrangement = Arrangement.SpaceBetween // This will add equal spacing between the items
                 ) {
                     for (type in columnTypes) {
-                        TypeItemButton(type, sharedViewModel.selectedTypes.value) { selected ->
+                        TypeItemButton(type, sharedViewModel) { selected ->
                             sharedViewModel.selectedTypes.value = selected
                         }
                         Spacer(modifier = Modifier.width(2.dp))
@@ -535,8 +541,8 @@ fun TypeButton(sharedViewModel: ResetViewModel) {
 }
 
 @Composable
-fun TypeItemButton(type: Int, selectedTypes: List<Int>, onTypeSelected: (List<Int>) -> Unit) {
-    val isButtonClicked = selectedTypes.contains(type)
+fun TypeItemButton(type: Int, sharedViewModel: ResetViewModel, onTypeSelected: (List<Int>) -> Unit) {
+    val isButtonClicked = sharedViewModel.selectedTypes.value.contains(type)
 
     Box(
         modifier = Modifier
@@ -549,14 +555,15 @@ fun TypeItemButton(type: Int, selectedTypes: List<Int>, onTypeSelected: (List<In
             //Only 2 can be selected.
             .clickable {
                 onTypeSelected(
-                    if (isButtonClicked) selectedTypes - type
+                    if (isButtonClicked) sharedViewModel.selectedTypes.value - type
                     else {
-                        if (selectedTypes.size < 2) {
-                            selectedTypes + type
+                        if (sharedViewModel.selectedTypes.value.size < 2) {
+                            sharedViewModel.selectedTypes.value + type
                         } else {
-                            selectedTypes
+                            sharedViewModel.selectedTypes.value
                         }
                     }
+
                 )
             }
     ) {
@@ -569,13 +576,15 @@ fun TypeItemButton(type: Int, selectedTypes: List<Int>, onTypeSelected: (List<In
                 .clip(shape = RoundedCornerShape(size = 12.dp))
         )
     }
+       sharedViewModel.runFilter()
+
 }
 
 
 @Composable
 fun GenerationButton(
     generation: Int,
-    selectedGeneration: Int,
+    sharedViewModel: ResetViewModel,
     onGenerationSelected: (Int) -> Unit,
     isGenerationSelected: Boolean,
     isNameInGeneration: Boolean
@@ -621,6 +630,9 @@ fun GenerationButton(
             )
         }
     }
+
+      // sharedViewModel.runFilter()
+
 }
 
 @Composable
@@ -667,6 +679,8 @@ fun GenerationNameList(
             )
         }
     }
+
+
 }
 
 
@@ -691,4 +705,6 @@ fun isNameInGeneration(name: String?, generation: Int): Boolean {
         9 -> listOf("Scarlet", "Violet").contains(name)
         else -> false
     }
+
+
 }
