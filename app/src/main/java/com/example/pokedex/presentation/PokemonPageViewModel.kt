@@ -13,7 +13,7 @@ class searchPageViewModel : ViewModel() {
 
     private var selectedPokemon: Pokemon? = null
 
-    var Pokemons = PokemonObject.pokeList
+    var Pokemons = PokemonObject._pokeList
 
     var PokemonsFave = PokemonObject.faveList
 
@@ -24,14 +24,10 @@ class searchPageViewModel : ViewModel() {
         val list = if (isFavorite) PokemonsFave else Pokemons
 
         // Apply sorting if a sort option is provided
-        return (sortOption?.let { sortPokemonList(list.value, it) } ?: list) as StateFlow<ArrayList<Pokemon>>
+        return list as StateFlow<ArrayList<Pokemon>>
     }
-    private fun sortPokemonList(pokemonList: List<Pokemon>, sortOption: SortOption): List<Pokemon> {
-        return when (sortOption) {
-            SortOption.LowToHigh -> pokemonList.sortedBy { it.id }
-            SortOption.HighToLow -> pokemonList.sortedByDescending { it.id }
-        }
-    }
+
+
 
 
 
