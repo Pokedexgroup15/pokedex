@@ -77,7 +77,12 @@ data class PokemonInfo(
     val id: Int,
     val name: String,
     val types: List<subType>,
-    val sprites: sprite
+    val sprites: sprite,
+    val stats: List<Stats>
+)
+
+data class Stats(
+    val base_stat: Int
 )
 
 data class sprite(
@@ -143,6 +148,7 @@ class RepositoryImpl: ViewModel() {
 
                         while( i2<it.chain.evolves_to.size){
                             PokemonObject.eveList[i][1].add(it.chain.evolves_to[i2].species.name)
+                            i3 =0
                             while( i3<it.chain.evolves_to[i2].evolves_to.size) {
 
                                 PokemonObject.eveList[i][2].add(it.chain.evolves_to[i2].evolves_to[i3].species.name)
@@ -176,7 +182,7 @@ class RepositoryImpl: ViewModel() {
                          type2 = it.types[1].type.name
                     }
                     else  type2 = "null"
-                    PokemonObject.pokeList.add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, it.sprites.other.text.frontdefault, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate))
+                    PokemonObject.pokeList.add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, it.sprites.other.text.frontdefault, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat))
 }}
                     i++
                 }

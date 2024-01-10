@@ -8,5 +8,11 @@ data class Pokemon(
     val type2: String,
     val pokedexText: String,
     val capture_rate: Int,
-    val growth_rate: String
+    val growth_rate: String,
+    val hp:Int,
+    val attack:Int,
+    val defense:Int,
+    val special_attack: Int,
+    val special_defense: Int,
+    val speed: Int
  )
