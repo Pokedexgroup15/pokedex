@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -40,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -284,119 +286,87 @@ import com.example.pokedex.presentation.searchPageViewModel
                     .padding(vertical = 4.dp))
 
             CatchAndGrowthRateBoxes(viewModel = viewModel)
-            /*Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.catchrate),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(35.dp)
-                        .clickable { catchRateTextBox = !catchRateTextBox }
-
-                )
-
-                Box(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .width(40.dp)
-                        .height(40.dp)
-                        .offset(x = 4.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(Color.Blue),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (pokemon != null) {
-                        Text(
-                            text = pokemon.capture_rate.toString(),
-                            color = Color.White,
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-
-                if(catchRateTextBox) {
-                    Box(
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .width(120.dp)
-                            .height(80.dp)
-                            .offset(x = 20.dp)
-                            .clip(RoundedCornerShape(6.dp))
-                            .background(Color.LightGray)
-                            .padding(3.dp)
-                    ){
-                        Text(
-                            text = "This is the catch rate of the Pokemon.",
-                            color = Color.White,
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.growthrate),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(35.dp)
-                        .clickable { growthRateTextBox = !growthRateTextBox }
-
-
-                )
-
-                Box(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .width(40.dp)
-                        .height(40.dp)
-                        .offset(x = 4.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(Color.Blue),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (pokemon != null) {
-                        Text(
-                            text = pokemon.growth_rate,
-                            color = Color.White,
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-                if(growthRateTextBox) {
-                    Box(
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .width(120.dp)
-                            .height(80.dp)
-                            .offset(x = 20.dp)
-                            .clip(RoundedCornerShape(6.dp))
-                            .background(Color.LightGray)
-                            .padding(3.dp)
-                    ){
-                        Text(
-                            text = "This is the growth rate of the Pokemon.",
-                            color = Color.White,
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-            }*/
+//Indsæt det gamle pis udcursed.
             Divider(
                     color = Color.Black,
             thickness = 1.5.dp,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 4.dp))
+            
+            FormUI(viewModel = viewModel)
+
+            Divider(
+                color = Color.Black,
+                thickness = 1.5.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp))
+
         }
     }
+@Composable
+fun FormUI(viewModel: searchPageViewModel) {
+    val pokemon = viewModel.getPokemon()
+
+    Text(
+        text = "Form",
+        fontSize = 24.sp,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(6.dp)
+    )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            Text(
+                text = "SuperSejform Placeholder text", // Placeholder text, erstat med pokemon.formdescription
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Normal
+            )
+            Row(
+                modifier = Modifier,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                if (pokemon != null) {
+                    Image(
+                        painter = painterResource(id = getTypeIconwithID(pokemon.type1)),
+                        contentDescription = "type1",
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
+                if (pokemon != null) {
+                    if (pokemon.type2 != "null") {
+                        Image(
+                            painter = painterResource(id = getTypeIconwithID(pokemon.type2)),
+                            contentDescription = "type2",
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
+                }
+            }
+        }
+        AsyncImage(
+            model = pokemon?.pictureURL,
+            contentDescription = null,
+            modifier = Modifier
+                .size(150.dp)
+                //Hvis behov for testing så brug dette.
+                //.border(1.dp, Color.Black)
+                .clip(RoundedCornerShape(8.dp)),
+            contentScale = ContentScale.Crop
+        )
+    }
+}
     @Composable
     fun GenderIcon(
         imageResId: Int,
