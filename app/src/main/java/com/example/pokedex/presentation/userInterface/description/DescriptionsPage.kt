@@ -50,9 +50,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.pokedex.domain.Pokemon
+import com.example.pokedex.presentation.navigation.Route
 import com.example.pokedex.presentation.userInterface.HomePage.EvolutionBar
 import com.example.pokedex.presentation.userInterface.HomePage.getTypeIconwithID
 import com.example.pokedex.presentation.searchPageViewModel
@@ -82,8 +84,20 @@ import com.example.pokedex.presentation.searchPageViewModel
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                IconButton(onClick = { val intent = Intent(context, MainActivity::class.java)
-                    context.startActivity(intent) }) {
+                IconButton(onClick = {
+                    navController.navigate(Route.POKEDEX.path){
+                        // avoid building up a large stack of destinations
+                        // on the back stack as users select items
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        // Avoid multiple copies of the same destination when
+                        // reselecting the same item
+                        launchSingleTop = true
+                        // Restore state when reselecting a previously selected item
+                        restoreState = true
+                    }
+                }) {
                     Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                 }
                 //Spacer(modifier = Modifier.width(14.dp))
