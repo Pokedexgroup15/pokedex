@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -193,24 +194,30 @@ import com.example.pokedex.presentation.searchPageViewModel
                             .clickable {
                                 Favorized = !Favorized
                                 pokemon?.let {
-                                if (Favorized) {
+                                    if (Favorized) {
 
 
                                         PokemonObject._faveList.value =
-                                            PokemonObject._pokeList.value.toMutableList().apply {
-                                                add(it)
-                                            } as ArrayList<Pokemon>
+                                            PokemonObject.pokeList.value
+                                                .toMutableList()
+                                                .apply {
+                                                    add(it)
+                                                } as ArrayList<Pokemon>
                                     } else {
                                         PokemonObject._faveList.value =
-                                            PokemonObject._pokeList.value.toMutableList().apply {
-                                                add(it)
-                                            } as ArrayList<Pokemon>
+                                            PokemonObject.pokeList.value
+                                                .toMutableList()
+                                                .apply {
+                                                    add(it)
+                                                } as ArrayList<Pokemon>
                                         //if (viewModel.PokemonsFave.contains(pokemon))
                                         //  viewModel.PokemonsFave.remove(pokemon)
                                         //else
                                         //  pokemon?.let { viewModel.PokemonsFave.add(it) }
 
-                                    }}}
+                                    }
+                                }
+                            }
                             .requiredSize(36.dp, 36.dp)
                             .align(Alignment.BottomEnd)
                     )
@@ -275,7 +282,9 @@ import com.example.pokedex.presentation.searchPageViewModel
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp))
-            Row(
+
+            CatchAndGrowthRateBoxes(viewModel = viewModel)
+            /*Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -379,7 +388,7 @@ import com.example.pokedex.presentation.searchPageViewModel
                         )
                     }
                 }
-            }
+            }*/
             Divider(
                     color = Color.Black,
             thickness = 1.5.dp,
@@ -430,4 +439,143 @@ enum class Gender {
 @Composable
 @Preview(showBackground = true)
 fun PokemonShowcasePreview() {
+}
+
+@Composable
+fun CatchAndGrowthRateBoxes(viewModel: searchPageViewModel) {
+    var catchRateTextBox by remember { mutableStateOf(false) }
+    var growthRateTextBox by remember { mutableStateOf(false) }
+    val pokemon = viewModel.getPokemon()
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+
+    ) {
+        /*Image(
+            painter = painterResource(id = R.drawable.catchrate),
+            contentDescription = null,
+            modifier = Modifier
+                .size(35.dp)
+                .clickable { catchRateTextBox = !catchRateTextBox }
+
+      )*/
+
+        Box(
+            modifier = Modifier
+                .padding(8.dp)
+                .width(120.dp)
+                .height(40.dp)
+                //.offset(x = 4.dp)
+                .clip(RoundedCornerShape(25.dp))
+                .border(
+                    width = 2.dp,
+                    color = Color.LightGray,
+                    shape = RoundedCornerShape(20.dp)
+                )
+                .clickable { catchRateTextBox = !catchRateTextBox },
+            contentAlignment = Alignment.Center
+        ) {
+            if (pokemon != null) {
+                Text(
+                    text = pokemon.capture_rate.toString(),
+                    color = Color.Gray,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+        Box(
+            modifier = Modifier
+                .padding(8.dp)
+                .width(120.dp)
+                .height(40.dp)
+                // .offset(x = 4.dp)
+                .clip(RoundedCornerShape(25.dp))
+                .border(
+                    width = 2.dp,
+                    color = Color.LightGray,
+                    shape = RoundedCornerShape(20.dp)
+                )
+                .clickable { growthRateTextBox = !growthRateTextBox },
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = pokemon?.growth_rate.toString(),
+                color = Color.Gray,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+    Row(
+        modifier = Modifier
+            .padding(4.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        if (catchRateTextBox) {
+            Box(
+                modifier = Modifier
+                    .padding(2.dp)
+                    .width(120.dp)
+                    .height(80.dp)
+                    .clip(RoundedCornerShape(6.dp))
+                    .background(Color.LightGray)
+                    .padding(3.dp)
+            ) {
+                Text(
+                    text = "This is the catch rate of the Pokemon.",
+                    color = Color.White,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+
+        if (growthRateTextBox) {
+            Box(
+                modifier = Modifier
+                    .padding(2.dp)
+                    .width(120.dp)
+                    .height(80.dp)
+                    .clip(RoundedCornerShape(6.dp))
+                    .background(Color.LightGray)
+                    .padding(3.dp)
+            ) {
+                Text(
+                    text = "This is the growth rate of the Pokemon.",
+                    color = Color.White,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+}
+
+
+val gradient = Brush.verticalGradient(
+    colors = listOf(Color(0xFFD4C21B), Color(0xFF76C5DE)))
+@Composable
+fun GradientBox() {
+    Row(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    )
+    {
+        Box(
+            modifier = Modifier
+                .height(150.dp)
+                .width(350.dp)
+                .background(Color.Transparent)
+                .border(width = 1.dp, brush = gradient, shape = RoundedCornerShape(35.dp))
+        )
+    }
 }
