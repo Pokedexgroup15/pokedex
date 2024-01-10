@@ -369,8 +369,8 @@ fun CatchAndGrowthRateBoxes(viewModel: searchPageViewModel) {
                     width = 2.dp,
                     color = Color.LightGray,
                     shape = RoundedCornerShape(20.dp)
-                )
-                .clickable { catchRateTextBox = !catchRateTextBox },
+                ),
+                //.clickable { catchRateTextBox = !catchRateTextBox },
             contentAlignment = Alignment.Center
         ) {
             if (pokemon != null) {
@@ -393,8 +393,8 @@ fun CatchAndGrowthRateBoxes(viewModel: searchPageViewModel) {
                     width = 2.dp,
                     color = Color.LightGray,
                     shape = RoundedCornerShape(20.dp)
-                )
-                .clickable { growthRateTextBox = !growthRateTextBox },
+                ),
+                //.clickable { growthRateTextBox = !growthRateTextBox },
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -405,7 +405,7 @@ fun CatchAndGrowthRateBoxes(viewModel: searchPageViewModel) {
             )
         }
     }
-    Row(
+    /*Row(
         modifier = Modifier
             .padding(4.dp)
             .fillMaxWidth(),
@@ -450,7 +450,7 @@ fun CatchAndGrowthRateBoxes(viewModel: searchPageViewModel) {
                 )
             }
         }
-    }
+    }*/
 }
 
 
