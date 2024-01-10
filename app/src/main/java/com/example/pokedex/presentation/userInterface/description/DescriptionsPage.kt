@@ -50,6 +50,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.pokedex.domain.Pokemon
@@ -282,7 +283,7 @@ import com.example.pokedex.presentation.searchPageViewModel
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp))
-
+            HeadlineAndInfoBox()
             CatchAndGrowthRateBoxes(viewModel = viewModel)
             /*Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -572,10 +573,66 @@ fun GradientBox() {
     {
         Box(
             modifier = Modifier
-                .height(150.dp)
+                .height(180.dp)
                 .width(350.dp)
                 .background(Color.Transparent)
                 .border(width = 1.dp, brush = gradient, shape = RoundedCornerShape(35.dp))
         )
     }
+}
+
+@Composable
+fun HeadlineAndInfoBox() {
+var infoBox by remember { mutableStateOf(false) }
+    Box {
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Catch and Growth Rates",
+                fontSize = 19.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
+
+            Image(
+                painter = painterResource(id = R.drawable.questionmark),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(18.dp)
+                    .offset(x = -8.dp)
+                    .clickable { infoBox = !infoBox }
+            )
+        }
+    }
+        if(infoBox){
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ){
+                Box(
+                    modifier = Modifier
+                        .height(130.dp)
+                        .width(350.dp)
+                        .background(Color.LightGray)
+                ) {
+                    Text(
+                        text = "Catch rate on the left, Growth rate on the right. " +
+                                "The catch rate shows the difficulity of catching the Pokemon." +
+                                "The growth rate means the rate of which the Pokemon gains XP and levels up. ",
+                        modifier = Modifier
+                            .padding(16.dp),
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                }
+            }
+        }
 }
