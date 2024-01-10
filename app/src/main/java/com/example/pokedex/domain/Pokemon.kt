@@ -1,5 +1,7 @@
 package com.example.pokedex.domain
 
+import com.example.pokedex.data.Generation
+
 data class Pokemon(
     val name: String,
     val pictureURL: String,
@@ -14,5 +16,6 @@ data class Pokemon(
     val defense:Int,
     val special_attack: Int,
     val special_defense: Int,
-    val speed: Int
+    val speed: Int,
+    val generation: Int
  )

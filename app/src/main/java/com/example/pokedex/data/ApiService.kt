@@ -61,7 +61,11 @@ data class Species(
 data class PokemonSpecies(
     val flavor_text_entries: List<flavor_texts>,
     val capture_rate: Int,
-    val growth_rate: Growth
+    val growth_rate: Growth,
+    val generation: Generation
+)
+data class Generation(
+    val name: String
 )
 
 data class Growth(
@@ -146,6 +150,7 @@ class RepositoryImpl: ViewModel() {
                         var i2: Int =0
                         var i3: Int =0
 
+
                         while( i2<it.chain.evolves_to.size){
                             PokemonObject.eveList[i][1].add(it.chain.evolves_to[i2].species.name)
                             i3 =0
@@ -169,9 +174,28 @@ class RepositoryImpl: ViewModel() {
                 }
 
                     result2.body()?.let { Log.d("test5", it.flavor_text_entries[0].flavor_text)
+                    var generationNum=-1
+                    when(it.generation.name){
+                       "generation-i" ->  generationNum = 1
+                        "generation-ii" ->  generationNum = 2
+                        "generation-iii" ->  generationNum = 3
+                        "generation-iv" ->  generationNum = 4
+                        "generation-v" ->  generationNum = 5
+                        "generation-vi" ->  generationNum = 6
+                        "generation-vii" ->  generationNum = 7
+                        "generation-viii" ->  generationNum = 8
+                        "generation-ix" ->  generationNum = 9
+//                        "generation-x" ->  generationNum = 1
+//                        "generation-xi" ->  generationNum = 1
+//                        "generation-xii" ->  generationNum = 1
+//                        "generation-xiii" ->  generationNum = 1
+//                        "generation-xiv" ->  generationNum = 1
+//                        "generation-xv" ->  generationNum = 1
+                   }
                     var pokedexEntry:String
                         val capture_rate:Int
                         val growth_rate:String
+
                     pokedexEntry = it.flavor_text_entries[0].flavor_text
                         capture_rate = it.capture_rate
                         growth_rate = it.growth_rate.name
@@ -182,7 +206,7 @@ class RepositoryImpl: ViewModel() {
                          type2 = it.types[1].type.name
                     }
                     else  type2 = "null"
-                    PokemonObject.pokeList.add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, it.sprites.other.text.frontdefault, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat))
+                    PokemonObject.pokeList.add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, it.sprites.other.text.frontdefault, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat,generationNum))
 }}
                     i++
                 }
