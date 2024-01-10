@@ -27,6 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -34,6 +35,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -71,6 +73,7 @@ import com.example.pokedex.presentation.theme.Font
         var growthRateTextBox by remember { mutableStateOf(false) }
         var Favorized by remember { mutableStateOf(viewModel.PokemonsFave.value.contains(pokemon)) }
         var isAbilityVisible by remember { mutableStateOf(false) }
+        val descriptionVisibilityMap = remember { mutableStateMapOf<String, Boolean>() }
     Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -401,7 +404,8 @@ import com.example.pokedex.presentation.theme.Font
             thickness = 1.5.dp,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 4.dp))
+                .padding(vertical = 4.dp)
+            )
             // abilities
             /*Row {
                 Text(
@@ -424,12 +428,10 @@ import com.example.pokedex.presentation.theme.Font
                             modifier = Modifier
                                 .padding(10.dp)
                         )
-                        //Spacer(modifier = Modifier.width(8.dp))
 
-                        //AnimatedVisibility(visible = isGenerationVisible) {
                         Icon(
                             imageVector = Icons.Default.KeyboardArrowDown,
-                            contentDescription = "Expand Generations",
+                            contentDescription = "Expand abilities",
                             modifier = Modifier
                                 .size(46.dp)
                                 .padding(10.dp)
@@ -438,13 +440,70 @@ import com.example.pokedex.presentation.theme.Font
                                 }
                                 .rotate(if (isAbilityVisible) 180f else 0f)
                         )
-                        Column {
+                    }
+                        if (isAbilityVisible) {
+                            Column {
+                                //val abilities = viewModel.getPokemon()?.abilities ?: emptyList()
+                                //AbilityList(abilities = abilities)
 
+                                //Example list
+                                val exampleAbilities = listOf(
+                                    "Ability example 1",
+                                    "Ability example 2",
+                                    "Ability example 3"
+                                )
+                                exampleAbilities.forEach { ability ->
+                                    val isDescriptionVisible = descriptionVisibilityMap[ability] ?: false
+
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(
+                                            text = ability,
+                                            modifier = Modifier.weight(1f),
+                                            fontFamily = Font.rudaFontFamily
+
+                                        )
+                                        IconButton(onClick = {
+                                            descriptionVisibilityMap[ability] = !isDescriptionVisible
+                                        }) {
+                                            Icon(
+                                                imageVector = Icons.Default.Info,
+                                                contentDescription = "Info"
+                                            )
+                                        }
+                                    }
+                                    // Display the description box if isDescriptionVisible is true
+                                    if (isDescriptionVisible) {
+                                        Box(
+                                            modifier = Modifier
+                                                .padding(8.dp)
+                                                .border(1.dp, Color.Gray)
+                                        ) {
+                                            //Example text
+                                            Text(
+                                                text = "Description for $ability",
+                                                fontSize = 14.sp,
+                                                modifier = Modifier.padding(8.dp),
+                                                fontFamily = Font.rudaFontFamily)
+                                        }
+                                    }
+                                }
+
+                            }
                         }
+
+
+                /*if (isAbilityVisible) {
+                    val abilities = viewModel.getPokemon()?.abilities ?: emptyList()
+                    AbilityListWithDescription(abilities = abilities)
+                }
+
+                 */
                     }
                 }
             }
-        }
+
     @Composable
     fun GenderIcon(
         imageResId: Int,
