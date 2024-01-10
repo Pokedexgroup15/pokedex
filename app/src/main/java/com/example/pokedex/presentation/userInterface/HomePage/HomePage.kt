@@ -115,9 +115,7 @@ fun homePage(navController: NavHostController, viewModel: searchPageViewModel, f
 @Composable
 
 fun PokemonList(navController: NavHostController, viewModel: searchPageViewModel, isFavorite: Boolean, sortOption: SortOption?) {
-    //val pokemons = viewModel.getMockData(isFavorite)
-    //val pokemons1 = filterViewModel.getSortedPokemonList()
-    val pokemons by viewModel.Pokemons.collectAsState()
+    val pokemons by viewModel.getData(isFavorite).collectAsState()
 
     LazyColumn(
         modifier = Modifier.fillMaxSize()
@@ -245,7 +243,7 @@ fun pokemonBox(modifier: Modifier,
 
 @Composable
 fun pokemonPictureAndLogo(modifier: Modifier, pokemon: Pokemon, viewModel: searchPageViewModel){
-    var Favorized by remember { mutableStateOf(viewModel.PokemonsFave.contains(pokemon))}
+    var Favorized by remember { mutableStateOf(viewModel.PokemonsFave.value.contains(pokemon))}
     Box(
         modifier=modifier
 
@@ -269,8 +267,8 @@ fun pokemonPictureAndLogo(modifier: Modifier, pokemon: Pokemon, viewModel: searc
                 .clickable {
                     Favorized = !Favorized
                     if (Favorized) {
-                        pokemon?.let { viewModel.PokemonsFave.add(it) }
-                    } else {viewModel.PokemonsFave.remove(pokemon)
+                        pokemon?.let { viewModel.PokemonsFave.value.add(it) }
+                    } else {viewModel.PokemonsFave.value.remove(pokemon)
                         //viewModel.toggleFavourite(pokemon)
 
 

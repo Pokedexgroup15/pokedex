@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.presentation.userInterface.HomePage.EvolutionBar
 import com.example.pokedex.presentation.userInterface.HomePage.getTypeIconwithID
 import com.example.pokedex.presentation.searchPageViewModel
@@ -65,7 +66,7 @@ import com.example.pokedex.presentation.searchPageViewModel
         val femaleColor = Color(143,68,124)
         var catchRateTextBox by remember { mutableStateOf(false) }
         var growthRateTextBox by remember { mutableStateOf(false) }
-        var Favorized by remember { mutableStateOf(viewModel.PokemonsFave.contains(pokemon)) }
+        var Favorized by remember { mutableStateOf(viewModel.PokemonsFave.value.contains(pokemon)) }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -191,21 +192,30 @@ import com.example.pokedex.presentation.searchPageViewModel
                             .size(25.dp)
                             .clickable {
                                 Favorized = !Favorized
+                                pokemon?.let {
                                 if (Favorized) {
-                                    pokemon?.let { viewModel.PokemonsFave.add(it) }
-                                } else {
-                                    viewModel.PokemonsFave.remove(pokemon)
-                                    //if (viewModel.PokemonsFave.contains(pokemon))
-                                    //  viewModel.PokemonsFave.remove(pokemon)
-                                    //else
-                                    //  pokemon?.let { viewModel.PokemonsFave.add(it) }
-                                }
-                            }
+
+
+                                        PokemonObject._faveList.value =
+                                            PokemonObject.pokeList.value.toMutableList().apply {
+                                                add(it)
+                                            } as ArrayList<Pokemon>
+                                    } else {
+                                        PokemonObject._faveList.value =
+                                            PokemonObject.pokeList.value.toMutableList().apply {
+                                                add(it)
+                                            } as ArrayList<Pokemon>
+                                        //if (viewModel.PokemonsFave.contains(pokemon))
+                                        //  viewModel.PokemonsFave.remove(pokemon)
+                                        //else
+                                        //  pokemon?.let { viewModel.PokemonsFave.add(it) }
+
+                                    }}}
                             .requiredSize(36.dp, 36.dp)
                             .align(Alignment.BottomEnd)
                     )
-                }
-            }
+                }}
+
             Divider(
                 color = Color.Black,
                 thickness = 1.5.dp,

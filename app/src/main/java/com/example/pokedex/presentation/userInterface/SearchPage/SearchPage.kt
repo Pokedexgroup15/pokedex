@@ -54,7 +54,7 @@ import com.example.pokedex.presentation.searchPageViewModel
 @Composable
 fun SearchPageFun(navController: NavHostController, viewModel: searchPageViewModel) {
     var name by remember { mutableStateOf("") }
-    var Pokemons= viewModel.getMockData(false)
+    var Pokemons= viewModel.getData(false)
     val context = LocalContext.current // Get the current context
     var searchList by remember { mutableStateOf(mutableListOf<Pokemon>()) }
 

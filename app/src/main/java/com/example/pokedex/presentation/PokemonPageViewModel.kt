@@ -5,7 +5,6 @@ import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.PokemonObject
 import com.example.pokedex.presentation.userInterface.filterPage.SortOption
 import com.example.pokedex.data.RepositoryImpl
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 //    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
@@ -13,20 +12,19 @@ import kotlinx.coroutines.flow.StateFlow
 class searchPageViewModel : ViewModel() {
 
     private var selectedPokemon: Pokemon? = null
-    var PokemonsFave = PokemonObject.faveList
 
     var Pokemons = PokemonObject.pokeList
+
+    var PokemonsFave = PokemonObject.faveList
 
     var repository = RepositoryImpl()
 
 
-    fun getMockData(isFavorite: Boolean, sortOption: SortOption? = null): StateFlow<ArrayList<Pokemon>> {
-
+    fun getData(isFavorite: Boolean, sortOption: SortOption? = null): StateFlow<ArrayList<Pokemon>> {
         val list = if (isFavorite) PokemonsFave else Pokemons
 
         // Apply sorting if a sort option is provided
-      // sortOption?.let { sortPokemonList(list, it) } ?: list
-        return Pokemons
+        return (sortOption?.let { sortPokemonList(list.value, it) } ?: list) as StateFlow<ArrayList<Pokemon>>
     }
     private fun sortPokemonList(pokemonList: List<Pokemon>, sortOption: SortOption): List<Pokemon> {
         return when (sortOption) {
@@ -47,10 +45,10 @@ class searchPageViewModel : ViewModel() {
 
 
     fun toggleFavourite(pokemon: Pokemon){
-        if (PokemonsFave.contains(pokemon))
-            PokemonsFave.remove(pokemon)
+        if (PokemonsFave.value.contains(pokemon))
+            PokemonsFave.value.remove(pokemon)
         else
-            PokemonsFave.add(pokemon)
+            PokemonsFave.value.add(pokemon)
     }
 
 

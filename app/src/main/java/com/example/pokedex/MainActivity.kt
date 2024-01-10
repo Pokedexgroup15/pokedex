@@ -18,7 +18,9 @@ object PokemonObject{
     var _pokeList = MutableStateFlow(ArrayList<Pokemon>())
     var pokeList = _pokeList.asStateFlow()
 
-    var faveList = ArrayList<Pokemon>()
+
+    var _faveList = MutableStateFlow(ArrayList<Pokemon>())
+    var faveList = _faveList.asStateFlow()
     var eveList = Array(549) {Array(3) {ArrayList<String>()} }
 }
 
