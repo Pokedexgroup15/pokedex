@@ -27,6 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -55,9 +57,10 @@ import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.presentation.userInterface.HomePage.EvolutionBar
 import com.example.pokedex.presentation.userInterface.HomePage.getTypeIconwithID
 import com.example.pokedex.presentation.searchPageViewModel
+import com.example.pokedex.presentation.theme.Font
 
 
-    @Composable
+@Composable
     fun ShowcasePage(navController: NavHostController,viewModel: searchPageViewModel) {
         val context = LocalContext.current
         var selectedGender by remember { mutableStateOf(Gender.NONE) }
@@ -67,7 +70,8 @@ import com.example.pokedex.presentation.searchPageViewModel
         var catchRateTextBox by remember { mutableStateOf(false) }
         var growthRateTextBox by remember { mutableStateOf(false) }
         var Favorized by remember { mutableStateOf(viewModel.PokemonsFave.value.contains(pokemon)) }
-        Column(
+        var isAbilityVisible by remember { mutableStateOf(false) }
+    Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
@@ -92,7 +96,8 @@ import com.example.pokedex.presentation.searchPageViewModel
                     Text(
                         text = it.name,
                         fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = Font.rudaFontFamily
                     )
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -193,24 +198,30 @@ import com.example.pokedex.presentation.searchPageViewModel
                             .clickable {
                                 Favorized = !Favorized
                                 pokemon?.let {
-                                if (Favorized) {
+                                    if (Favorized) {
 
 
                                         PokemonObject._faveList.value =
-                                            PokemonObject.pokeList.value.toMutableList().apply {
-                                                add(it)
-                                            } as ArrayList<Pokemon>
+                                            PokemonObject.pokeList.value
+                                                .toMutableList()
+                                                .apply {
+                                                    add(it)
+                                                } as ArrayList<Pokemon>
                                     } else {
                                         PokemonObject._faveList.value =
-                                            PokemonObject.pokeList.value.toMutableList().apply {
-                                                add(it)
-                                            } as ArrayList<Pokemon>
+                                            PokemonObject.pokeList.value
+                                                .toMutableList()
+                                                .apply {
+                                                    add(it)
+                                                } as ArrayList<Pokemon>
                                         //if (viewModel.PokemonsFave.contains(pokemon))
                                         //  viewModel.PokemonsFave.remove(pokemon)
                                         //else
                                         //  pokemon?.let { viewModel.PokemonsFave.add(it) }
 
-                                    }}}
+                                    }
+                                }
+                            }
                             .requiredSize(36.dp, 36.dp)
                             .align(Alignment.BottomEnd)
                     )
@@ -259,6 +270,7 @@ import com.example.pokedex.presentation.searchPageViewModel
                 pokemon?.let {
                     Text(
                         text = pokemon.pokedexText,
+                        fontFamily = Font.rudaFontFamily,
 
                         modifier = Modifier
                             .padding(16.dp)
@@ -302,7 +314,8 @@ import com.example.pokedex.presentation.searchPageViewModel
                             text = pokemon.capture_rate.toString(),
                             color = Color.White,
                             fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = Font.rudaFontFamily
                         )
                     }
                 }
@@ -322,7 +335,8 @@ import com.example.pokedex.presentation.searchPageViewModel
                             text = "This is the catch rate of the Pokemon.",
                             color = Color.White,
                             fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = Font.rudaFontFamily
                         )
                     }
                 }
@@ -356,7 +370,8 @@ import com.example.pokedex.presentation.searchPageViewModel
                             text = pokemon.growth_rate,
                             color = Color.White,
                             fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = Font.rudaFontFamily
                         )
                     }
                 }
@@ -375,7 +390,8 @@ import com.example.pokedex.presentation.searchPageViewModel
                             text = "This is the growth rate of the Pokemon.",
                             color = Color.White,
                             fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = Font.rudaFontFamily
                         )
                     }
                 }
@@ -386,8 +402,49 @@ import com.example.pokedex.presentation.searchPageViewModel
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 4.dp))
+            // abilities
+            /*Row {
+                Text(
+                    text = "Abilities",
+                    color = Color.Black,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = Font.rudaFontFamily
+                )
+            }
+
+             */
+            Column {
+                    Row {
+                        Text(
+                            text = "Abilities",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = Font.rudaFontFamily,
+                            modifier = Modifier
+                                .padding(10.dp)
+                        )
+                        //Spacer(modifier = Modifier.width(8.dp))
+
+                        //AnimatedVisibility(visible = isGenerationVisible) {
+                        Icon(
+                            imageVector = Icons.Default.KeyboardArrowDown,
+                            contentDescription = "Expand Generations",
+                            modifier = Modifier
+                                .size(46.dp)
+                                .padding(10.dp)
+                                .clickable {
+                                    isAbilityVisible = !isAbilityVisible
+                                }
+                                .rotate(if (isAbilityVisible) 180f else 0f)
+                        )
+                        Column {
+
+                        }
+                    }
+                }
+            }
         }
-    }
     @Composable
     fun GenderIcon(
         imageResId: Int,
