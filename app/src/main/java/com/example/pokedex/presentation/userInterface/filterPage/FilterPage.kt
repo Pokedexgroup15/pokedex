@@ -111,7 +111,7 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                             sharedViewModel = resetViewModel,
                             onLowToHighClick = {
                                 resetViewModel.Pokemons.value =resetViewModel.Pokemons.value.toMutableList().apply {
-                                    sortedBy { it.id }  } as ArrayList<Pokemon>
+                                    sortBy { it.id }  } as ArrayList<Pokemon>
                             },
                             onHighToLowClick = {
                                 resetViewModel.Pokemons.value= resetViewModel.Pokemons.value.toMutableList().apply {
