@@ -89,8 +89,16 @@ data class PokemonInfo(
     val name: String,
     val types: List<subType>,
     val sprites: sprite,
-    val stats: List<Stats>
+    val stats: List<Stats>,
+    val abilities: List<Abilities>
 )
+
+data class Abilities(
+    val name: String
+)
+
+
+
 
 data class Stats(
     val base_stat: Int
@@ -219,6 +227,14 @@ class RepositoryImpl: ViewModel() {
                         capture_rate = it.capture_rate
                         growth_rate = it.growth_rate.name
                 result.body()?.let { Log.d("test5", it.types[0].type.name+" "+it.name)
+                   var i3=0
+
+                    var abilities = ArrayList<String>()
+                   while(i3<it.abilities.size){
+                       abilities.add(it.abilities[i3].name)
+                       i3++
+                   }
+
                     var type2: String
 
                     if(it.types.size>1){
@@ -229,7 +245,7 @@ class RepositoryImpl: ViewModel() {
                     if(it.sprites.other.text.frontdefault!= null)
                         sprite = it.sprites.other.text.frontdefault
                     PokemonObject._pokeList.value = PokemonObject.pokeList.value.toMutableList().apply {
-                        add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, sprite, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat,generationNum))
+                        add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, sprite, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat,generationNum,abilities))
                     } as ArrayList<Pokemon>
                 }}
 
