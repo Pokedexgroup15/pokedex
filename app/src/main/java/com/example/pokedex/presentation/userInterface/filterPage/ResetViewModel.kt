@@ -3,6 +3,8 @@ package com.example.pokedex.presentation.userInterface.filterPage
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.pokedex.PokemonObject
+import com.example.pokedex.domain.Pokemon
+import kotlinx.coroutines.flow.StateFlow
 
 //import com.example.pokedex.Presentation.UserInterface.FilterPage.SortOption
 
@@ -13,7 +15,7 @@ class ResetViewModel : ViewModel() {
     val selectedGeneration = mutableStateOf(-1)
     val selectedName = mutableStateOf<String?>(null)
     val selectedCatchRate = mutableStateOf<List<String>>(emptyList())
-    var Pokemons = PokemonObject.pokeList.value
+    var Pokemons = PokemonObject._pokeList
 
     fun resetFilters() {
         selectedSortOption.value = null
@@ -22,4 +24,19 @@ class ResetViewModel : ViewModel() {
         selectedGeneration.value = -1
         selectedName.value = null
     }
+    /*
+     fun sortPokemonList(pokemonList: StateFlow<ArrayList<Pokemon>>, sortOption: SortOption) {
+
+        return when (sortOption) {
+            SortOption.LowToHigh -> PokemonObject._pokeList.value = PokemonObject._pokeList.value.toMutableList().apply {
+                sortByDescending { it.id }  } as ArrayList<Pokemon>
+
+            SortOption.HighToLow -> PokemonObject._pokeList.value = PokemonObject._pokeList.value.toMutableList().apply {
+                sortByDescending { it.id }
+            } as ArrayList<Pokemon>
+
+        }
+    }
+
+     */
 }

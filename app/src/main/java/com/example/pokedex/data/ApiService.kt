@@ -196,7 +196,7 @@ class RepositoryImpl: ViewModel() {
                          type2 = it.types[1].type.name
                     }
                     else  type2 = "null"
-                    PokemonObject._pokeList.value = PokemonObject.pokeList.value.toMutableList().apply {
+                    PokemonObject._pokeList.value = PokemonObject._pokeList.value.toMutableList().apply {
                         add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, it.sprites.other.text.frontdefault, it.id, it.types[0].type.name, type2, pokedexEntry, capture_rate, growth_rate))
                     } as ArrayList<Pokemon>
                 }}

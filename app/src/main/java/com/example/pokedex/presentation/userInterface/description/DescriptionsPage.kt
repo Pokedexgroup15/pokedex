@@ -199,14 +199,14 @@ import com.example.pokedex.presentation.searchPageViewModel
 
 
                                         PokemonObject._faveList.value =
-                                            PokemonObject.pokeList.value
+                                            PokemonObject._pokeList.value
                                                 .toMutableList()
                                                 .apply {
                                                     add(it)
                                                 } as ArrayList<Pokemon>
                                     } else {
                                         PokemonObject._faveList.value =
-                                            PokemonObject.pokeList.value
+                                            PokemonObject._pokeList.value
                                                 .toMutableList()
                                                 .apply {
                                                     add(it)
