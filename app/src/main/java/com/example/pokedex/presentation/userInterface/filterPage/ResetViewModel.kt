@@ -23,7 +23,7 @@ class ResetViewModel : ViewModel() {
         viewModelScope.launch {
             // Trigger the flow and consume its elements using collect
             PokemonObject.pokeList.collect { newpoke ->
-                delay(1000//todo adjust sleep time
+                delay(1000)//todo adjust sleep time
                 if(PokemonObject.filter){
                 runFilter()       }     }
         }
