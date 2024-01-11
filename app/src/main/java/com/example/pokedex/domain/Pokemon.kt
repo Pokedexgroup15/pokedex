@@ -1,7 +1,10 @@
 package com.example.pokedex.domain
 
+
+import com.example.pokedex.data.GenderRate
 import com.example.pokedex.data.Abilities
 import com.example.pokedex.data.Generation
+
 
 data class Pokemon(
     val name: String,
@@ -12,6 +15,7 @@ data class Pokemon(
     val pokedexText: String,
     val capture_rate: Int,
     val growth_rate: String,
+    val genderRate: GenderRate,
     val hp:Int,
     val attack:Int,
     val defense:Int,

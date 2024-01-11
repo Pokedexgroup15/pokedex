@@ -2,6 +2,7 @@ package com.example.pokedex.data
 
 import android.util.Log
 import androidx.lifecycle.*
+import com.example.pokedex.Gender
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.PokemonObject
 import com.google.gson.annotations.SerializedName
@@ -64,6 +65,7 @@ data class PokemonSpecies(
     val flavor_text_entries: List<flavor_texts>,
     val capture_rate: Int,
     val growth_rate: Growth,
+    val gender_rate: Int,
     val generation: Generation
 )
 data class Generation(
@@ -94,9 +96,11 @@ data class PokemonInfo(
 )
 
 data class Abilities(
+    val ability: Ability
+)
+data class Ability(
     val name: String
 )
-
 
 
 
@@ -130,9 +134,11 @@ data class Type(
     val url:String
 )
 
-
-
-
+data class GenderRate(
+    val gender: Gender,
+    val maleRatio: Double,
+    val femaleRatio: Double
+)
 
 
 class RepositoryImpl: ViewModel() {
@@ -219,19 +225,25 @@ class RepositoryImpl: ViewModel() {
                         }}
 
                     val capture_rate:Int
+
                         val growth_rate:String
                         if(it.flavor_text_entries.isNotEmpty()) {
+
 
                             pokedexEntry = it.flavor_text_entries[i2].flavor_text
                         }
                         capture_rate = it.capture_rate
                         growth_rate = it.growth_rate.name
+                        val genderInfo=calculateGenderRate(it.gender_rate)
+
                 result.body()?.let { Log.d("test5", it.types[0].type.name+" "+it.name)
                    var i3=0
 
                     var abilities = ArrayList<String>()
+                    Log.d("abil",""+it.abilities.size)
                    while(i3<it.abilities.size){
-                       abilities.add(it.abilities[i3].name)
+                       abilities.add(it.abilities[i3].ability.name)
+                       Log.d("abil",abilities[i3])
                        i3++
                    }
 
@@ -242,15 +254,17 @@ class RepositoryImpl: ViewModel() {
                     }
                     else  type2 = "null"
 
+
                     var sprite:String =""
                     if(it.sprites.other.text.frontdefault!= null)
                         sprite = it.sprites.other.text.frontdefault
                     PokemonObject._pokeList.value = PokemonObject._pokeList.value.toMutableList().apply {
-                        add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, sprite, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat,generationNum,abilities))
+                        add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, sprite, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate, genderRate = genderInfo,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat,generationNum,abilities))
                     } as ArrayList<Pokemon>
                 }}
 
                     PokemonObject.count++
+
                     i++
                 }
 
@@ -262,5 +276,22 @@ class RepositoryImpl: ViewModel() {
 
     }}
 
+private fun calculateGenderRate(genderRate: Int): GenderRate {
+    return when (genderRate) {
+        -1 ->GenderRate(Gender.NONE, 0.0, 0.0)
+        0 ->GenderRate(Gender.MALE, 100.0, 0.0)
+        8 ->GenderRate(Gender.FEMALE, 0.0, 100.0)
+        in 1..7 -> {
+            val femaleRatio =genderRate * 12.5
+            val maleRatio= 100.0 - femaleRatio
+            val gender=when{
+                genderRate< 4 ->Gender.MALE
+                genderRate > 4->Gender.FEMALE
+                else ->Gender.MIXED
+            }
+            GenderRate(gender, maleRatio, femaleRatio)
+        } else -> GenderRate(Gender.UNKNOWN, 0.0, 0.0)
+    }
+}
 
 
