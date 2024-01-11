@@ -65,14 +65,11 @@ data class PokemonSpecies(
     val flavor_text_entries: List<flavor_texts>,
     val capture_rate: Int,
     val growth_rate: Growth,
-<<<<<<< HEAD
-    val gender_rate: Int
-=======
+    val gender_rate: Int,
     val generation: Generation
 )
 data class Generation(
     val name: String
->>>>>>> Development
 )
 
 data class Growth(
@@ -226,12 +223,10 @@ class RepositoryImpl: ViewModel() {
                         }}
 
                     val capture_rate:Int
-<<<<<<< HEAD
-                    val growth_rate:String
-=======
+
                         val growth_rate:String
                         if(it.flavor_text_entries.isNotEmpty()) {
->>>>>>> Development
+
 
                             pokedexEntry = it.flavor_text_entries[i2].flavor_text
                         }
@@ -254,21 +249,18 @@ class RepositoryImpl: ViewModel() {
                          type2 = it.types[1].type.name
                     }
                     else  type2 = "null"
-<<<<<<< HEAD
-                    PokemonObject.pokeList.add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, it.sprites.other.text.frontdefault, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate,genderRate=genderInfo))
-}}
-=======
+
 
                     var sprite:String =""
                     if(it.sprites.other.text.frontdefault!= null)
                         sprite = it.sprites.other.text.frontdefault
                     PokemonObject._pokeList.value = PokemonObject._pokeList.value.toMutableList().apply {
-                        add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, sprite, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat,generationNum,abilities))
+                        add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, sprite, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate, genderRate = genderInfo,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat,generationNum,abilities))
                     } as ArrayList<Pokemon>
                 }}
 
                     PokemonObject.count++
->>>>>>> Development
+
                     i++
                 }
 

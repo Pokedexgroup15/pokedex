@@ -55,12 +55,9 @@ import androidx.compose.ui.window.Popup
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-<<<<<<< HEAD
 import com.example.pokedex.data.GenderRate
-=======
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.presentation.navigation.Route
->>>>>>> Development
 import com.example.pokedex.presentation.userInterface.HomePage.EvolutionBar
 import com.example.pokedex.presentation.userInterface.HomePage.getTypeIconwithID
 import com.example.pokedex.presentation.searchPageViewModel
