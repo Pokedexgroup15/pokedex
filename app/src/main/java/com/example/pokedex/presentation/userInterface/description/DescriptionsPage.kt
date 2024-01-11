@@ -120,6 +120,7 @@ import com.example.pokedex.presentation.userInterface.description.AbilityListWit
                     Text(
                         text = it.name,
                         fontSize = 30.sp,
+                        fontFamily = Font.rudaFontFamily,
                         fontWeight = FontWeight.Bold
                     )
                     Row(
@@ -601,6 +602,7 @@ import com.example.pokedex.presentation.userInterface.description.AbilityListWit
                    text = "${ratio}%",
                    fontSize = 16.sp,
                    fontWeight = FontWeight.Bold,
+                   fontFamily = Font.rudaFontFamily,
                    modifier = Modifier
                        .align(Alignment.TopCenter)
                )
@@ -669,6 +671,7 @@ fun CatchAndGrowthRateBoxes(viewModel: searchPageViewModel) {
                     text = pokemon.capture_rate.toString(),
                     color = Color.Gray,
                     fontSize = 15.sp,
+                    fontFamily = Font.rudaFontFamily,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -692,6 +695,7 @@ fun CatchAndGrowthRateBoxes(viewModel: searchPageViewModel) {
                 text = pokemon?.growth_rate.toString(),
                 color = Color.Gray,
                 fontSize = 14.sp,
+                fontFamily = Font.rudaFontFamily,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -718,6 +722,7 @@ fun CatchAndGrowthRateBoxes(viewModel: searchPageViewModel) {
                     text = "This is the catch rate of the Pokemon.",
                     color = Color.White,
                     fontSize = 15.sp,
+                    fontFamily = Font.rudaFontFamily,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -737,6 +742,7 @@ fun CatchAndGrowthRateBoxes(viewModel: searchPageViewModel) {
                     text = "This is the growth rate of the Pokemon.",
                     color = Color.White,
                     fontSize = 15.sp,
+                    fontFamily = Font.rudaFontFamily,
                     fontWeight = FontWeight.Bold
                 )
             }
