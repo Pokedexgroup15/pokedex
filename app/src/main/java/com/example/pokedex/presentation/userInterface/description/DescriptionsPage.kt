@@ -3,28 +3,26 @@ package com.example.pokedex
 
 
 import android.content.Intent
+import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -39,17 +37,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -68,6 +66,7 @@ import com.example.pokedex.presentation.searchPageViewModel
 import java.lang.Math.PI
 import java.lang.Math.cos
 import java.lang.Math.sin
+
 
 
 @Composable
@@ -94,8 +93,10 @@ import java.lang.Math.sin
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                IconButton(onClick = { val intent = Intent(context, MainActivity::class.java)
-                    context.startActivity(intent) }) {
+                IconButton(onClick = {
+                    val intent = Intent(context, MainActivity::class.java)
+                    context.startActivity(intent)
+                }) {
                     Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                 }
                 //Spacer(modifier = Modifier.width(14.dp))
@@ -167,7 +168,7 @@ import java.lang.Math.sin
                         .padding(16.dp)
                         .align(Alignment.BottomStart)
                 ) {
-                 //RYK GENDERICONS og Favorite ICON HER SÅ DET BLIVER IN PICTURE som FIGMA
+                    //RYK GENDERICONS og Favorite ICON HER SÅ DET BLIVER IN PICTURE som FIGMA
                     ////////////////////////////////////////////////////
                     Spacer(modifier = Modifier.width(16.dp))
 
@@ -200,7 +201,7 @@ import java.lang.Math.sin
                         painter = painterResource(id = R.drawable.pokeball_bw),
                         contentDescription = "Favorite option",
                         //tint = if (viewModel.PokemonsFave.contains(pokemon)) Color.Red else Color.Black,
-                        tint = if(Favorized) Color.Red else Color.Black,
+                        tint = if (Favorized) Color.Red else Color.Black,
                         modifier = Modifier
                             .size(25.dp)
                             .clickable {
@@ -233,7 +234,8 @@ import java.lang.Math.sin
                             .requiredSize(36.dp, 36.dp)
                             .align(Alignment.BottomEnd)
                     )
-                }}
+                }
+            }
 
             Divider(
                 color = Color.Black,
@@ -245,12 +247,12 @@ import java.lang.Math.sin
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.BottomCenter
-            ){
-                Column (
+            ) {
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 10.dp)
-                ){
+                ) {
                     Text(text = "", modifier = Modifier.align(Alignment.CenterHorizontally))
                     Spacer(modifier = Modifier.weight(4f))
                     EvolutionBar(navController)
@@ -293,17 +295,19 @@ import java.lang.Math.sin
                 thickness = 1.5.dp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp))
+                    .padding(vertical = 4.dp)
+            )
 
             CatchAndGrowthRateBoxes(viewModel = viewModel)
 //Indsæt det gamle pis udcursed.
             Divider(
-                    color = Color.Black,
-            thickness = 1.5.dp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp))
-            
+                color = Color.Black,
+                thickness = 1.5.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            )
+
             FormUI(viewModel = viewModel)
 
             Divider(
@@ -311,20 +315,46 @@ import java.lang.Math.sin
                 thickness = 1.5.dp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp))
-
-
-            SpiderChart(
-                stats = mapOf(
-                    "HP" to 80f,
-                    "Attack" to 60f,
-                    "Defense" to 70f,
-                    "Special Attack" to 45f,
-                    "Special Defense" to 45f,
-                    "Speed" to 20f
-                ),
-                modifier = Modifier.padding(16.dp)
+                    .padding(vertical = 4.dp)
             )
+//This is a spiderchart hackworkaround, because Canvas can't directly take align inputs.
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .align(alignment = CenterHorizontally)
+            )
+            {
+                Text(
+                    text = "Base Stats",
+                    fontFamily = com.example.pokedex.presentation.theme.Font.rudaFontFamily,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.TopStart)
+
+                )
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .wrapContentSize(Alignment.Center)
+                ) {
+                    SpiderChart(
+
+                        stats = mapOf(
+                            "HP" to 140f,
+                            "Attack" to 60f,
+                            "Defense" to 70f,
+                            "Special Attack" to 45f,
+                            "Special Defense" to 45f,
+                            "Speed" to 20f
+
+                        ),
+                        modifier = Modifier.padding(72.dp),
+                    )
+                }
+            }
         }
     }
 @Composable
@@ -548,73 +578,92 @@ fun CatchAndGrowthRateBoxes(viewModel: searchPageViewModel) {
         }
     }
 }
+
+
 @Composable
 fun SpiderChart(stats: Map<String, Float>, modifier: Modifier = Modifier, size: Dp = 200.dp) {
-    val maxValue = 100f //size of the entire circle and rings adjust.
+    val maxValue = 100f // Size of the entire circle and rings adjust.
     val numberOfRings = 5
     val ringSpacing = 20.dp
 
-    Canvas(
+    Box(
         modifier = modifier
             .size(size)
-    ) {
-        val centerX = size.toPx() / 2f
-        val centerY = size.toPx() / 2f
-        val maxRadius = (size.toPx() / 3).coerceAtMost(size.toPx() / 3)
-        val ringRadius = maxRadius / numberOfRings
 
-       //draws 5 rings
-        for (i in 1..numberOfRings) {
-            drawCircle(
-                color = Color.Gray.copy(alpha = 0.3f),
-                radius = i * ringSpacing.toPx() + ringRadius,
-                center = Offset(centerX, centerY),
+    ) {
+        Canvas(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            //Had to use toPx() because dp won't work on canvas with height and width.
+            val centerX = size.toPx() / 2f
+            val centerY = size.toPx() / 2f
+            val maxRadius = (size.toPx() / 3).coerceAtMost(size.toPx() / 3)
+            val ringRadius = maxRadius / numberOfRings
+
+            // Draws 5 rings with size max 100
+            for (i in 1..numberOfRings) {
+                drawCircle(
+                    color = Color.Gray.copy(alpha = 0.3f),
+                    radius = i * ringSpacing.toPx() + ringRadius,
+                    center = Offset(centerX, centerY),
+                    style = Stroke(2f)
+                )
+            }
+
+            val path = Path()
+
+            // Draws stats and 6 titles
+            stats.entries.forEachIndexed { index, pokeStatEntry ->
+                val pokeStatValue = pokeStatEntry.value.coerceIn(0f, maxValue)
+                val angle = 2 * PI * index / stats.size.toFloat()
+                val x = centerX + maxRadius * pokeStatValue / maxValue * cos(angle)
+                val y = centerY + maxRadius * pokeStatValue / maxValue * sin(angle)
+
+                drawLine(
+                    color = Color.Black,
+                    start = Offset(centerX, centerY),
+                    end = Offset(x.toFloat(), y.toFloat()),
+                    strokeWidth = 2f
+                )
+                // calc pos based on center y and x
+                val titleX = centerX + (maxRadius + 20f) * cos(angle)
+                val titleY = centerY + (maxRadius + 20f) * sin(angle)
+
+                // workaround hack, not the best, but works with key collection.
+                drawContext.canvas.nativeCanvas.drawText(
+                    pokeStatEntry.key,
+                    titleX.toFloat(),
+                    titleY.toFloat(),
+                    Paint().apply {
+                        color = Color.Black.toArgb()
+                        textSize = 12.sp.toPx()
+                        textAlign = Paint.Align.CENTER
+                    }
+                )
+
+                // points on canvas
+                if (index == 0) {
+                    path.moveTo(x.toFloat(), y.toFloat())
+                } else {
+                    path.lineTo(x.toFloat(), y.toFloat())
+                }
+            }
+
+            // important line, fragile.
+            path.close()
+
+            drawPath(
+                path = path,
+                color = Color(0xFF006CB8),
+                style = Fill
+            )
+            drawPath(
+                path = path,
+                color = Color.Black,
                 style = Stroke(2f)
             )
         }
-        for (i in 0 until stats.size) {
-            val angle = 2 * PI * i / stats.size.toFloat()
-            val x = centerX + maxRadius * cos(angle)
-            val y = centerY + maxRadius * sin(angle)
-            drawLine(
-                color = Color.Black,
-                start = Offset(centerX, centerY),
-                end = Offset(x.toFloat(), y.toFloat()),
-                strokeWidth = 2f
-            )
-        }
-
-        //draws based on input
-        val path = Path()
-        stats.entries.forEachIndexed { index, entry ->
-            val statValue = entry.value.coerceIn(0f, maxValue)
-            val angle = 2 * PI * index / stats.size.toFloat()
-            val x = centerX + maxRadius * statValue / maxValue * cos(angle)
-            val y = centerY + maxRadius * statValue / maxValue * sin(angle)
-
-            if (index == 0) {
-                path.moveTo(x.toFloat(), y.toFloat())
-            } else {
-                path.lineTo(x.toFloat(), y.toFloat())
-            }
-        }
-
-        //This should make it stop drawing after it ends with it's value.
-        path.close()
-
-
-        drawPath(
-            path = path,
-            color = Color(0xFF006CB8),
-            style = Fill
-        )
-
-        //outline to path
-        drawPath(
-            path = path,
-            color = Color.Black,
-            style = Stroke(2f)
-        )
     }
 }
 
