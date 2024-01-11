@@ -548,9 +548,6 @@ import com.example.pokedex.presentation.userInterface.description.AbilityListWit
             )
         }
     }
-     //           .padding(vertical = 4.dp))
-      //  }
-   // }
 
     @Composable
     fun GenderDisplay(genderRate: GenderRate) {
