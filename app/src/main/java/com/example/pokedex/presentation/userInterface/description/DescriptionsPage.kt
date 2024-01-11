@@ -70,16 +70,16 @@ import com.example.pokedex.presentation.userInterface.description.AbilityListWit
 
 @Composable
         fun ShowcasePage(navController: NavHostController,viewModel: searchPageViewModel) {
-        val context = LocalContext.current
-        var selectedGender by remember { mutableStateOf(Gender.NONE) }
-        val pokemon = viewModel.getPokemon()
-        val maleColor = Color(49, 59, 169)
-        val femaleColor = Color(143, 68, 124)
-        var catchRateTextBox by remember { mutableStateOf(false) }
-        var growthRateTextBox by remember { mutableStateOf(false) }
-        var Favorized by remember { mutableStateOf(viewModel.PokemonsFave.value.contains(pokemon)) }
-        var isAbilityVisible by remember { mutableStateOf(false) }
-        val descriptionVisibilityMap = remember { mutableStateMapOf<String, Boolean>() }
+    val context = LocalContext.current
+    var selectedGender by remember { mutableStateOf(Gender.NONE) }
+    val pokemon = viewModel.getPokemon()
+    val maleColor = Color(49, 59, 169)
+    val femaleColor = Color(143, 68, 124)
+    var catchRateTextBox by remember { mutableStateOf(false) }
+    var growthRateTextBox by remember { mutableStateOf(false) }
+    var Favorized by remember { mutableStateOf(viewModel.PokemonsFave.value.contains(pokemon)) }
+    var isAbilityVisible by remember { mutableStateOf(false) }
+    val descriptionVisibilityMap = remember { mutableStateMapOf<String, Boolean>() }
 
     Column(
         modifier = Modifier
@@ -441,6 +441,7 @@ import com.example.pokedex.presentation.userInterface.description.AbilityListWit
             }
 
              */
+        //if (isAbilityVisible && pokemon != null){
         Column {
             Row {
                 Text(
@@ -465,74 +466,57 @@ import com.example.pokedex.presentation.userInterface.description.AbilityListWit
                 )
             }
 
+            if (isAbilityVisible && pokemon != null) {
+                //Column {
 
+            pokemon.abilities.forEach { ability ->
+                    val isDescriptionVisible = descriptionVisibilityMap[ability] ?: false
 
-
-
-            if (isAbilityVisible) {
-                Column {
-                    //val abilities = viewModel.getPokemon()?.abilities ?: emptyList()
-                    //AbilityList(abilities = abilities)
-                    //Example list
-                    val exampleAbilities = listOf(
-                        "Ability example 1",
-                        "Ability example 2",
-                        "Ability example 3"
-                    )
-                    exampleAbilities.forEach { ability ->
-                        val isDescriptionVisible = descriptionVisibilityMap[ability] ?: false
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = ability,
-                                modifier = Modifier.weight(1f),
-                                fontFamily = Font.rudaFontFamily
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            //text = pokemon.abilities.toString(),
+                            text = ability,
+                            modifier = Modifier.weight(1f),
+                            fontFamily = Font.rudaFontFamily
+                        )
+                        IconButton(onClick = {
+                            descriptionVisibilityMap[ability] = !isDescriptionVisible
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Info,
+                                contentDescription = "Info"
                             )
-                            IconButton(onClick = {
-                                descriptionVisibilityMap[ability] =
-                                    !isDescriptionVisible
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Info,
-                                    contentDescription = "Info"
-                                )
-                            }
-                        }
-
-
-                        // Display the description box if isDescriptionVisible is true
-                        if (isDescriptionVisible) {
-                            Box(
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .border(1.dp, Color.Gray)
-                            ) {
-                                //Example text
-                                Text(
-                                    text = "Description for $ability",
-                                    fontSize = 14.sp,
-                                    modifier = Modifier.padding(8.dp),
-                                    fontFamily = Font.rudaFontFamily
-                                )
-                            }
                         }
                     }
 
+                    if (isDescriptionVisible) {
+                        Box(
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .border(1.dp, Color.Gray)
+                        ) {
+                            Text(
+                                "Description for $ability",
+                                modifier = Modifier.padding(8.dp),
+                                fontFamily = Font.rudaFontFamily
+                            )
+                        }
+                    }
                 }
+            } else if (isAbilityVisible) {
+                Text("No abilities found or Pokemon data is not loaded.")
             }
-
-
-            /*if (isAbilityVisible) {
-                val abilities = viewModel.getPokemon()?.abilities ?: emptyList()
-                AbilityListWithDescription(abilities = abilities)
-            }
-
-             */
         }
     }
 }
+
+
+
+
+
+
 
 @Composable
     fun GenderIcon(
