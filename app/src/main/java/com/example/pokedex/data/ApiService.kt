@@ -94,9 +94,11 @@ data class PokemonInfo(
 )
 
 data class Abilities(
+    val ability: Ability
+)
+data class Ability(
     val name: String
 )
-
 
 
 
@@ -230,8 +232,10 @@ class RepositoryImpl: ViewModel() {
                    var i3=0
 
                     var abilities = ArrayList<String>()
+                    Log.d("abil",""+it.abilities.size)
                    while(i3<it.abilities.size){
-                       abilities.add(it.abilities[i3].name)
+                       abilities.add(it.abilities[i3].ability.name)
+                       Log.d("abil",abilities[i3])
                        i3++
                    }
 
