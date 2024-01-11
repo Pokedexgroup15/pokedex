@@ -183,7 +183,18 @@ fun pokemonBox(modifier: Modifier,
         modifier = modifier
             .clickable {
                viewModel.setPokemon(pokemon)
-                navController.navigate(Route.Pokemon.path)
+                navController.navigate(Route.Pokemon.path){
+                // avoid building up a large stack of destinations
+                // on the back stack as users select items
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+                // Avoid multiple copies of the same destination when
+                // reselecting the same item
+                launchSingleTop = true
+                // Restore state when reselecting a previously selected item
+                restoreState = true
+            }
             }
     ) {
 

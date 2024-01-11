@@ -2,6 +2,7 @@ package com.example.pokedex.data
 
 import android.util.Log
 import androidx.lifecycle.*
+import com.example.pokedex.Gender
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.PokemonObject
 import com.google.gson.annotations.SerializedName
@@ -12,6 +13,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import kotlin.math.log
+import com.example.pokedex.presentation.userInterface.filterPage.ResetViewModel
 
 object RetrofitBase {
 
@@ -62,7 +64,12 @@ data class Species(
 data class PokemonSpecies(
     val flavor_text_entries: List<flavor_texts>,
     val capture_rate: Int,
-    val growth_rate: Growth
+    val growth_rate: Growth,
+    val gender_rate: Int,
+    val generation: Generation
+)
+data class Generation(
+    val name: String
 )
 
 data class Growth(
@@ -83,7 +90,22 @@ data class PokemonInfo(
     val id: Int,
     val name: String,
     val types: List<subType>,
-    val sprites: sprite
+    val sprites: sprite,
+    val stats: List<Stats>,
+    val abilities: List<Abilities>
+)
+
+data class Abilities(
+    val ability: Ability
+)
+data class Ability(
+    val name: String
+)
+
+
+
+data class Stats(
+    val base_stat: Int
 )
 
 data class sprite(
@@ -112,9 +134,11 @@ data class Type(
     val url:String
 )
 
-
-
-
+data class GenderRate(
+    val gender: Gender,
+    val maleRatio: Double,
+    val femaleRatio: Double
+)
 
 
 class RepositoryImpl: ViewModel() {
@@ -122,6 +146,7 @@ class RepositoryImpl: ViewModel() {
     //imageView.load("https://example.com/image.jpg")
 
   fun addPokemon(start:Int, end:Int, onlyDefaults:Boolean, cleanCopy:Boolean){
+
 
     val quotesApi = RetrofitBase.getInstance().create(PokeApi::class.java)
     val speciesApi = RetrofitBase.getInstance().create(PokeApiSpecies::class.java)
@@ -148,8 +173,10 @@ class RepositoryImpl: ViewModel() {
                         var i2: Int =0
                         var i3: Int =0
 
+
                         while( i2<it.chain.evolves_to.size){
                             PokemonObject.eveList[i][1].add(it.chain.evolves_to[i2].species.name)
+                            i3 =0
                             while( i3<it.chain.evolves_to[i2].evolves_to.size) {
 
                                 PokemonObject.eveList[i][2].add(it.chain.evolves_to[i2].evolves_to[i3].species.name)
@@ -169,10 +196,24 @@ class RepositoryImpl: ViewModel() {
 
                 }
 
-                    result2.body()?.let { Log.d("test5", it.flavor_text_entries[0].flavor_text)
+                    result2.body()?.let {
 
-                    var pokedexEntry:String
+                    var generationNum=-1
+                    when(it.generation.name){
+                       "generation-i" ->  generationNum = 1
+                        "generation-ii" ->  generationNum = 2
+                        "generation-iii" ->  generationNum = 3
+                        "generation-iv" ->  generationNum = 4
+                        "generation-v" ->  generationNum = 5
+                        "generation-vi" ->  generationNum = 6
+                        "generation-vii" ->  generationNum = 7
+                        "generation-viii" ->  generationNum = 8
+                        "generation-ix" ->  generationNum = 9
+                   }
+
+                    var pokedexEntry:String = " "
                         var i2:Int = 0
+                        if(it.flavor_text_entries.size>0){
                         while(i2<it.flavor_text_entries.size-1){
                             if(it.flavor_text_entries[i2].language.name =="en"){
 //                            Log.d("lan",it.flavor_text_entries[i2].language.name)
@@ -181,25 +222,49 @@ class RepositoryImpl: ViewModel() {
                             i2++
 
 
-                        }
+                        }}
 
                     val capture_rate:Int
-                        val growth_rate:String
 
-                    pokedexEntry = it.flavor_text_entries[i2].flavor_text
+                        val growth_rate:String
+                        if(it.flavor_text_entries.isNotEmpty()) {
+
+
+                            pokedexEntry = it.flavor_text_entries[i2].flavor_text
+                        }
                         capture_rate = it.capture_rate
                         growth_rate = it.growth_rate.name
+                        val genderInfo=calculateGenderRate(it.gender_rate)
+
                 result.body()?.let { Log.d("test5", it.types[0].type.name+" "+it.name)
+                   var i3=0
+
+                    var abilities = ArrayList<String>()
+                    Log.d("abil",""+it.abilities.size)
+                   while(i3<it.abilities.size){
+                       abilities.add(it.abilities[i3].ability.name)
+                       Log.d("abil",abilities[i3])
+                       i3++
+                   }
+
                     var type2: String
 
                     if(it.types.size>1){
                          type2 = it.types[1].type.name
                     }
                     else  type2 = "null"
-                    PokemonObject._pokeList.value = PokemonObject.pokeList.value.toMutableList().apply {
-                        add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, it.sprites.other.text.frontdefault, it.id, it.types[0].type.name, type2, pokedexEntry, capture_rate, growth_rate))
+
+
+                    var sprite:String =""
+                    if(it.sprites.other.text.frontdefault!= null)
+                        sprite = it.sprites.other.text.frontdefault
+                    PokemonObject._pokeList.value = PokemonObject._pokeList.value.toMutableList().apply {
+                        add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, sprite, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate, genderRate = genderInfo,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat,generationNum,abilities))
                     } as ArrayList<Pokemon>
                 }}
+
+                    PokemonObject.count++
+
                     i++
                 }
 
@@ -211,5 +276,22 @@ class RepositoryImpl: ViewModel() {
 
     }}
 
+private fun calculateGenderRate(genderRate: Int): GenderRate {
+    return when (genderRate) {
+        -1 ->GenderRate(Gender.NONE, 0.0, 0.0)
+        0 ->GenderRate(Gender.MALE, 100.0, 0.0)
+        8 ->GenderRate(Gender.FEMALE, 0.0, 100.0)
+        in 1..7 -> {
+            val femaleRatio =genderRate * 12.5
+            val maleRatio= 100.0 - femaleRatio
+            val gender=when{
+                genderRate< 4 ->Gender.MALE
+                genderRate > 4->Gender.FEMALE
+                else ->Gender.MIXED
+            }
+            GenderRate(gender, maleRatio, femaleRatio)
+        } else -> GenderRate(Gender.UNKNOWN, 0.0, 0.0)
+    }
+}
 
 
