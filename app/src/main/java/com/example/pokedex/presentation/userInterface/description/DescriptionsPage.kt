@@ -81,6 +81,8 @@ import com.example.pokedex.presentation.userInterface.description.AbilityListWit
         var catchRateTextBox by remember { mutableStateOf(false) }
         var growthRateTextBox by remember { mutableStateOf(false) }
         var Favorized by remember { mutableStateOf(viewModel.PokemonsFave.value.contains(pokemon)) }
+        var isAbilityVisible by remember { mutableStateOf(false) }
+        val descriptionVisibilityMap = remember { mutableStateMapOf<String, Boolean>() }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -546,9 +548,9 @@ import com.example.pokedex.presentation.userInterface.description.AbilityListWit
             )
         }
     }
-                .padding(vertical = 4.dp))
-        }
-    }
+     //           .padding(vertical = 4.dp))
+      //  }
+   // }
 
     @Composable
     fun GenderDisplay(genderRate: GenderRate) {
