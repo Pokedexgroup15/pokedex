@@ -447,19 +447,21 @@ fun ShowcasePage(navController: NavHostController,viewModel: searchPageViewModel
                     .fillMaxSize()
                     .wrapContentSize(Alignment.Center)
             ) {
-                SpiderChart(
+                if (pokemon != null) {
+                    SpiderChart(
 
-                    stats = mapOf(
-                        "HP" to 140f,
-                        "Attack" to 60f,
-                        "Defense" to 70f,
-                        "Special Attack" to 45f,
-                        "Special Defense" to 45f,
-                        "Speed" to 20f
+                        stats = mapOf(
+                            "HP" to pokemon.hp,
+                            "Attack" to pokemon.attack,
+                            "Defense" to pokemon.defense,
+                            "Special Attack" to pokemon.special_attack,
+                            "Special Defense" to pokemon.special_defense,
+                            "Speed" to pokemon.speed
 
-                    ),
-                    modifier = Modifier.padding(72.dp),
-                )
+                        ),
+                        modifier = Modifier.padding(72.dp),
+                    )
+                }
             }
         }
     }
@@ -519,16 +521,14 @@ fun FormUI(viewModel: searchPageViewModel) {
             contentDescription = null,
             modifier = Modifier
                 .size(150.dp)
-                //Hvis behov for testing så brug dette.
-                //.border(1.dp, Color.Black)
                 .clip(RoundedCornerShape(8.dp)),
             contentScale = ContentScale.Crop
         )
     }
 }
 @Composable
-fun SpiderChart(stats: Map<String, Float>, modifier: Modifier = Modifier, size: Dp = 255.dp) {
-    val maxValue = 255f
+fun SpiderChart(stats: Map<String, Int>, modifier: Modifier = Modifier, size: Dp = 255.dp) {
+    val maxValue = 255
     val numberOfRings = 5
     val ringSpacing = 20.dp
 
@@ -558,7 +558,7 @@ fun SpiderChart(stats: Map<String, Float>, modifier: Modifier = Modifier, size: 
             val path = Path()
             // Draws stats and 6 titles
             stats.entries.forEachIndexed { index, pokeStatEntry ->
-                val pokeStatValue = pokeStatEntry.value.coerceIn(0f, maxValue)
+                val pokeStatValue = pokeStatEntry.value.coerceIn(0, maxValue)
                 val angle = 2 * PI * index / stats.size.toFloat()
                 val x = centerX + maxRadius * pokeStatValue / maxValue * cos(angle)
                 val y = centerY + maxRadius * pokeStatValue / maxValue * sin(angle)
