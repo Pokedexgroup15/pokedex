@@ -64,251 +64,256 @@ import com.example.pokedex.presentation.userInterface.HomePage.EvolutionBar
 import com.example.pokedex.presentation.userInterface.HomePage.getTypeIconwithID
 import com.example.pokedex.presentation.searchPageViewModel
 import com.example.pokedex.presentation.theme.Font
+import com.example.pokedex.presentation.userInterface.description.AbilityItem
+import com.example.pokedex.presentation.userInterface.description.AbilityListWithDescription
 
 
-    @Composable
-    fun ShowcasePage(navController: NavHostController,viewModel: searchPageViewModel) {
+@Composable
+        fun ShowcasePage(navController: NavHostController,viewModel: searchPageViewModel) {
         val context = LocalContext.current
         var selectedGender by remember { mutableStateOf(Gender.NONE) }
         val pokemon = viewModel.getPokemon()
-        val maleColor = Color(49,59,169)
-        val femaleColor = Color(143,68,124)
+        val maleColor = Color(49, 59, 169)
+        val femaleColor = Color(143, 68, 124)
         var catchRateTextBox by remember { mutableStateOf(false) }
         var growthRateTextBox by remember { mutableStateOf(false) }
         var Favorized by remember { mutableStateOf(viewModel.PokemonsFave.value.contains(pokemon)) }
         var isAbilityVisible by remember { mutableStateOf(false) }
         val descriptionVisibilityMap = remember { mutableStateMapOf<String, Boolean>() }
-    Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState(), true)
-        ) {
-            // Top Baren folkens!
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                IconButton(onClick = {
-                    navController.navigate(Route.POKEDEX.path){
-                        // avoid building up a large stack of destinations
-                        // on the back stack as users select items
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        // Avoid multiple copies of the same destination when
-                        // reselecting the same item
-                        launchSingleTop = true
-                        // Restore state when reselecting a previously selected item
-                        restoreState = true
-                    }
-                }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                }
-                //Spacer(modifier = Modifier.width(14.dp))
-                //Texten skal retrieve en string fra PokeAPI'en.
 
-                viewModel.getPokemon()?.let {
-                    Text(
-                        text = it.name,
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = Font.rudaFontFamily
-                    )
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        if (pokemon != null) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState(), true)
+    ) {
+        // Top Baren folkens!
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            IconButton(onClick = {
+                navController.navigate(Route.POKEDEX.path) {
+                    // avoid building up a large stack of destinations
+                    // on the back stack as users select items
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    // Avoid multiple copies of the same destination when
+                    // reselecting the same item
+                    launchSingleTop = true
+                    // Restore state when reselecting a previously selected item
+                    restoreState = true
+                }
+            }) {
+                Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+            }
+            //Spacer(modifier = Modifier.width(14.dp))
+            //Texten skal retrieve en string fra PokeAPI'en.
+
+            viewModel.getPokemon()?.let {
+                Text(
+                    text = it.name,
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = Font.rudaFontFamily
+                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    if (pokemon != null) {
+                        Image(
+                            painter = painterResource(id = getTypeIconwithID(pokemon.type1)),
+                            contentDescription = "type1",
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
+                    if (pokemon != null) {
+                        if (pokemon.type2 != "null") {
                             Image(
-                                painter = painterResource(id = getTypeIconwithID(pokemon.type1)),
-                                contentDescription = "type1",
+                                painter = painterResource(id = getTypeIconwithID(pokemon.type2)),
+                                contentDescription = "type2",
                                 modifier = Modifier.size(30.dp)
                             )
                         }
-                        if (pokemon != null) {
-                            if (pokemon.type2 != "null") {
-                                Image(
-                                    painter = painterResource(id = getTypeIconwithID(pokemon.type2)),
-                                    contentDescription = "type2",
-                                    modifier = Modifier.size(30.dp)
-                                )
-                            }
-                        }
                     }
                 }
             }
-            Divider(
-                color = Color.Black,
-                thickness = 1.5.dp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        when (selectedGender) {
-                            Gender.MALE -> maleColor
-                            Gender.FEMALE -> femaleColor
-                            else -> Color.Transparent // Or grey depends on logic.
-                        }
-                    )
-            ) {
-                if (pokemon != null) {
-                    AsyncImage(
-                        model = pokemon.pictureURL,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(350.dp),
-                        contentScale = ContentScale.Crop
-                    )
-
-
-                }
-
-                Row(
+        }
+        Divider(
+            color = Color.Black,
+            thickness = 1.5.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    when (selectedGender) {
+                        Gender.MALE -> maleColor
+                        Gender.FEMALE -> femaleColor
+                        else -> Color.Transparent // Or grey depends on logic.
+                    }
+                )
+        ) {
+            if (pokemon != null) {
+                AsyncImage(
+                    model = pokemon.pictureURL,
+                    contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
-                        .align(Alignment.BottomStart)
-                ) {
-                 //RYK GENDERICONS og Favorite ICON HER SÅ DET BLIVER IN PICTURE som FIGMA
-                    ////////////////////////////////////////////////////
-                    Spacer(modifier = Modifier.width(16.dp))
+                        .height(350.dp),
+                    contentScale = ContentScale.Crop
+                )
 
-                }
+
             }
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.Start
+                    .padding(16.dp)
+                    .align(Alignment.BottomStart)
             ) {
-                GenderIcon(
-                    imageResId = R.drawable.male,
-                    selectedGender = Gender.MALE,
-                    onGenderSelected = { selectedGender = it }
-                )
+                //RYK GENDERICONS og Favorite ICON HER SÅ DET BLIVER IN PICTURE som FIGMA
+                ////////////////////////////////////////////////////
+                Spacer(modifier = Modifier.width(16.dp))
 
-                GenderIcon(
-                    imageResId = R.drawable.female,
-                    selectedGender = Gender.FEMALE,
-                    onGenderSelected = { selectedGender = it }
-                )
-                Spacer(modifier = Modifier.weight(1f))
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            GenderIcon(
+                imageResId = R.drawable.male,
+                selectedGender = Gender.MALE,
+                onGenderSelected = { selectedGender = it }
+            )
 
-                Box(
+            GenderIcon(
+                imageResId = R.drawable.female,
+                selectedGender = Gender.FEMALE,
+                onGenderSelected = { selectedGender = it }
+            )
+            Spacer(modifier = Modifier.weight(1f))
+
+            Box(
+                modifier = Modifier
+                    .padding(5.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.pokeball_bw),
+                    contentDescription = "Favorite option",
+                    //tint = if (viewModel.PokemonsFave.contains(pokemon)) Color.Red else Color.Black,
+                    tint = if (Favorized) Color.Red else Color.Black,
                     modifier = Modifier
-                        .padding(5.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.pokeball_bw),
-                        contentDescription = "Favorite option",
-                        //tint = if (viewModel.PokemonsFave.contains(pokemon)) Color.Red else Color.Black,
-                        tint = if(Favorized) Color.Red else Color.Black,
-                        modifier = Modifier
-                            .size(25.dp)
-                            .clickable {
-                                Favorized = !Favorized
-                                pokemon?.let {
-                                    if (Favorized) {
+                        .size(25.dp)
+                        .clickable {
+                            Favorized = !Favorized
+                            pokemon?.let {
+                                if (Favorized) {
 
 
-                                        PokemonObject._faveList.value =
-                                            PokemonObject.pokeList.value
-                                                .toMutableList()
-                                                .apply {
-                                                    add(it)
-                                                } as ArrayList<Pokemon>
-                                    } else {
-                                        PokemonObject._faveList.value =
-                                            PokemonObject.pokeList.value
-                                                .toMutableList()
-                                                .apply {
-                                                    add(it)
-                                                } as ArrayList<Pokemon>
-                                        //if (viewModel.PokemonsFave.contains(pokemon))
-                                        //  viewModel.PokemonsFave.remove(pokemon)
-                                        //else
-                                        //  pokemon?.let { viewModel.PokemonsFave.add(it) }
+                                    PokemonObject._faveList.value =
+                                        PokemonObject.pokeList.value
+                                            .toMutableList()
+                                            .apply {
+                                                add(it)
+                                            } as ArrayList<Pokemon>
+                                } else {
+                                    PokemonObject._faveList.value =
+                                        PokemonObject.pokeList.value
+                                            .toMutableList()
+                                            .apply {
+                                                add(it)
+                                            } as ArrayList<Pokemon>
+                                    //if (viewModel.PokemonsFave.contains(pokemon))
+                                    //  viewModel.PokemonsFave.remove(pokemon)
+                                    //else
+                                    //  pokemon?.let { viewModel.PokemonsFave.add(it) }
 
-                                    }
                                 }
                             }
-                            .requiredSize(36.dp, 36.dp)
-                            .align(Alignment.BottomEnd)
-                    )
-                }}
-
-            Divider(
-                color = Color.Black,
-                thickness = 1.5.dp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            )
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.BottomCenter
-            ){
-                Column (
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 10.dp)
-                ){
-                    Text(text = "", modifier = Modifier.align(Alignment.CenterHorizontally))
-                    Spacer(modifier = Modifier.weight(4f))
-                    EvolutionBar(navController)
-                    Spacer(modifier = Modifier.weight(1f))
-                }
-            }
-            Divider(
-                color = Color.Black,
-                thickness = 1.5.dp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.rectangle),
-                    contentDescription = null,
-                    modifier = Modifier.matchParentSize(),
-                    contentScale = ContentScale.FillBounds
+                        }
+                        .requiredSize(36.dp, 36.dp)
+                        .align(Alignment.BottomEnd)
                 )
-                pokemon?.let {
-                    Text(
-                        text = pokemon.pokedexText,
-                        fontFamily = Font.rudaFontFamily,
-
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .align(Alignment.CenterStart),
-                        color = Color.Black,
-                        fontSize = 16.sp,
-                        textAlign = TextAlign.Left
-                    )
-                }
             }
-            Divider(
-                color = Color.Black,
-                thickness = 1.5.dp,
+        }
+
+        Divider(
+            color = Color.Black,
+            thickness = 1.5.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)
+        )
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp))
+                    .padding(bottom = 10.dp)
+            ) {
+                Text(text = "", modifier = Modifier.align(Alignment.CenterHorizontally))
+                Spacer(modifier = Modifier.weight(4f))
+                EvolutionBar(navController)
+                Spacer(modifier = Modifier.weight(1f))
+            }
+        }
+        Divider(
+            color = Color.Black,
+            thickness = 1.5.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.rectangle),
+                contentDescription = null,
+                modifier = Modifier.matchParentSize(),
+                contentScale = ContentScale.FillBounds
+            )
+            pokemon?.let {
+                Text(
+                    text = pokemon.pokedexText,
+                    fontFamily = Font.rudaFontFamily,
 
-            CatchAndGrowthRateBoxes(viewModel = viewModel)
-            /*Row(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterStart),
+                    color = Color.Black,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Left
+                )
+            }
+        }
+        Divider(
+            color = Color.Black,
+            thickness = 1.5.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)
+        )
+
+        CatchAndGrowthRateBoxes(viewModel = viewModel)
+        /*Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -417,15 +422,15 @@ import com.example.pokedex.presentation.theme.Font
                     }
                 }
             }*/
-            Divider(
-                    color = Color.Black,
+        Divider(
+            color = Color.Black,
             thickness = 1.5.dp,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 4.dp)
-            )
-            // abilities
-            /*Row {
+        )
+        // abilities
+        /*Row {
                 Text(
                     text = "Abilities",
                     color = Color.Black,
@@ -436,93 +441,100 @@ import com.example.pokedex.presentation.theme.Font
             }
 
              */
-            Column {
-                    Row {
-                        Text(
-                            text = "Abilities",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            fontFamily = Font.rudaFontFamily,
-                            modifier = Modifier
-                                .padding(10.dp)
-                        )
+        Column {
+            Row {
+                Text(
+                    text = "Abilities",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = Font.rudaFontFamily,
+                    modifier = Modifier
+                        .padding(10.dp)
+                )
 
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowDown,
-                            contentDescription = "Expand abilities",
-                            modifier = Modifier
-                                .size(46.dp)
-                                .padding(10.dp)
-                                .clickable {
-                                    isAbilityVisible = !isAbilityVisible
-                                }
-                                .rotate(if (isAbilityVisible) 180f else 0f)
-                        )
-                    }
-                        if (isAbilityVisible) {
-                            Column {
-                                //val abilities = viewModel.getPokemon()?.abilities ?: emptyList()
-                                //AbilityList(abilities = abilities)
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowDown,
+                    contentDescription = "Expand abilities",
+                    modifier = Modifier
+                        .size(46.dp)
+                        .padding(10.dp)
+                        .clickable {
+                            isAbilityVisible = !isAbilityVisible
+                        }
+                        .rotate(if (isAbilityVisible) 180f else 0f)
+                )
+            }
 
-                                //Example list
-                                val exampleAbilities = listOf(
-                                    "Ability example 1",
-                                    "Ability example 2",
-                                    "Ability example 3"
+
+
+
+
+            if (isAbilityVisible) {
+                Column {
+                    //val abilities = viewModel.getPokemon()?.abilities ?: emptyList()
+                    //AbilityList(abilities = abilities)
+                    //Example list
+                    val exampleAbilities = listOf(
+                        "Ability example 1",
+                        "Ability example 2",
+                        "Ability example 3"
+                    )
+                    exampleAbilities.forEach { ability ->
+                        val isDescriptionVisible = descriptionVisibilityMap[ability] ?: false
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = ability,
+                                modifier = Modifier.weight(1f),
+                                fontFamily = Font.rudaFontFamily
+                            )
+                            IconButton(onClick = {
+                                descriptionVisibilityMap[ability] =
+                                    !isDescriptionVisible
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Info,
+                                    contentDescription = "Info"
                                 )
-                                exampleAbilities.forEach { ability ->
-                                    val isDescriptionVisible = descriptionVisibilityMap[ability] ?: false
-
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Text(
-                                            text = ability,
-                                            modifier = Modifier.weight(1f),
-                                            fontFamily = Font.rudaFontFamily
-
-                                        )
-                                        IconButton(onClick = {
-                                            descriptionVisibilityMap[ability] = !isDescriptionVisible
-                                        }) {
-                                            Icon(
-                                                imageVector = Icons.Default.Info,
-                                                contentDescription = "Info"
-                                            )
-                                        }
-                                    }
-                                    // Display the description box if isDescriptionVisible is true
-                                    if (isDescriptionVisible) {
-                                        Box(
-                                            modifier = Modifier
-                                                .padding(8.dp)
-                                                .border(1.dp, Color.Gray)
-                                        ) {
-                                            //Example text
-                                            Text(
-                                                text = "Description for $ability",
-                                                fontSize = 14.sp,
-                                                modifier = Modifier.padding(8.dp),
-                                                fontFamily = Font.rudaFontFamily)
-                                        }
-                                    }
-                                }
-
                             }
                         }
 
 
-                /*if (isAbilityVisible) {
-                    val abilities = viewModel.getPokemon()?.abilities ?: emptyList()
-                    AbilityListWithDescription(abilities = abilities)
-                }
-
-                 */
+                        // Display the description box if isDescriptionVisible is true
+                        if (isDescriptionVisible) {
+                            Box(
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .border(1.dp, Color.Gray)
+                            ) {
+                                //Example text
+                                Text(
+                                    text = "Description for $ability",
+                                    fontSize = 14.sp,
+                                    modifier = Modifier.padding(8.dp),
+                                    fontFamily = Font.rudaFontFamily
+                                )
+                            }
+                        }
                     }
+
                 }
             }
 
-    @Composable
+
+            /*if (isAbilityVisible) {
+                val abilities = viewModel.getPokemon()?.abilities ?: emptyList()
+                AbilityListWithDescription(abilities = abilities)
+            }
+
+             */
+        }
+    }
+}
+
+@Composable
     fun GenderIcon(
         imageResId: Int,
         selectedGender: Gender,

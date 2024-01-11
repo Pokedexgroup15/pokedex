@@ -11,12 +11,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+
+
 
 @Composable
 fun AbilityRow(abilityName: String, onInfoClicked: () -> Unit) {
@@ -60,5 +65,25 @@ fun AbilityListWithDescription(abilities: List<String>) {
             val description = "Description for $ability"
             AbilityDescriptionBox(description, abilityDescriptionVisibility[ability] ?: false)
         }
+    }
+}
+
+@Composable
+fun AbilityItem(ability: String, descriptionVisibilityMap: MutableMap<String, Boolean>) {
+    var isDescriptionVisible by remember { mutableStateOf(descriptionVisibilityMap[ability] ?: false) }
+
+    Row {
+        Text(text = ability)
+        IconButton(onClick = {
+            isDescriptionVisible = !isDescriptionVisible
+            descriptionVisibilityMap[ability] = isDescriptionVisible
+        }) {
+            Icon(imageVector = Icons.Default.Info, contentDescription = "Info")
+        }
+    }
+
+    if (isDescriptionVisible) {
+        Text("Description for $ability")
+        // Add description logic here
     }
 }
