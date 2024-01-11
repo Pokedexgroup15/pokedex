@@ -42,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -464,6 +465,22 @@ fun ShowcasePage(navController: NavHostController,viewModel: searchPageViewModel
                 }
             }
         }
+
+        val total = (pokemon?.hp ?: 0) +
+                (pokemon?.attack ?: 0) +
+                (pokemon?.defense ?: 0) +
+                (pokemon?.special_attack ?: 0) +
+                (pokemon?.special_defense ?: 0) +
+                (pokemon?.speed ?: 0)
+
+        Text(
+            text = "Total : " + total,
+            fontFamily = com.example.pokedex.presentation.theme.Font.rudaFontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 24.sp,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+        )
     }
 }
 @Composable
@@ -594,7 +611,8 @@ fun SpiderChart(stats: Map<String, Int>, modifier: Modifier = Modifier, size: Dp
                     statValueY.toFloat(),
                     Paint().apply {
                         color = Color.Black.toArgb()
-                        textSize = 12.sp.toPx()
+                        textSize = 16.sp.toPx()
+                        isFakeBoldText
                         textAlign = Paint.Align.CENTER
                     }
                 )
@@ -620,6 +638,7 @@ fun SpiderChart(stats: Map<String, Int>, modifier: Modifier = Modifier, size: Dp
             )
         }
     }
+
 }
 
 
