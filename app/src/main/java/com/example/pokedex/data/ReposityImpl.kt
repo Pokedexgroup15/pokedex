@@ -6,11 +6,11 @@ import com.example.pokedex.data.api.PokemonApiService
 import com.example.pokedex.PokemonObject
 
 class PokemonRepositoryImpl(private val apiService: PokemonApiService) : PokemonRepository {
-    var Pokemons = PokemonObject.pokeList
+    var Pokemons = PokemonObject._pokeList
 
     override suspend fun getPokemonList(): List<Pokemon> {
         // Make API call using apiService
         // Parse the response and return the list of Pokemon
-        return Pokemons
+        return Pokemons.value
     }
 }

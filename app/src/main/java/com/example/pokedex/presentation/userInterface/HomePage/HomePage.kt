@@ -56,6 +56,7 @@ import com.example.pokedex.presentation.navigation.Route
 import com.example.pokedex.presentation.searchPageViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.SortOption
+import androidx.compose.runtime.collectAsState
 
 
 @Composable
@@ -114,9 +115,7 @@ fun homePage(navController: NavHostController, viewModel: searchPageViewModel, f
 @Composable
 
 fun PokemonList(navController: NavHostController, viewModel: searchPageViewModel, isFavorite: Boolean, sortOption: SortOption?) {
-    //val pokemons = viewModel.getMockData(isFavorite)
-    //val pokemons1 = filterViewModel.getSortedPokemonList()
-    val pokemons = viewModel.getMockData(isFavorite, sortOption)
+    val pokemons by viewModel.getData(isFavorite).collectAsState()
 
     LazyColumn(
         modifier = Modifier.fillMaxSize()
@@ -184,7 +183,18 @@ fun pokemonBox(modifier: Modifier,
         modifier = modifier
             .clickable {
                viewModel.setPokemon(pokemon)
-                navController.navigate(Route.Pokemon.path)
+                navController.navigate(Route.Pokemon.path){
+                // avoid building up a large stack of destinations
+                // on the back stack as users select items
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+                // Avoid multiple copies of the same destination when
+                // reselecting the same item
+                launchSingleTop = true
+                // Restore state when reselecting a previously selected item
+                restoreState = true
+            }
             }
     ) {
 
@@ -244,7 +254,7 @@ fun pokemonBox(modifier: Modifier,
 
 @Composable
 fun pokemonPictureAndLogo(modifier: Modifier, pokemon: Pokemon, viewModel: searchPageViewModel){
-    var Favorized by remember { mutableStateOf(viewModel.PokemonsFave.contains(pokemon))}
+    var Favorized by remember { mutableStateOf(viewModel.PokemonsFave.value.contains(pokemon))}
     Box(
         modifier=modifier
 
@@ -268,8 +278,8 @@ fun pokemonPictureAndLogo(modifier: Modifier, pokemon: Pokemon, viewModel: searc
                 .clickable {
                     Favorized = !Favorized
                     if (Favorized) {
-                        pokemon?.let { viewModel.PokemonsFave.add(it) }
-                    } else {viewModel.PokemonsFave.remove(pokemon)
+                        pokemon?.let { viewModel.PokemonsFave.value.add(it) }
+                    } else {viewModel.PokemonsFave.value.remove(pokemon)
                         //viewModel.toggleFavourite(pokemon)
 
 

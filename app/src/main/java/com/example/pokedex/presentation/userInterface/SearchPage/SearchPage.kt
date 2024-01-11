@@ -54,7 +54,7 @@ import com.example.pokedex.presentation.searchPageViewModel
 @Composable
 fun SearchPageFun(navController: NavHostController, viewModel: searchPageViewModel) {
     var name by remember { mutableStateOf("") }
-    var Pokemons= viewModel.getMockData(false)
+    var Pokemons= viewModel.getData(false)
     val context = LocalContext.current // Get the current context
     var searchList by remember { mutableStateOf(mutableListOf<Pokemon>()) }
 
@@ -96,7 +96,7 @@ fun SearchPageFun(navController: NavHostController, viewModel: searchPageViewMod
                     onSearch = {
                         searchList.clear()
                         name.trim()
-                        searchList = Pokemons.filter { it.name.startsWith(name.replaceFirstChar { it.uppercase() }) }.toMutableList()
+                        searchList = Pokemons.value.filter { it.name.startsWith(name.replaceFirstChar { it.uppercase() }) }.toMutableList()
                     }
                 )
             )
