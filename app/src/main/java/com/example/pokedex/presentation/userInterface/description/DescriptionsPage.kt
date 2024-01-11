@@ -581,27 +581,24 @@ fun CatchAndGrowthRateBoxes(viewModel: searchPageViewModel) {
 
 
 @Composable
-fun SpiderChart(stats: Map<String, Float>, modifier: Modifier = Modifier, size: Dp = 200.dp) {
-    val maxValue = 100f // Size of the entire circle and rings adjust.
+fun SpiderChart(stats: Map<String, Float>, modifier: Modifier = Modifier, size: Dp = 255.dp) {
+    val maxValue = 255f // Size of the entire circle and rings adjust.
     val numberOfRings = 5
     val ringSpacing = 20.dp
 
     Box(
         modifier = modifier
             .size(size)
-
     ) {
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            //Had to use toPx() because dp won't work on canvas with height and width.
             val centerX = size.toPx() / 2f
             val centerY = size.toPx() / 2f
             val maxRadius = (size.toPx() / 3).coerceAtMost(size.toPx() / 3)
             val ringRadius = maxRadius / numberOfRings
 
-            // Draws 5 rings with size max 100
             for (i in 1..numberOfRings) {
                 drawCircle(
                     color = Color.Gray.copy(alpha = 0.3f),
@@ -613,7 +610,6 @@ fun SpiderChart(stats: Map<String, Float>, modifier: Modifier = Modifier, size: 
 
             val path = Path()
 
-            // Draws stats and 6 titles
             stats.entries.forEachIndexed { index, pokeStatEntry ->
                 val pokeStatValue = pokeStatEntry.value.coerceIn(0f, maxValue)
                 val angle = 2 * PI * index / stats.size.toFloat()
@@ -626,11 +622,12 @@ fun SpiderChart(stats: Map<String, Float>, modifier: Modifier = Modifier, size: 
                     end = Offset(x.toFloat(), y.toFloat()),
                     strokeWidth = 2f
                 )
-                // calc pos based on center y and x
-                val titleX = centerX + (maxRadius + 20f) * cos(angle)
-                val titleY = centerY + (maxRadius + 20f) * sin(angle)
 
-                // workaround hack, not the best, but works with key collection.
+                // Calculate title positions outside the last ring
+                val titleDistance = maxRadius + 40f // Adjust the distance as needed
+                val titleX = centerX + titleDistance * cos(angle)
+                val titleY = centerY + titleDistance * sin(angle)
+
                 drawContext.canvas.nativeCanvas.drawText(
                     pokeStatEntry.key,
                     titleX.toFloat(),
@@ -642,7 +639,20 @@ fun SpiderChart(stats: Map<String, Float>, modifier: Modifier = Modifier, size: 
                     }
                 )
 
-                // points on canvas
+                // Display the specific stat value under each title
+                val statValueX = centerX + titleDistance * cos(angle)
+                val statValueY = centerY + titleDistance * sin(angle) + 20f // Adjust the vertical distance
+                drawContext.canvas.nativeCanvas.drawText(
+                    pokeStatValue.toString(),
+                    statValueX.toFloat(),
+                    statValueY.toFloat(),
+                    Paint().apply {
+                        color = Color.Black.toArgb()
+                        textSize = 12.sp.toPx()
+                        textAlign = Paint.Align.CENTER
+                    }
+                )
+
                 if (index == 0) {
                     path.moveTo(x.toFloat(), y.toFloat())
                 } else {
@@ -650,7 +660,6 @@ fun SpiderChart(stats: Map<String, Float>, modifier: Modifier = Modifier, size: 
                 }
             }
 
-            // important line, fragile.
             path.close()
 
             drawPath(
@@ -666,8 +675,6 @@ fun SpiderChart(stats: Map<String, Float>, modifier: Modifier = Modifier, size: 
         }
     }
 }
-
-
 val gradient = Brush.verticalGradient(
     colors = listOf(Color(0xFFD4C21B), Color(0xFF76C5DE)))
 @Composable
