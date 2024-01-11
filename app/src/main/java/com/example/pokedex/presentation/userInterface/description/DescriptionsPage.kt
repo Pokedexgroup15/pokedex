@@ -80,115 +80,111 @@ import java.lang.Math.cos
 import java.lang.Math.sin
 
 @Composable
-    fun ShowcasePage(navController: NavHostController,viewModel: searchPageViewModel) {
-        val context = LocalContext.current
-        val pokemon = viewModel.getPokemon()
-        val maleColor = Color(49,59,169)
-        val femaleColor = Color(143,68,124)
-        val mixedColor= Color(0xFFF5F5DC)
-        val genderlessColor = Color.LightGray
-        var catchRateTextBox by remember { mutableStateOf(false) }
-        var growthRateTextBox by remember { mutableStateOf(false) }
-        var Favorized by remember { mutableStateOf(viewModel.PokemonsFave.value.contains(pokemon)) }
-        var isAbilityVisible by remember { mutableStateOf(false) }
-        val descriptionVisibilityMap = remember { mutableStateMapOf<String, Boolean>() }
-        Column(
+fun ShowcasePage(navController: NavHostController,viewModel: searchPageViewModel) {
+    val context = LocalContext.current
+    val pokemon = viewModel.getPokemon()
+    val maleColor = Color(49,59,169)
+    val femaleColor = Color(143,68,124)
+    val mixedColor= Color(0xFFF5F5DC)
+    val genderlessColor = Color.LightGray
+    var catchRateTextBox by remember { mutableStateOf(false) }
+    var growthRateTextBox by remember { mutableStateOf(false) }
+    var Favorized by remember { mutableStateOf(viewModel.PokemonsFave.value.contains(pokemon)) }
+    var isAbilityVisible by remember { mutableStateOf(false) }
+    val descriptionVisibilityMap = remember { mutableStateMapOf<String, Boolean>() }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState(), true)
+    ) {
+        // Top Baren folkens!
+        Row(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState(), true)
+                .fillMaxWidth()
+                .padding(5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            // Top Baren folkens!
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                IconButton(onClick = {
-                    val intent = Intent(context, MainActivity::class.java)
-                    context.startActivity(intent)
-                }) {
-                IconButton(onClick = {
-                    navController.navigate(Route.POKEDEX.path){
-                        // avoid building up a large stack of destinations
-                        // on the back stack as users select items
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        // Avoid multiple copies of the same destination when
-                        // reselecting the same item
-                        launchSingleTop = true
-                        // Restore state when reselecting a previously selected item
-                        restoreState = true
+            IconButton(onClick = {
+                navController.navigate(Route.POKEDEX.path){
+                    // avoid building up a large stack of destinations
+                    // on the back stack as users select items
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
                     }
-                }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                    // Avoid multiple copies of the same destination when
+                    // reselecting the same item
+                    launchSingleTop = true
+                    // Restore state when reselecting a previously selected item
+                    restoreState = true
                 }
-                //Spacer(modifier = Modifier.width(14.dp))
-                //Texten skal retrieve en string fra PokeAPI'en.
+            }) {
+                Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+            }
+            //Spacer(modifier = Modifier.width(14.dp))
+            //Texten skal retrieve en string fra PokeAPI'en.
 
-                viewModel.getPokemon()?.let {
-                    Text(
-                        text = it.name,
-                        fontSize = 30.sp,
-                        fontFamily = Font.rudaFontFamily,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        if (pokemon != null) {
+            viewModel.getPokemon()?.let {
+                Text(
+                    text = it.name,
+                    fontSize = 30.sp,
+                    fontFamily = Font.rudaFontFamily,
+                    fontWeight = FontWeight.Bold
+                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    if (pokemon != null) {
+                        Image(
+                            painter = painterResource(id = getTypeIconwithID(pokemon.type1)),
+                            contentDescription = "type1",
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
+                    if (pokemon != null) {
+                        if (pokemon.type2 != "null") {
                             Image(
-                                painter = painterResource(id = getTypeIconwithID(pokemon.type1)),
-                                contentDescription = "type1",
+                                painter = painterResource(id = getTypeIconwithID(pokemon.type2)),
+                                contentDescription = "type2",
                                 modifier = Modifier.size(30.dp)
                             )
                         }
-                        if (pokemon != null) {
-                            if (pokemon.type2 != "null") {
-                                Image(
-                                    painter = painterResource(id = getTypeIconwithID(pokemon.type2)),
-                                    contentDescription = "type2",
-                                    modifier = Modifier.size(30.dp)
-                                )
-                            }
-                        }
                     }
                 }
             }
-            Divider(
-                color = Color.Black,
-                thickness = 1.5.dp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            )
-            val backgroundColor = when (pokemon?.genderRate?.gender) {
-                Gender.MIXED->mixedColor
-                Gender.NONE -> genderlessColor
-                Gender.MALE -> maleColor
-                Gender.FEMALE -> femaleColor
-                else -> Color.Transparent
+        }
+        Divider(
+            color = Color.Black,
+            thickness = 1.5.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)
+        )
+        val backgroundColor = when (pokemon?.genderRate?.gender) {
+            Gender.MIXED->mixedColor
+            Gender.NONE -> genderlessColor
+            Gender.MALE -> maleColor
+            Gender.FEMALE -> femaleColor
+            else -> Color.Transparent
 
-            }
+        }
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(backgroundColor)
-            ) {
-                if (pokemon != null) {
-                    AsyncImage(
-                        model = pokemon.pictureURL,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(350.dp),
-                        contentScale = ContentScale.Crop
-                    )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(backgroundColor)
+        ) {
+            if (pokemon != null) {
+                AsyncImage(
+                    model = pokemon.pictureURL,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(350.dp),
+                    contentScale = ContentScale.Crop
+                )
 
 
             }
@@ -203,19 +199,19 @@ import java.lang.Math.sin
                 ////////////////////////////////////////////////////
                 Spacer(modifier = Modifier.width(16.dp))
 
-                }
             }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment=Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
-            ) {
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment=Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
 
-                pokemon?.let { GenderDisplay(genderRate = it.genderRate) }
+            pokemon?.let { GenderDisplay(genderRate = it.genderRate) }
 
-                Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(1f))
 
             Box(
                 modifier = Modifier
@@ -323,60 +319,151 @@ import java.lang.Math.sin
                 .padding(vertical = 4.dp)
         )
 
+        CatchAndGrowthRateBoxes(viewModel = viewModel)
 
-            CatchAndGrowthRateBoxes(viewModel = viewModel)
-//Indsæt det gamle pis udcursed.
-            Divider(
-                color = Color.Black,
-                thickness = 1.5.dp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            )
+        Divider(
+            color = Color.Black,
+            thickness = 1.5.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)
+        )
+        // abilities
+        /*Row {
+                Text(
+                    text = "Abilities",
+                    color = Color.Black,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = Font.rudaFontFamily
+                )
+            }
 
-            FormUI(viewModel = viewModel)
+             */
+        //if (isAbilityVisible && pokemon != null){
+        Column {
+            Row {
+                Text(
+                    text = "Abilities",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = Font.rudaFontFamily,
+                    modifier = Modifier
+                        .padding(10.dp)
+                )
 
-            Divider(
-                color = Color.Black,
-                thickness = 1.5.dp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            )
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowDown,
+                    contentDescription = "Expand abilities",
+                    modifier = Modifier
+                        .size(46.dp)
+                        .padding(10.dp)
+                        .clickable {
+                            isAbilityVisible = !isAbilityVisible
+                        }
+                        .rotate(if (isAbilityVisible) 180f else 0f)
+                )
+            }
+
+            if (isAbilityVisible && pokemon != null) {
+                //Column {
+
+                pokemon.abilities.forEach { ability ->
+                    val isDescriptionVisible = descriptionVisibilityMap[ability] ?: false
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            //text = pokemon.abilities.toString(),
+                            text = ability,
+                            modifier = Modifier.weight(1f),
+                            fontFamily = Font.rudaFontFamily
+                        )
+                        IconButton(onClick = {
+                            descriptionVisibilityMap[ability] = !isDescriptionVisible
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Info,
+                                contentDescription = "Info"
+                            )
+                        }
+                    }
+
+                    if (isDescriptionVisible) {
+                        Box(
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .border(1.dp, Color.Gray)
+                        ) {
+                            Text(
+                                "Description for $ability",
+                                modifier = Modifier.padding(8.dp),
+                                fontFamily = Font.rudaFontFamily
+                            )
+                        }
+                    }
+                }
+            } else if (isAbilityVisible) {
+                Text("No abilities found or Pokemon data is not loaded.")
+            }
+        }
+
+        Divider(
+            color = Color.Black,
+            thickness = 1.5.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)
+        )
+        FormUI(viewModel = viewModel)
+        Divider(
+            color = Color.Black,
+            thickness = 1.5.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)
+        )
 //This is a spiderchart hackworkaround, because Canvas can't directly take align inputs.
-            Box(
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .align(alignment = CenterHorizontally)
+        )
+        {
+            Text(
+                text = "Base Stats",
+                fontFamily = com.example.pokedex.presentation.theme.Font.rudaFontFamily,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .align(Alignment.TopStart)
+
+            )
+
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .align(alignment = CenterHorizontally)
-            )
-            {
-                Text(
-                    text = "Base Stats",
-                    fontFamily = com.example.pokedex.presentation.theme.Font.rudaFontFamily,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp,
-                        .padding(16.dp)
-                        .align(Alignment.TopStart)
-                Column(
-                        .fillMaxSize()
-                        .wrapContentSize(Alignment.Center)
-                    SpiderChart(
+                    .wrapContentSize(Alignment.Center)
+            ) {
+                SpiderChart(
 
-                        stats = mapOf(
-                            "HP" to 140f,
-                            "Attack" to 60f,
-                            "Defense" to 70f,
-                            "Special Attack" to 45f,
-                            "Special Defense" to 45f,
-                            "Speed" to 20f
+                    stats = mapOf(
+                        "HP" to 140f,
+                        "Attack" to 60f,
+                        "Defense" to 70f,
+                        "Special Attack" to 45f,
+                        "Special Defense" to 45f,
+                        "Speed" to 20f
 
-                        ),
-                        modifier = Modifier.padding(72.dp),
-                    )
-                }
+                    ),
+                    modifier = Modifier.padding(72.dp),
+                )
             }
         }
     }
+}
 @Composable
 fun FormUI(viewModel: searchPageViewModel) {
     val pokemon = viewModel.getPokemon()
@@ -422,6 +509,9 @@ fun FormUI(viewModel: searchPageViewModel) {
                             painter = painterResource(id = getTypeIconwithID(pokemon.type2)),
                             contentDescription = "type2",
                             modifier = Modifier.size(30.dp)
+                        )
+                    }
+                }
             }
         }
         AsyncImage(
@@ -436,24 +526,124 @@ fun FormUI(viewModel: searchPageViewModel) {
         )
     }
 }
-    @Composable
-    fun GenderIcon(
-        imageResId: Int,
-        selectedGender: Gender,
-        onGenderSelected: (Gender) -> Unit
+@Composable
+fun SpiderChart(stats: Map<String, Float>, modifier: Modifier = Modifier, size: Dp = 255.dp) {
+    val maxValue = 255f
+    val numberOfRings = 5
+    val ringSpacing = 20.dp
+
+    Box(
+        modifier = modifier
+            .size(size)
     ) {
-        Box(
+        Canvas(
             modifier = Modifier
-                .size(40.dp)
-                .clickable { onGenderSelected(selectedGender) }
-                .padding(2.dp)
-                .border(
-                    width = 2.dp,
-                    color = if (selectedGender != Gender.NONE) Color.White else Color.Transparent,
-                    //shape = CircleShape
-                )
-                .padding(2.dp),
+                .fillMaxSize()
         ) {
+            //Had to use toPx() because dp won't work on canvas with height and width.
+            val centerX = size.toPx() / 2f
+            val centerY = size.toPx() / 2f
+            val maxRadius = (size.toPx() / 3).coerceAtMost(size.toPx() / 3)
+            val ringRadius = maxRadius / numberOfRings
+            // Draws 5 rings with size max 100
+            for (i in 1..numberOfRings) {
+                drawCircle(
+                    color = Color.Gray.copy(alpha = 0.3f),
+                    radius = i * ringSpacing.toPx() + ringRadius,
+                    center = Offset(centerX, centerY),
+                    style = Stroke(2f)
+                )
+            }
+
+            val path = Path()
+            // Draws stats and 6 titles
+            stats.entries.forEachIndexed { index, pokeStatEntry ->
+                val pokeStatValue = pokeStatEntry.value.coerceIn(0f, maxValue)
+                val angle = 2 * PI * index / stats.size.toFloat()
+                val x = centerX + maxRadius * pokeStatValue / maxValue * cos(angle)
+                val y = centerY + maxRadius * pokeStatValue / maxValue * sin(angle)
+
+                drawLine(
+                    color = Color.Black,
+                    start = Offset(centerX, centerY),
+                    end = Offset(x.toFloat(), y.toFloat()),
+                    strokeWidth = 2f
+                )
+                // calc pos based on center y and x
+                val titleDistance = maxRadius + 40f
+                val titleX = centerX + titleDistance * cos(angle)
+                val titleY = centerY + titleDistance * sin(angle)
+                // workaround hack, not the best, but works with key collection.
+                drawContext.canvas.nativeCanvas.drawText(
+                    pokeStatEntry.key,
+                    titleX.toFloat(),
+                    titleY.toFloat(),
+                    Paint().apply {
+                        color = Color.Black.toArgb()
+                        textSize = 12.sp.toPx()
+                        textAlign = Paint.Align.CENTER
+                    }
+                )
+
+
+                val statValueX = centerX + titleDistance * cos(angle)
+                val statValueY = centerY + titleDistance * sin(angle) + 20f
+                drawContext.canvas.nativeCanvas.drawText(
+                    pokeStatValue.toString(),
+                    statValueX.toFloat(),
+                    statValueY.toFloat(),
+                    Paint().apply {
+                        color = Color.Black.toArgb()
+                        textSize = 12.sp.toPx()
+                        textAlign = Paint.Align.CENTER
+                    }
+                )
+
+                if (index == 0) {
+                    path.moveTo(x.toFloat(), y.toFloat())
+                } else {
+                    path.lineTo(x.toFloat(), y.toFloat())
+                }
+            }
+            // important line, fragile.
+            path.close()
+
+            drawPath(
+                path = path,
+                color = Color(0xFF006CB8),
+                style = Fill
+            )
+            drawPath(
+                path = path,
+                color = Color.Black,
+                style = Stroke(2f)
+            )
+        }
+    }
+}
+
+
+
+
+
+@Composable
+fun GenderIcon(
+    imageResId: Int,
+    selectedGender: Gender,
+    onGenderSelected: (Gender) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .size(40.dp)
+            .clickable { onGenderSelected(selectedGender) }
+            .padding(2.dp)
+            .border(
+                width = 2.dp,
+                color = if (selectedGender != Gender.NONE) Color.White else Color.Transparent,
+                //shape = CircleShape
+            )
+            .padding(2.dp),
+    ) {
         Image(
             painter = painterResource(id = imageResId),
             contentDescription = null,
@@ -466,74 +656,74 @@ fun FormUI(viewModel: searchPageViewModel) {
             //  width = 2.dp,
             //color = if (selectedGender != Gender.NONE) Color.White else Color.Transparent,),
             contentScale = ContentScale.Fit
-            )
-        }
+        )
     }
+}
 
-    @Composable
-    fun GenderDisplay(genderRate: GenderRate) {
-        Row(
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            when(genderRate.gender) {
-                Gender.MALE,Gender.FEMALE,Gender.MIXED -> {
-                    if (genderRate.maleRatio > 0) {
-                        GenderIcon(
-                            imageResId = R.drawable.male,
-                            ratio = genderRate.maleRatio,
-                            color = Color(0xFF51BAEE)
-                        )
-                    }
-                    if (genderRate.femaleRatio > 0.0) {
-                        Spacer(modifier = Modifier.width(4.dp))
-                        GenderIcon(
-                            imageResId = R.drawable.female,
-                            ratio = genderRate.femaleRatio,
-                            color = Color(0xFFFF007F)
-                        )
-                    }
+@Composable
+fun GenderDisplay(genderRate: GenderRate) {
+    Row(
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        when(genderRate.gender) {
+            Gender.MALE,Gender.FEMALE,Gender.MIXED -> {
+                if (genderRate.maleRatio > 0) {
+                    GenderIcon(
+                        imageResId = R.drawable.male,
+                        ratio = genderRate.maleRatio,
+                        color = Color(0xFF51BAEE)
+                    )
                 }
-                Gender.NONE -> {
-                    GenderIcon(imageResId = R.drawable.male, ratio = 0.0, color = Color(0xFF51BAEE))
+                if (genderRate.femaleRatio > 0.0) {
                     Spacer(modifier = Modifier.width(4.dp))
-                    GenderIcon(imageResId = R.drawable.female, ratio = 0.0, color = Color(0xFFFF007F))
-                }
-                else->{
-                    Text(text = "UNKNOWN")
+                    GenderIcon(
+                        imageResId = R.drawable.female,
+                        ratio = genderRate.femaleRatio,
+                        color = Color(0xFFFF007F)
+                    )
                 }
             }
-
+            Gender.NONE -> {
+                GenderIcon(imageResId = R.drawable.male, ratio = 0.0, color = Color(0xFF51BAEE))
+                Spacer(modifier = Modifier.width(4.dp))
+                GenderIcon(imageResId = R.drawable.female, ratio = 0.0, color = Color(0xFFFF007F))
+            }
+            else->{
+                Text(text = "UNKNOWN")
+            }
         }
+
+    }
+}
+
+@Composable
+fun GenderIcon(imageResId: Int, ratio: Double, color: Color) {
+    Column (horizontalAlignment = Alignment.CenterHorizontally){
+        Box(
+            contentAlignment = Alignment.Center, modifier = Modifier
+                .border(width = 1.dp, color, shape = RoundedCornerShape(50))
+                .padding(3.dp)
+        ) {
+            Text(
+                text = "${ratio}%",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = Font.rudaFontFamily,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+            )
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        Image(
+            painter = painterResource(id = imageResId),
+            contentDescription = "Gender icon",
+            modifier = Modifier
+                .size(36.dp)
+        )
     }
 
-   @Composable
-   fun GenderIcon(imageResId: Int, ratio: Double, color: Color) {
-       Column (horizontalAlignment = Alignment.CenterHorizontally){
-           Box(
-               contentAlignment = Alignment.Center, modifier = Modifier
-                   .border(width = 1.dp, color, shape = RoundedCornerShape(50))
-                   .padding(3.dp)
-           ) {
-               Text(
-                   text = "${ratio}%",
-                   fontSize = 16.sp,
-                   fontWeight = FontWeight.Bold,
-                   fontFamily = Font.rudaFontFamily,
-                   modifier = Modifier
-                       .align(Alignment.TopCenter)
-               )
-           }
-           Spacer(modifier = Modifier.height(4.dp))
-           Image(
-               painter = painterResource(id = imageResId),
-               contentDescription = "Gender icon",
-               modifier = Modifier
-                   .size(36.dp)
-           )
-       }
-
-   }
+}
 
 
 
@@ -543,7 +733,7 @@ enum class Gender {
 }
 
 @Composable
-//@Preview(showBackground = true)
+@Preview(showBackground = true)
 fun PokemonShowcasePreview() {
 }
 
@@ -668,101 +858,6 @@ fun CatchAndGrowthRateBoxes(viewModel: searchPageViewModel) {
 }
 
 
-@Composable
-fun SpiderChart(stats: Map<String, Float>, modifier: Modifier = Modifier, size: Dp = 255.dp) {
-    val maxValue = 255f
-    val numberOfRings = 5
-    val ringSpacing = 20.dp
-
-    Box(
-        modifier = modifier
-            .size(size)
-    ) {
-        Canvas(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            //Had to use toPx() because dp won't work on canvas with height and width.
-            val centerX = size.toPx() / 2f
-            val centerY = size.toPx() / 2f
-            val maxRadius = (size.toPx() / 3).coerceAtMost(size.toPx() / 3)
-            val ringRadius = maxRadius / numberOfRings
-            // Draws 5 rings with size max 100
-            for (i in 1..numberOfRings) {
-                drawCircle(
-                    color = Color.Gray.copy(alpha = 0.3f),
-                    radius = i * ringSpacing.toPx() + ringRadius,
-                    center = Offset(centerX, centerY),
-                    style = Stroke(2f)
-                )
-            }
-
-            val path = Path()
-            // Draws stats and 6 titles
-            stats.entries.forEachIndexed { index, pokeStatEntry ->
-                val pokeStatValue = pokeStatEntry.value.coerceIn(0f, maxValue)
-                val angle = 2 * PI * index / stats.size.toFloat()
-                val x = centerX + maxRadius * pokeStatValue / maxValue * cos(angle)
-                val y = centerY + maxRadius * pokeStatValue / maxValue * sin(angle)
-
-                drawLine(
-                    color = Color.Black,
-                    start = Offset(centerX, centerY),
-                    end = Offset(x.toFloat(), y.toFloat()),
-                    strokeWidth = 2f
-                )
-                // calc pos based on center y and x
-                val titleDistance = maxRadius + 40f
-                val titleX = centerX + titleDistance * cos(angle)
-                val titleY = centerY + titleDistance * sin(angle)
-                // workaround hack, not the best, but works with key collection.
-                drawContext.canvas.nativeCanvas.drawText(
-                    pokeStatEntry.key,
-                    titleX.toFloat(),
-                    titleY.toFloat(),
-                    Paint().apply {
-                        color = Color.Black.toArgb()
-                        textSize = 12.sp.toPx()
-                        textAlign = Paint.Align.CENTER
-                    }
-                )
-
-
-                val statValueX = centerX + titleDistance * cos(angle)
-                val statValueY = centerY + titleDistance * sin(angle) + 20f
-                drawContext.canvas.nativeCanvas.drawText(
-                    pokeStatValue.toString(),
-                    statValueX.toFloat(),
-                    statValueY.toFloat(),
-                    Paint().apply {
-                        color = Color.Black.toArgb()
-                        textSize = 12.sp.toPx()
-                        textAlign = Paint.Align.CENTER
-                    }
-                )
-
-                if (index == 0) {
-                    path.moveTo(x.toFloat(), y.toFloat())
-                } else {
-                    path.lineTo(x.toFloat(), y.toFloat())
-                }
-            }
-            // important line, fragile.
-            path.close()
-
-            drawPath(
-                path = path,
-                color = Color(0xFF006CB8),
-                style = Fill
-            )
-            drawPath(
-                path = path,
-                color = Color.Black,
-                style = Stroke(2f)
-            )
-        }
-    }
-}
 val gradient = Brush.verticalGradient(
     colors = listOf(Color(0xFFD4C21B), Color(0xFF76C5DE)))
 @Composable
