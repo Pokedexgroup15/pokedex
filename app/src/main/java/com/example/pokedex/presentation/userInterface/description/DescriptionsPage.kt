@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -383,24 +384,32 @@ import com.example.pokedex.presentation.searchPageViewModel
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (genderRate.gender != Gender.NONE) {
-                if (genderRate.maleRatio > 0) {
-                    GenderIcon(
-                        imageResId = R.drawable.male,
-                        ratio = genderRate.maleRatio,
-                        color = Color(0xFF51BAEE)
-                    )
+            when(genderRate.gender) {
+                Gender.MALE,Gender.FEMALE,Gender.MIXED -> {
+                    if (genderRate.maleRatio > 0) {
+                        GenderIcon(
+                            imageResId = R.drawable.male,
+                            ratio = genderRate.maleRatio,
+                            color = Color(0xFF51BAEE)
+                        )
+                    }
+                    if (genderRate.femaleRatio > 0.0) {
+                        Spacer(modifier = Modifier.width(4.dp))
+                        GenderIcon(
+                            imageResId = R.drawable.female,
+                            ratio = genderRate.femaleRatio,
+                            color = Color(0xFFFF007F)
+                        )
+                    }
                 }
-                if (genderRate.femaleRatio > 0.0) {
+                Gender.NONE -> {
+                    GenderIcon(imageResId = R.drawable.male, ratio = 0.0, color = Color(0xFF51BAEE))
                     Spacer(modifier = Modifier.width(4.dp))
-                    GenderIcon(
-                        imageResId = R.drawable.female,
-                        ratio = genderRate.femaleRatio,
-                        color = Color(0xFFFF007F)
-                    )
+                    GenderIcon(imageResId = R.drawable.female, ratio = 0.0, color = Color(0xFFFF007F))
                 }
-            } else {
-                Text(text = " ")
+                else->{
+                    Text(text = "UNKNOWN")
+                }
             }
 
         }
