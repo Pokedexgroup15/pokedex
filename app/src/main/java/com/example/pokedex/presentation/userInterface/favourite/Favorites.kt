@@ -34,6 +34,7 @@ import com.example.pokedex.presentation.userInterface.HomePage.PokemonList
 import com.example.pokedex.R
 import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 import com.example.pokedex.presentation.searchPageViewModel
+import com.example.pokedex.presentation.theme.Font
 import com.example.pokedex.presentation.userInterface.filterPage.SortOption
 
 
@@ -76,6 +77,7 @@ fun Favorites(navHostController: NavHostController, viewModel: searchPageViewMod
                 Text(
                     text = "No favorites selected yet",
                     fontSize = 20.sp,
+                    fontFamily = Companion.rudaFontFamily,
                     color = Color.Gray
                 )
             }
