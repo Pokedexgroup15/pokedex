@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -298,6 +299,11 @@ fun BottomBar(navController: NavController) {
                 title = "Pokedex",
                 icon = Icons.Default.List,
                 rootRoute = Route.POKEDEX
+            ),
+            Tab(
+                title = "Who's That Pokemon?",
+                icon = Icons.Default.Home,
+                rootRoute = Route.Game
             ),
             Tab(
                 title = "Favorites",
