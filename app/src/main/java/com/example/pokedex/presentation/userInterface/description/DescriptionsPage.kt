@@ -75,8 +75,6 @@ import com.example.pokedex.presentation.userInterface.HomePage.EvolutionBar
 import com.example.pokedex.presentation.userInterface.HomePage.getTypeIconwithID
 import com.example.pokedex.presentation.searchPageViewModel
 import com.example.pokedex.presentation.theme.Font
-import com.example.pokedex.presentation.userInterface.description.AbilityItem
-import com.example.pokedex.presentation.userInterface.description.AbilityListWithDescription
 import java.lang.Math.PI
 import java.lang.Math.cos
 import java.lang.Math.sin
