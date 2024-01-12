@@ -57,6 +57,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -434,9 +435,9 @@ fun ShowcasePage(navController: NavHostController,viewModel: searchPageViewModel
         {
             Text(
                 text = "Base Stats",
-                fontFamily = com.example.pokedex.presentation.theme.Font.rudaFontFamily,
+                fontFamily = Font.rudaFontFamily,
                 fontWeight = FontWeight.Bold,
-                fontSize = 24.sp,
+                fontSize = 20.sp,
                 modifier = Modifier
                     .padding(16.dp)
                     .align(Alignment.TopStart)
@@ -489,8 +490,9 @@ fun FormUI(viewModel: searchPageViewModel) {
 
     Text(
         text = "Form",
-        fontSize = 24.sp,
+        fontSize = 20.sp,
         fontWeight = FontWeight.Bold,
+        fontFamily = Font.rudaFontFamily,
         modifier = Modifier
             .fillMaxWidth()
             .padding(6.dp)
@@ -509,6 +511,7 @@ fun FormUI(viewModel: searchPageViewModel) {
             Text(
                 text = "SuperSejform Placeholder text", // Placeholder text, erstat med pokemon.formdescription
                 fontSize = 18.sp,
+                fontFamily = Font.rudaFontFamily,
                 fontWeight = FontWeight.Normal
             )
             Row(
