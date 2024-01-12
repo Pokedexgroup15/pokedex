@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
@@ -318,7 +319,7 @@ fun ShowcasePage(navController: NavHostController,viewModel: searchPageViewModel
                 .fillMaxWidth()
                 .padding(vertical = 4.dp)
         )
-
+        HeadlineAndInfoBox()
         CatchAndGrowthRateBoxes(viewModel = viewModel)
 
         Divider(
@@ -783,6 +784,7 @@ fun CatchAndGrowthRateBoxes(viewModel: searchPageViewModel) {
                 .padding(8.dp)
                 .width(120.dp)
                 .height(40.dp)
+                .offset(y=-5.dp)
                 //.offset(x = 4.dp)
                 .clip(RoundedCornerShape(25.dp))
                 .border(
@@ -808,6 +810,7 @@ fun CatchAndGrowthRateBoxes(viewModel: searchPageViewModel) {
                 .padding(8.dp)
                 .width(120.dp)
                 .height(40.dp)
+                .offset(y = -5.dp)
                 // .offset(x = 4.dp)
                 .clip(RoundedCornerShape(25.dp))
                 .border(
@@ -825,54 +828,6 @@ fun CatchAndGrowthRateBoxes(viewModel: searchPageViewModel) {
                 fontFamily = Font.rudaFontFamily,
                 fontWeight = FontWeight.Bold
             )
-        }
-    }
-    Row(
-        modifier = Modifier
-            .padding(4.dp)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        if (catchRateTextBox) {
-            Box(
-                modifier = Modifier
-                    .padding(2.dp)
-                    .width(120.dp)
-                    .height(80.dp)
-                    .clip(RoundedCornerShape(6.dp))
-                    .background(Color.LightGray)
-                    .padding(3.dp)
-            ) {
-                Text(
-                    text = "This is the catch rate of the Pokemon.",
-                    color = Color.White,
-                    fontSize = 15.sp,
-                    fontFamily = Font.rudaFontFamily,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
-
-        if (growthRateTextBox) {
-            Box(
-                modifier = Modifier
-                    .padding(2.dp)
-                    .width(120.dp)
-                    .height(80.dp)
-                    .clip(RoundedCornerShape(6.dp))
-                    .background(Color.LightGray)
-                    .padding(3.dp)
-            ) {
-                Text(
-                    text = "This is the growth rate of the Pokemon.",
-                    color = Color.White,
-                    fontSize = 15.sp,
-                    fontFamily = Font.rudaFontFamily,
-                    fontWeight = FontWeight.Bold
-                )
-            }
         }
     }
 }
@@ -897,5 +852,63 @@ fun GradientBox() {
                 .background(Color.Transparent)
                 .border(width = 1.dp, brush = gradient, shape = RoundedCornerShape(35.dp))
         )
+    }
+}
+
+@Composable
+fun HeadlineAndInfoBox() {
+    var infoBox by remember { mutableStateOf(false) }
+    Box {
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Catch and Growth Rates",
+                fontSize = 19.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
+
+            Image(
+                painter = painterResource(id = R.drawable.questionmark),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(18.dp)
+                    .offset(x = -8.dp)
+                    .clickable { infoBox = !infoBox }
+            )
+        }
+    }
+
+
+    if (infoBox) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Box(
+                modifier = Modifier
+                    .height(130.dp)
+                    .width(350.dp)
+                    .background(Color.LightGray)
+            ) {
+                Text(
+                    text = "Catch rate on the left, Growth rate on the right. " +
+                            "The catch rate shows the difficulity of catching the Pokemon." +
+                            "The growth rate means the rate of which the Pokemon gains XP and levels up. ",
+                    modifier = Modifier
+                        .padding(16.dp),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+            }
+        }
     }
 }
