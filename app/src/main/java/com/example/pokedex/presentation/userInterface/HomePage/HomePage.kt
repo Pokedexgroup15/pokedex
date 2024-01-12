@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -57,6 +58,7 @@ import com.example.pokedex.presentation.searchPageViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.SortOption
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.res.vectorResource
 
 
 @Composable
@@ -279,7 +281,8 @@ fun pokemonPictureAndLogo(modifier: Modifier, pokemon: Pokemon, viewModel: searc
                     Favorized = !Favorized
                     if (Favorized) {
                         pokemon?.let { viewModel.PokemonsFave.value.add(it) }
-                    } else {viewModel.PokemonsFave.value.remove(pokemon)
+                    } else {
+                        viewModel.PokemonsFave.value.remove(pokemon)
                         //viewModel.toggleFavourite(pokemon)
 
 
@@ -299,6 +302,13 @@ fun BottomBar(navController: NavController) {
                 icon = Icons.Default.List,
                 rootRoute = Route.POKEDEX
             ),
+
+            Tab(
+                title = "Whos That Pokemon?",
+                icon = Icons.Default.Home,
+                rootRoute = Route.Game
+            ),
+
             Tab(
                 title = "Favorites",
                 icon = Icons.Default.Favorite,
@@ -311,12 +321,25 @@ fun BottomBar(navController: NavController) {
             .value
             .any { it.destination.route == Route.FAVORITES.path }
 
-        tabs.forEach { tab ->
-            val isTabSelected = if (tab.rootRoute == Route.POKEDEX) {
-                !isFavoritesTabSelected
-            } else {
-                isFavoritesTabSelected
+        tabs.forEach{tab ->
+
+            val isTabSelected = when (tab.rootRoute){
+                Route.POKEDEX -> !isFavoritesTabSelected
+                Route.FAVORITES -> isFavoritesTabSelected
+                Route.Game -> navController.currentBackStack
+                    .collectAsState()
+                    .value
+                    .any{ it.destination.route == Route.Game.path}
+                    else -> false
             }
+
+
+       // tabs.forEach { tab ->
+         //   val isTabSelected = if (tab.rootRoute == Route.POKEDEX) {
+           //     !isFavoritesTabSelected
+            //} else {
+              //  isFavoritesTabSelected
+            //}
 
             NavigationBarItem(
                 icon = {

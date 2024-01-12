@@ -21,6 +21,7 @@ import com.example.pokedex.presentation.userInterface.HomePage.homePage
 import com.example.pokedex.presentation.userInterface.SearchPage.SearchPageFun
 
 import com.example.pokedex.presentation.searchPageViewModel
+import com.example.pokedex.presentation.userInterface.whosthat.WTPGame
 
 
 @Composable
@@ -54,6 +55,9 @@ fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier)
         }
         composable(Route.Pokemon.path) {
             ShowcasePage(navController, viewModel)
+        }
+        composable(Route.Game.path){
+            WTPGame(navController, viewModel)
         }
     }
 }
