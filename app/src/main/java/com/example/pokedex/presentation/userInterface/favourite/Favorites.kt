@@ -63,7 +63,6 @@ fun Favorites(navHostController: NavHostController, viewModel: searchPageViewMod
             Text(
                 text = "Favorites",
                 fontSize = 30.sp,
-
                 fontWeight = FontWeight.Bold,
                 fontFamily = Companion.rudaFontFamily
             )
