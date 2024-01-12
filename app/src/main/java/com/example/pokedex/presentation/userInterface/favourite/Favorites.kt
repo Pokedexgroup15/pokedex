@@ -2,6 +2,7 @@ package com.example.pokedex.presentation.userInterface.favourite
 import com.example.pokedex.presentation.theme.Font.Companion
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,12 +11,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.pokedex.PokemonObject
 import com.example.pokedex.presentation.userInterface.HomePage.PokemonList
 import com.example.pokedex.R
 import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
@@ -38,6 +43,8 @@ import com.example.pokedex.presentation.userInterface.filterPage.SortOption
 @Composable
 fun Favorites(navHostController: NavHostController, viewModel: searchPageViewModel, filterViewModel: FilterViewModel) {
     val currentSortOption = filterViewModel.selectedSortOption.value
+    val pokemonsFaveList by viewModel.PokemonsFave.collectAsState(initial = arrayListOf())
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -60,6 +67,25 @@ fun Favorites(navHostController: NavHostController, viewModel: searchPageViewMod
                 fontFamily = Companion.rudaFontFamily
             )
         }
-        PokemonList(navController = navHostController, viewModel = viewModel, isFavorite = true, sortOption = currentSortOption)
+        if (pokemonsFaveList.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .wrapContentSize(Alignment.Center)
+            ) {
+                Text(
+                    text = "No favorites selected yet",
+                    fontSize = 20.sp,
+                    color = Color.Gray
+                )
+            }
+        } else {
+            PokemonList(
+                navController = navHostController,
+                viewModel = viewModel,
+                isFavorite = true,
+                sortOption = currentSortOption
+            )
+        }
     }
 }
