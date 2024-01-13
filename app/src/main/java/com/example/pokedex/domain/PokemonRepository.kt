@@ -2,6 +2,5 @@ package com.example.pokedex.domain
 
 
 interface PokemonRepository {
-    suspend fun getPokemonList(): List<Pokemon>
-
+     suspend fun addPokemon(start:Int, end:Int, onlyDefaults:Boolean, cleanCopy:Boolean){}
 }

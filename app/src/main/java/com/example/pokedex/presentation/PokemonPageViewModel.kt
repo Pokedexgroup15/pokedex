@@ -2,12 +2,15 @@ package com.example.pokedex.presentation
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.PokemonObject
+import com.example.pokedex.data.repository.RepositoryImpl
 import com.example.pokedex.presentation.userInterface.filterPage.SortOption
-import com.example.pokedex.data.RepositoryImpl
 import kotlinx.coroutines.flow.StateFlow
 import com.example.pokedex.presentation.userInterface.filterPage.ResetViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 //    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 
@@ -21,7 +24,6 @@ class searchPageViewModel : ViewModel() {
 
     var PokemonsFilter = PokemonObject.filteredList
 
-    var repository = RepositoryImpl()
 
 
     fun getData(isFavorite: Boolean, sortOption: SortOption? = null): StateFlow<ArrayList<Pokemon>> {
@@ -33,6 +35,13 @@ class searchPageViewModel : ViewModel() {
 Log.d("filterr",""+PokemonObject.filter)
         // Apply sorting if a sort option is provided
         return list as StateFlow<ArrayList<Pokemon>>
+    }
+
+    fun getALLPokemons(){
+        viewModelScope.launch(Dispatchers.IO){
+            RepositoryImpl().addPokemon(1,1000,true,true)
+
+        }
     }
 
 

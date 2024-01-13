@@ -65,6 +65,7 @@ fun homePage(navController: NavHostController, viewModel: searchPageViewModel, f
     //PokemonList(navController = navController, viewModel = viewModel, pokemons = sortedPokemons, isFavorite = false)
     val currentSortOption = filterViewModel.selectedSortOption.value
 
+    viewModel.getALLPokemons()
 
     Column(
         modifier = Modifier
@@ -116,7 +117,6 @@ fun homePage(navController: NavHostController, viewModel: searchPageViewModel, f
 
 fun PokemonList(navController: NavHostController, viewModel: searchPageViewModel, isFavorite: Boolean, sortOption: SortOption?) {
     val pokemons by viewModel.getData(isFavorite).collectAsState()
-
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {

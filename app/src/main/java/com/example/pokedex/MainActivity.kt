@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.presentation.theme.PokedexTheme
 import com.example.pokedex.presentation.navigation.navStart
-import com.example.pokedex.data.RepositoryImpl
+import com.example.pokedex.data.repository.RepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -36,7 +36,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        RepositoryImpl().addPokemon(1,1000,true,true)
         setContent {
             PokedexTheme {
                 Surface(
