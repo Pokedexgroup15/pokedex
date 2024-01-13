@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+
 }
 
 android {
@@ -119,6 +120,13 @@ dependencies {
     // cucumber test
     androidTestImplementation("io.cucumber:cucumber-android:7.14.0")
     androidTestImplementation("io.cucumber:cucumber-picocontainer:7.14.1")
+
+// Room database
+
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
 
 
 
