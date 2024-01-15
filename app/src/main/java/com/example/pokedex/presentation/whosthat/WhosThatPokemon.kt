@@ -1,7 +1,9 @@
 package com.example.pokedex.presentation.userInterface.whosthat
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -59,7 +61,7 @@ import coil.compose.rememberImagePainter
 fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewModel) {
     val pokemonInfo = viewModel.pokemon.value
     val isGuessCorrect = viewModel.isGuessCorrect
-    var showIncorrectMessage by remember{ mutableStateOf(false) }
+    var showIncorrectMessage by remember { mutableStateOf(false) }
 
 
     Column(
@@ -97,8 +99,7 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
         }
 
 
-
-        pokemonInfo?.sprites?.other?.text?.frontdefault?.let { imageUrl ->
+        /*pokemonInfo?.sprites?.other?.text?.frontdefault?.let { imageUrl ->
             val imageModifier = Modifier
                 .size(400.dp)
                 .align(Alignment.CenterHorizontally)
@@ -114,34 +115,59 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                     } else Modifier
                 )
 
-
-            AsyncImage(
-                model = imageUrl, contentDescription = "Pokemon",
+            Box(
                 modifier = Modifier
                     .size(400.dp)
                     .align(Alignment.CenterHorizontally)
-                    .then(imageModifier)
-            )
+            ) {
+                AsyncImage(
+                    model = imageUrl, contentDescription = "Pokemon",
+                    modifier = Modifier
+                        .matchParentSize()
+                )
+            }
+*/
+
+        pokemonInfo?.sprites?.other?.text?.frontdefault?.let { imageUrl ->
+            Box(
+                modifier = Modifier
+                    .size(400.dp)
+                    .align(Alignment.CenterHorizontally)
+            ) {
+                if (!isGuessCorrect) {
+                    AsyncImage(
+                        model = imageUrl,
+                        contentDescription = "Pokemon",
+                        colorFilter = ColorFilter.tint(Color.Black),
+                        modifier = Modifier.matchParentSize()
+                    )
+                } else {
+                    AsyncImage(
+                        model = imageUrl, contentDescription = "Pokemon",
+                        modifier = Modifier.matchParentSize()
+                    )
+                }
+            }
         }
 
 
         /* pokemonInfo?.sprites?.other?.text?.frontdefault?.let{imageUrl ->
-            val imageModifier = if(!isGuessCorrect){
-                Modifier
-                    .size(400.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .graphicsLayer { colorFilter = ColorFilter.tint(Color.Black) }
-                } else {
-                Modifier
-                    .size(400.dp)
-                    .align(Alignment.CenterHorizontally)}
-            AsyncImage(model = imageUrl, contentDescription = "Whos That Pokemon Image",
-            modifier = Modifier
+        val imageModifier = if(!isGuessCorrect){
+            Modifier
                 .size(400.dp)
                 .align(Alignment.CenterHorizontally)
-                .then(imageModifier)
-            )
-        }*/
+                .graphicsLayer { colorFilter = ColorFilter.tint(Color.Black) }
+            } else {
+            Modifier
+                .size(400.dp)
+                .align(Alignment.CenterHorizontally)}
+        AsyncImage(model = imageUrl, contentDescription = "Whos That Pokemon Image",
+        modifier = Modifier
+            .size(400.dp)
+            .align(Alignment.CenterHorizontally)
+            .then(imageModifier)
+        )
+    }*/
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             var text by remember { mutableStateOf("") }
             OutlinedTextField(
@@ -178,6 +204,8 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
         }
     }
 }
+
+
 
 
 

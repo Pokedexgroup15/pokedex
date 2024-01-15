@@ -20,7 +20,7 @@ class WhosThatPokemonViewModel (
 
     fun fetchRandomPokemon(){
         viewModelScope.launch {
-            val randomId = (1..898).random()
+            val randomId = (1..5).random()
             val response = pokeApi.getPokemonInfo(randomId)
             if(response.isSuccessful){
                 _pokemon.value = response.body()
