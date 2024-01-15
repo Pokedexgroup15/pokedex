@@ -1,6 +1,7 @@
 package com.example.pokedex.presentation.userInterface.whosthat
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -145,24 +148,35 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp,vertical = 18.dp)
+                    .padding(horizontal = 16.dp, vertical = 5.dp)
             )
             Button(
                 onClick = { viewModel.checkGuess()
                             showIncorrectMessage=!viewModel.isGuessCorrect && viewModel.guessAttempt.isNotEmpty()},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent
+                ),
                 modifier = Modifier
-                    .padding( vertical= 18.dp)
+                    .padding(vertical= 1.dp)
+                    .background(color=Color.Transparent)
+
                     )
              {
-                Text("Submit")
+                Text("Submit", color=Color.Black, fontSize = 20.sp)
             }
 
             Button(
                 onClick = { viewModel.resetGame()
                             showIncorrectMessage=false},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent
+                ),
+                modifier = Modifier
+                    .padding(vertical= 1.dp)
+
             )
             {
-                Text("Try a different Pokemon?")
+                Text("Try a different Pokemon?", color=Color.Black, fontSize = 15.sp)
             }
 
 
@@ -173,7 +187,7 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                 }
             } else {
                 if (showIncorrectMessage){
-                    Text(text = "That is incorrect... try again?")
+                    Text(text = "That is incorrect... try again?", color=Color.Red)
                 }
 
             }
