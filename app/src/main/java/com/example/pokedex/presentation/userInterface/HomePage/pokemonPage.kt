@@ -2,6 +2,7 @@ package com.example.pokedex.presentation.userInterface.HomePage
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,12 +18,28 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -67,11 +84,11 @@ fun EvolutionBar(navController: NavHostController,pokemon: Pokemon,viewModel: se
     ) {
         Text(
             text = "Evolutions",
-            fontSize = 30.sp,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
             fontFamily = Font.rudaFontFamily,
             modifier = Modifier
         )
-        DropDownArrowImage()
     }
     Spacer(modifier = Modifier.height(16.dp))
     FlowRow(
@@ -200,6 +217,7 @@ if(!matchFound) {
     }
 }
 
+
 @Composable
 fun EvolutionCircleImage(navController: NavHostController,imageUrl: String,viewModel: searchPageViewModel,pokemon:Pokemon) {
     Box(
@@ -207,14 +225,16 @@ fun EvolutionCircleImage(navController: NavHostController,imageUrl: String,viewM
         modifier = Modifier
             .size(110.dp)
             .clip(CircleShape)
-            .clickable(){
+            .clickable() {
                 viewModel.setPokemon(pokemon)
-                navController.navigate(Route.Pokemon.path)            }
+                navController.navigate(Route.Pokemon.path)
+            }
     ) {
         Image(
             painter = painterResource(id = R.drawable.evolutionscircle),
             contentDescription = "Evolution",
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .size(100.dp),
             //contentScale = ContentScale.Crop
             //modifier = Modifier.size(100.dp)
@@ -255,4 +275,72 @@ fun EvolutionsPicture(imageUrl: String ){
             .offset(y = -10.dp)
             .offset(x = 3.dp),
     )
+}
+
+@Composable
+fun VersionBar(navController: NavHostController,  viewModel: searchPageViewModel) {
+    var isButtonClicked by remember { mutableStateOf(false) }
+    val pokemon = viewModel.getPokemon()
+    val versions = pokemon?.forms ?: emptyList()
+    val (selectedVersion, setSelectedVersion) = remember { mutableStateOf<String?>(null) }
+
+    //val descriptionVisibilityMap = remember { mutableStateMapOf<String, Boolean>() }
+    Column {
+        Row {
+            Text(
+                text = "Versions",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = Font.rudaFontFamily,
+                modifier = Modifier
+                    .padding(10.dp)
+            )
+        }
+        Column {
+            if (pokemon != null) {
+                versions.forEach { version ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = version,
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(10.dp),
+                            fontFamily = Font.rudaFontFamily
+                        )
+                        IconButton(onClick = {
+                            // Toggle the selected version when the button is clicked
+                            if (selectedVersion == version) {
+                                setSelectedVersion(null)
+                            } else {
+                                setSelectedVersion(version)
+                            }
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Info,
+                                contentDescription = "Info"
+                            )
+                        }
+                    }
+
+                    // Display the picture of the Pokémon when the "Info" icon is clicked for the selected version
+                    if (selectedVersion == version) {
+                        Box(
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .border(1.dp, Color.LightGray, shape = RoundedCornerShape(20.dp))
+                        ) {
+                            Box(
+                                modifier = Modifier.padding(10.dp), // Increase the padding value as needed
+                            ) {
+                                val imageUrl = /* Load the image URL for the selected version here */
+                                    EvolutionsPicture(pokemon.pictureURL)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
