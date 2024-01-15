@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -56,6 +58,7 @@ import com.example.pokedex.presentation.searchPageViewModel
 import com.example.pokedex.presentation.theme.Font
 import com.example.pokedex.presentation.userInterface.HomePage.getTypeIconwithID
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import coil.compose.rememberImagePainter
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -107,6 +110,12 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                     .size(400.dp)
                     .align(Alignment.CenterHorizontally)
             ) {
+                Image(
+                    painterResource(id = R.drawable.whosthatpokemonbackground),
+                    modifier = Modifier.fillMaxSize(),
+                    contentDescription = null,
+            contentScale = ContentScale.Crop
+                )
                 if (!isGuessCorrect) {
                     AsyncImage(
                         model = imageUrl,
@@ -157,8 +166,8 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                     containerColor = Color.Transparent
                 ),
                 modifier = Modifier
-                    .padding(vertical= 1.dp)
-                    .background(color=Color.Transparent)
+                    .padding(vertical = 1.dp)
+                    .background(color = Color.Transparent)
 
                     )
              {
