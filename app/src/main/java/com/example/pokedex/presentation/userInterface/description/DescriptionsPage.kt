@@ -76,6 +76,7 @@ import com.example.pokedex.presentation.userInterface.HomePage.EvolutionBar
 import com.example.pokedex.presentation.userInterface.HomePage.getTypeIconwithID
 import com.example.pokedex.presentation.searchPageViewModel
 import com.example.pokedex.presentation.theme.Font
+import com.example.pokedex.presentation.userInterface.HomePage.VersionBar
 import java.lang.Math.PI
 import java.lang.Math.cos
 import java.lang.Math.sin
@@ -277,6 +278,28 @@ fun ShowcasePage(navController: NavHostController,viewModel: searchPageViewModel
                 Text(text = "", modifier = Modifier.align(Alignment.CenterHorizontally))
                 Spacer(modifier = Modifier.weight(4f))
                 EvolutionBar(navController)
+                Spacer(modifier = Modifier.weight(1f))
+            }
+        }
+        Divider(
+            color = Color.LightGray,
+            thickness = 1.5.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)
+        )
+
+        Box(modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.BottomCenter
+        ){
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp)
+            ) {
+                Text(text = "", modifier = Modifier.align(Alignment.CenterHorizontally))
+                Spacer(modifier = Modifier.weight(4f))
+                VersionBar(navController)
                 Spacer(modifier = Modifier.weight(1f))
             }
         }
@@ -784,7 +807,7 @@ fun CatchAndGrowthRateBoxes(viewModel: searchPageViewModel) {
                 .padding(8.dp)
                 .width(120.dp)
                 .height(40.dp)
-                .offset(y=-5.dp)
+                .offset(y = -5.dp)
                 //.offset(x = 4.dp)
                 .clip(RoundedCornerShape(25.dp))
                 .border(
