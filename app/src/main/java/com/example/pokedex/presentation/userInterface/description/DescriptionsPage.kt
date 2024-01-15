@@ -242,28 +242,30 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                     }
                 }
 
-                Divider(
-                    color = Color.Black,
-                    thickness = 1.5.dp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp)
-                )
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.BottomCenter
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 10.dp)
-                    ) {
-                        Text(text = "", modifier = Modifier.align(CenterHorizontally))
-                        Spacer(modifier = Modifier.weight(4f))
-                        EvolutionBar(navController)
-                        Spacer(modifier = Modifier.weight(1f))
-                    }
+        Divider(
+            color = Color.Black,
+            thickness = 1.5.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)
+        )
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp)
+            ) {
+                Text(text = "", modifier = Modifier.align(Alignment.CenterHorizontally))
+                Spacer(modifier = Modifier.weight(4f))
+                if (pokemon != null) {
+                    EvolutionBar(navController,pokemon,viewModel)
                 }
+                Spacer(modifier = Modifier.weight(1f))
+            }
+        }
                 Divider(
                     color = Color.Black,
                     thickness = 1.5.dp,

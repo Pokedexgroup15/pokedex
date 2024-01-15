@@ -66,7 +66,13 @@ data class PokemonSpecies(
     val capture_rate: Int,
     val growth_rate: Growth,
     val gender_rate: Int,
-    val generation: Generation
+    val generation: Generation,
+    val varieties: List<Varieties>
+)
+
+data class Varieties(
+    val pokemon: Species
+
 )
 data class Generation(
     val name: String
@@ -198,6 +204,13 @@ class RepositoryImpl: ViewModel() {
 
                     result2.body()?.let {
 
+                    var forms = ArrayList<String>()
+                        var i3=0
+                        while(i3<it.varieties.size){
+                            forms.add(it.varieties[i3].pokemon.name)
+                            i3++
+                        }
+
                     var generationNum=-1
                     when(it.generation.name){
                        "generation-i" ->  generationNum = 1
@@ -259,7 +272,7 @@ class RepositoryImpl: ViewModel() {
                     if(it.sprites.other.text.frontdefault!= null)
                         sprite = it.sprites.other.text.frontdefault
                     PokemonObject._pokeList.value = PokemonObject._pokeList.value.toMutableList().apply {
-                        add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, sprite, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate, genderRate = genderInfo,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat,generationNum,abilities))
+                        add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, sprite, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate, genderRate = genderInfo,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat,generationNum,abilities,forms))
                     } as ArrayList<Pokemon>
                 }}
 
