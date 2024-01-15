@@ -2,6 +2,7 @@ package com.example.pokedex.presentation.userInterface.whosthat
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -97,33 +98,27 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
         }
 
 
-
         pokemonInfo?.sprites?.other?.text?.frontdefault?.let { imageUrl ->
-            val imageModifier = Modifier
-                .size(400.dp)
-                .align(Alignment.CenterHorizontally)
-                .then(
-                    if (!isGuessCorrect) {
-                        Modifier.drawWithContent {
-                            drawContent()
-                            drawRect(
-                                color = Color.Black.copy(alpha = 0.8f),
-                                size = this.size
-                            )
-                        }
-                    } else Modifier
-                )
-
-
-            AsyncImage(
-                model = imageUrl, contentDescription = "Pokemon",
+            Box(
                 modifier = Modifier
                     .size(400.dp)
                     .align(Alignment.CenterHorizontally)
-                    .then(imageModifier)
-            )
+            ) {
+                if (!isGuessCorrect) {
+                    AsyncImage(
+                        model = imageUrl,
+                        contentDescription = "Pokemon",
+                        colorFilter = ColorFilter.tint(Color.Black),
+                        modifier = Modifier.matchParentSize()
+                    )
+                } else {
+                    AsyncImage(
+                        model = imageUrl, contentDescription = "Pokemon",
+                        modifier = Modifier.matchParentSize()
+                    )
+                }
+            }
         }
-
 
         /* pokemonInfo?.sprites?.other?.text?.frontdefault?.let{imageUrl ->
             val imageModifier = if(!isGuessCorrect){
