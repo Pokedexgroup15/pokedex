@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -84,6 +85,7 @@ fun EvolutionBar(navController: NavHostController,pokemon: Pokemon,viewModel: se
         Text(
             text = "Evolutions",
             fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
             fontFamily = Font.rudaFontFamily,
             modifier = Modifier
         )
@@ -223,9 +225,10 @@ fun EvolutionCircleImage(navController: NavHostController,imageUrl: String,viewM
         modifier = Modifier
             .size(110.dp)
             .clip(CircleShape)
-            .clickable(){
+            .clickable() {
                 viewModel.setPokemon(pokemon)
-                navController.navigate(Route.Pokemon.path)            }
+                navController.navigate(Route.Pokemon.path)
+            }
     ) {
         Image(
             painter = painterResource(id = R.drawable.evolutionscircle),
@@ -275,8 +278,12 @@ fun EvolutionsPicture(imageUrl: String ){
 }
 
 @Composable
-fun VersionBar(navController: NavHostController) {
-    var isVersionVisible by remember { mutableStateOf(false) }
+fun VersionBar(navController: NavHostController,  viewModel: searchPageViewModel) {
+    var isButtonClicked by remember { mutableStateOf(false) }
+    val pokemon = viewModel.getPokemon()
+    val versions = pokemon?.forms ?: emptyList()
+    val (selectedVersion, setSelectedVersion) = remember { mutableStateOf<String?>(null) }
+
     //val descriptionVisibilityMap = remember { mutableStateMapOf<String, Boolean>() }
     Column {
         Row {
@@ -288,66 +295,52 @@ fun VersionBar(navController: NavHostController) {
                 modifier = Modifier
                     .padding(10.dp)
             )
-
-            Icon(
-                imageVector = Icons.Default.KeyboardArrowDown,
-                contentDescription = "Expand versions",
-                modifier = Modifier
-                    .size(46.dp)
-                    .padding(10.dp)
-                    .clickable {
-                        isVersionVisible = !isVersionVisible
-                    }
-                    .rotate(if (isVersionVisible) 180f else 0f)
-            )
         }
-
-        if (isVersionVisible) {
-            //Column {
-            /*
-            pokemon.versions.forEach { version ->
-                val isDescriptionVisible = versionPicVisibilityMap[version] ?: false
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        //text = pokemon.abilities.toString(),
-                        text = version,
-                        modifier = Modifier.weight(1f),
-                        fontFamily = Font.rudaFontFamily
-                    )
-                    IconButton(onClick = {
-                        versionPicVisibilityMap[version] = !isVersionVisible
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Info,
-                            contentDescription = "Info"
-                        )
-                    }
-                }
-
-                if (isDescriptionVisible) {
-                    Box(
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .border(1.dp, Color.Gray)
+        Column {
+            if (pokemon != null) {
+                versions.forEach { version ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            "Description for $version",
-                            modifier = Modifier.padding(8.dp),
+                            text = version,
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(10.dp),
                             fontFamily = Font.rudaFontFamily
                         )
+                        IconButton(onClick = {
+                            // Toggle the selected version when the button is clicked
+                            if (selectedVersion == version) {
+                                setSelectedVersion(null)
+                            } else {
+                                setSelectedVersion(version)
+                            }
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Info,
+                                contentDescription = "Info"
+                            )
+                        }
+                    }
+
+                    // Display the picture of the Pokémon when the "Info" icon is clicked for the selected version
+                    if (selectedVersion == version) {
+                        Box(
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .border(1.dp, Color.LightGray, shape = RoundedCornerShape(20.dp))
+                        ) {
+                            Box(
+                                modifier = Modifier.padding(10.dp), // Increase the padding value as needed
+                            ) {
+                                val imageUrl = /* Load the image URL for the selected version here */
+                                    EvolutionsPicture(pokemon.pictureURL)
+                            }
+                        }
                     }
                 }
             }
-        } else if (isVersionVisible) {
-            Text("No abilities found or Pokemon data is not loaded.")
-        }
-    }
-    }
-
- */
         }
     }
 }

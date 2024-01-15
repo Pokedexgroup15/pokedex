@@ -285,7 +285,7 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
             ) {
                 Text(text = "", modifier = Modifier.align(Alignment.CenterHorizontally))
                 Spacer(modifier = Modifier.weight(4f))
-                VersionBar(navController)
+                VersionBar(navController, viewModel)
                 Spacer(modifier = Modifier.weight(1f))
             }
         }
