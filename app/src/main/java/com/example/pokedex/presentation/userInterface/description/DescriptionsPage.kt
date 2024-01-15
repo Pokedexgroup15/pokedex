@@ -762,65 +762,44 @@ fun CatchAndGrowthRateBoxes(viewModel: searchPageViewModel) {
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
-
     ) {
-        /*Image(
-            painter = painterResource(id = R.drawable.catchrate),
-            contentDescription = null,
-            modifier = Modifier
-                .size(35.dp)
-                .clickable { catchRateTextBox = !catchRateTextBox }
-
-      )*/
-
         Box(
             modifier = Modifier
                 .padding(8.dp)
-                .width(120.dp)
-                .height(40.dp)
-                .offset(y=-5.dp)
-                //.offset(x = 4.dp)
-                .clip(RoundedCornerShape(25.dp))
                 .border(
-                    width = 2.dp,
+                    width = 1.dp,
                     color = Color.LightGray,
                     shape = RoundedCornerShape(20.dp)
                 )
-                .clickable { catchRateTextBox = !catchRateTextBox },
-            contentAlignment = Alignment.Center
-        ) {
-            if (pokemon != null) {
-                Text(
-                    text = pokemon.capture_rate.toString(),
-                    color = Color.Gray,
-                    fontSize = 15.sp,
-                    fontFamily = Font.rudaFontFamily,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
-        Box(
-            modifier = Modifier
-                .padding(8.dp)
-                .width(120.dp)
-                .height(40.dp)
-                .offset(y = -5.dp)
-                // .offset(x = 4.dp)
-                .clip(RoundedCornerShape(25.dp))
-                .border(
-                    width = 2.dp,
-                    color = Color.LightGray,
-                    shape = RoundedCornerShape(20.dp)
-                )
-                .clickable { growthRateTextBox = !growthRateTextBox },
-            contentAlignment = Alignment.Center
         ) {
             Text(
-                text = pokemon?.growth_rate.toString(),
+                text = "Catch Rate: ${pokemon?.capture_rate ?: "N/A"}",
                 color = Color.Gray,
-                fontSize = 14.sp,
+                fontSize = 15.sp,
                 fontFamily = Font.rudaFontFamily,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(8.dp)
+                    )
+        }
+        Spacer(modifier = Modifier.width(8.dp))
+        Box(
+            modifier = Modifier
+                .padding(8.dp)
+                .border(
+                    width = 1.dp,
+                    color = Color.LightGray,
+                    shape = RoundedCornerShape(20.dp)
+                )
+        ) {
+            Text(
+                text = "Growth Rate: ${pokemon?.growth_rate ?: "N/A"}",
+                color = Color.Gray,
+                fontSize = 15.sp,
+                fontFamily = Font.rudaFontFamily,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(8.dp)
             )
         }
     }
