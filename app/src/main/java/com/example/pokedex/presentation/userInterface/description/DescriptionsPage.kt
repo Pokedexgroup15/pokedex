@@ -218,35 +218,22 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                         Icon(
                             painter = painterResource(id = R.drawable.pokeball_bw),
                             contentDescription = "Favorite option",
-                            //tint = if (viewModel.PokemonsFave.contains(pokemon)) Color.Red else Color.Black,
                             tint = if (Favorized) Color.Red else Color.Black,
                             modifier = Modifier
                                 .size(25.dp)
                                 .clickable {
                                     Favorized = !Favorized
                                     pokemon?.let {
-                                        if (Favorized) {
-
-
-                                            PokemonObject._faveList.value =
-                                                PokemonObject.pokeList.value
-                                                    .toMutableList()
-                                                    .apply {
-                                                        add(it)
-                                                    } as ArrayList<Pokemon>
+                                        val updatedFaveList = if (Favorized) {
+                                            PokemonObject._faveList.value.toMutableList().apply {
+                                                add(it)
+                                            }
                                         } else {
-                                            PokemonObject._faveList.value =
-                                                PokemonObject.pokeList.value
-                                                    .toMutableList()
-                                                    .apply {
-                                                        add(it)
-                                                    } as ArrayList<Pokemon>
-                                            //if (viewModel.PokemonsFave.contains(pokemon))
-                                            //  viewModel.PokemonsFave.remove(pokemon)
-                                            //else
-                                            //  pokemon?.let { viewModel.PokemonsFave.add(it) }
-
+                                            PokemonObject._faveList.value.toMutableList().apply {
+                                                remove(it)
+                                            }
                                         }
+                                        PokemonObject._faveList.value = updatedFaveList as ArrayList<Pokemon>
                                     }
                                 }
                                 .requiredSize(36.dp, 36.dp)
