@@ -77,6 +77,7 @@ import com.example.pokedex.presentation.userInterface.HomePage.EvolutionBar
 import com.example.pokedex.presentation.userInterface.HomePage.getTypeIconwithID
 import com.example.pokedex.presentation.searchPageViewModel
 import com.example.pokedex.presentation.theme.Font
+import com.example.pokedex.presentation.userInterface.HomePage.VersionBar
 import java.lang.Math.PI
 import java.lang.Math.cos
 import java.lang.Math.sin
@@ -263,6 +264,28 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                 if (pokemon != null) {
                     EvolutionBar(navController,pokemon,viewModel)
                 }
+                Spacer(modifier = Modifier.weight(1f))
+            }
+        }
+        Divider(
+            color = Color.LightGray,
+            thickness = 1.5.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)
+        )
+
+        Box(modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.BottomCenter
+        ){
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp)
+            ) {
+                Text(text = "", modifier = Modifier.align(Alignment.CenterHorizontally))
+                Spacer(modifier = Modifier.weight(4f))
+                VersionBar(navController, viewModel)
                 Spacer(modifier = Modifier.weight(1f))
             }
         }
