@@ -150,14 +150,16 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 18.dp)
+                    .padding(horizontal = 16.dp,vertical = 18.dp)
             )
             Button(
                 onClick = { viewModel.checkGuess()
                             showIncorrectMessage=!viewModel.isGuessCorrect && viewModel.guessAttempt.isNotEmpty()},
-                modifier = Modifier.padding(vertical = 18.dp)
-            ) {
-                Text("Enter")
+                modifier = Modifier
+                    .padding( vertical= 18.dp)
+                    )
+             {
+                Text("Submit")
             }
 
             Button(
