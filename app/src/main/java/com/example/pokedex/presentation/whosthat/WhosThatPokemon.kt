@@ -153,14 +153,16 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                     .padding(vertical = 18.dp)
             )
             Button(
-                onClick = { viewModel.checkGuess() },
+                onClick = { viewModel.checkGuess()
+                            showIncorrectMessage=!viewModel.isGuessCorrect && viewModel.guessAttempt.isNotEmpty()},
                 modifier = Modifier.padding(vertical = 18.dp)
             ) {
                 Text("Enter")
             }
 
             Button(
-                onClick = { viewModel.resetGame() },
+                onClick = { viewModel.resetGame()
+                            showIncorrectMessage=false},
             )
             {
                 Text("Try a different Pokemon?")
@@ -173,6 +175,9 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                     Text("Play again?")
                 }
             } else {
+                if (showIncorrectMessage){
+                    Text(text = "That is incorrect... try again?")
+                }
 
             }
         }
