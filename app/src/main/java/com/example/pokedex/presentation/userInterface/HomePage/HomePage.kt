@@ -198,6 +198,7 @@ fun pokemonBox(modifier: Modifier,
                 restoreState = true
             }
             }
+            .background(Color(0xFFE6F3FF))
     ) {
 
         Column(
