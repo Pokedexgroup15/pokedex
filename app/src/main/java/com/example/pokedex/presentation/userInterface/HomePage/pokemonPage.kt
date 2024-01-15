@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.pokedex.R
-
+import com.example.pokedex.presentation.theme.Font
 
 
 @Composable
@@ -57,6 +57,7 @@ fun EvolutionBar(navController: NavHostController){
         Text(
             text = "Evolutions",
             fontSize = 30.sp,
+            fontFamily = Font.rudaFontFamily,
             modifier = Modifier
         )
         DropDownArrowImage()
