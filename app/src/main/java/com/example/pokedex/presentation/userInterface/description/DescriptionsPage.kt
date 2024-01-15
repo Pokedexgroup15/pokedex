@@ -276,7 +276,9 @@ fun ShowcasePage(navController: NavHostController,viewModel: searchPageViewModel
             ) {
                 Text(text = "", modifier = Modifier.align(Alignment.CenterHorizontally))
                 Spacer(modifier = Modifier.weight(4f))
-                EvolutionBar(navController)
+                if (pokemon != null) {
+                    EvolutionBar(navController,pokemon,viewModel)
+                }
                 Spacer(modifier = Modifier.weight(1f))
             }
         }
