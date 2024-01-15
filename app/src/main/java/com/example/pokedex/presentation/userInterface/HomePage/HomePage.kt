@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -301,15 +302,16 @@ fun BottomBar(navController: NavController) {
                 rootRoute = Route.POKEDEX
             ),
             Tab(
-                title = "Who's That Pokemon?",
-                icon = Icons.Default.Home,
-                rootRoute = Route.Game
-            ),
-            Tab(
                 title = "Favorites",
                 icon = Icons.Default.Favorite,
                 rootRoute = Route.FAVORITES
+            ),
+            Tab(
+                title = "Who's That Pokemon?",
+                icon = Icons.Default.PlayArrow,
+                rootRoute = Route.Game
             )
+
         )
 
         val isFavoritesTabSelected = navController.currentBackStack

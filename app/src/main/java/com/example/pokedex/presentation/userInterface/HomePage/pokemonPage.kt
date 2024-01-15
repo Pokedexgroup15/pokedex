@@ -166,7 +166,7 @@ if(!matchFound) {
                     i7++
                 }
 
-                EvolutionCircleImage(navController, imageUrl,viewModel,pokemon)
+                EvolutionCircleImage(navController, imageUrl,viewModel,curPokemon)
                 i5++
             }
                 if (PokemonObject.eveList[i][2].size !=0) {
