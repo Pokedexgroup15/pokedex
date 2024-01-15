@@ -14,6 +14,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import kotlin.math.log
 import com.example.pokedex.presentation.userInterface.filterPage.ResetViewModel
+import retrofit2.create
 
 object RetrofitBase {
 
@@ -42,9 +43,25 @@ interface PokeEveChain{
     suspend fun getPokemonEveInfo(@Path("id") pathId: Int) : Response<PokemonEve>
 }
 
+interface PokeAbility{
+    @GET("https://pokeapi.co/api/v2/ability/{id}")
+
+    suspend fun getPokemonAbilInfo(@Path("id") pathId: Int) : Response<PokeAbil>
+}
+
 data class PokemonEve(
     val chain: Chain
 
+)
+
+data class PokeAbil(
+    val name:String,
+    val effect_entries :List<Ent>
+)
+
+data class Ent(
+    val effect : String,
+    val language: Language
 )
 
 data class Chain(
@@ -147,6 +164,9 @@ data class GenderRate(
 )
 
 
+
+
+
 class RepositoryImpl: ViewModel() {
 //    load image
     //imageView.load("https://example.com/image.jpg")
@@ -157,6 +177,7 @@ class RepositoryImpl: ViewModel() {
     val quotesApi = RetrofitBase.getInstance().create(PokeApi::class.java)
     val speciesApi = RetrofitBase.getInstance().create(PokeApiSpecies::class.java)
     val eveApi = RetrofitBase.getInstance().create(PokeEveChain::class.java)
+      val abilApi = RetrofitBase.getInstance().create(PokeAbility::class.java)
 
         viewModelScope.launch(Dispatchers.IO){
 //            val fileName = "json/pokemonCache.json"
@@ -201,6 +222,26 @@ class RepositoryImpl: ViewModel() {
 
 
                 }
+
+                    if (i<310){
+                        val result4= abilApi.getPokemonAbilInfo(i)
+                        var i2=0
+                        result4.body()?.let {
+
+
+                            while(i2<it.effect_entries.size){
+
+                                if(it.effect_entries[i2].language.name=="en"){
+                                    PokemonObject.abilMap.put(it.name,it.effect_entries[i2].effect)
+break
+                                }
+                                i2++
+                            }
+
+                        }
+
+
+                        }
 
                     result2.body()?.let {
 

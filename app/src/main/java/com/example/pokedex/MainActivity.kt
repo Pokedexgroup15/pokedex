@@ -5,6 +5,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.presentation.theme.PokedexTheme
@@ -26,8 +28,7 @@ object PokemonObject{
     var eveList = Array(549) {Array(3) {ArrayList<String>()} }
     var _filteredList = MutableStateFlow(ArrayList<Pokemon>())
     var filteredList = _filteredList.asStateFlow()
-
-
+    var abilMap =HashMap<String, String>()
 }
 
 
