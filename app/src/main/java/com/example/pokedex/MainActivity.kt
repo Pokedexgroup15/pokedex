@@ -12,11 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
+import com.example.pokedex.data.RepositoryImpl
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.presentation.theme.PokedexTheme
 import com.example.pokedex.presentation.navigation.navStart
 import com.example.pokedex.data.local.PokemonDatabase
 import com.example.pokedex.presentation.searchPageViewModel
+import com.google.gson.Gson
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -40,15 +43,16 @@ class MainActivity : ComponentActivity() {
      Room.databaseBuilder(
          applicationContext,
          PokemonDatabase::class.java, "pokemon_database"
-     ).build()
+     ).fallbackToDestructiveMigration()
+         .build()
+
  }
 
 private val viewmodel by viewModels<searchPageViewModel> (
 factoryProducer =  {
     object : ViewModelProvider.Factory{
        override  fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return searchPageViewModel(database.dao) as T
-        }
+           return searchPageViewModel(database.dao) as T        }
     }
 }
 )
@@ -58,7 +62,8 @@ factoryProducer =  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //RepositoryImpl().addPokemon(1,10,true,true)
+        RepositoryImpl(database.dao).addPokemon(1,1025,true,true)
+
 
         setContent {
             PokedexTheme {
@@ -75,4 +80,8 @@ factoryProducer =  {
 
 
     }
+}
+fun deserializeFromJson(jsonString: String): Pokemon {
+    val gson = Gson()
+    return gson.fromJson(jsonString, Pokemon::class.java)
 }

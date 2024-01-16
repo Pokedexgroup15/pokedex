@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.example.pokedex.Gender
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.PokemonObject
+import com.example.pokedex.data.local.PokemonDAO
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.*
 import retrofit2.Retrofit
@@ -14,6 +15,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import kotlin.math.log
 import com.example.pokedex.presentation.userInterface.filterPage.ResetViewModel
+import com.google.gson.Gson
 import retrofit2.create
 
 object RetrofitBase {
@@ -167,7 +169,7 @@ data class GenderRate(
 
 
 
-class RepositoryImpl: ViewModel() {
+class RepositoryImpl(  private val dao: PokemonDAO): ViewModel() {
 //    load image
     //imageView.load("https://example.com/image.jpg")
 
@@ -312,8 +314,15 @@ break
                     var sprite:String =""
                     if(it.sprites.other.text.frontdefault!= null)
                         sprite = it.sprites.other.text.frontdefault
+                    var pk=Pokemon(it.name.replaceFirstChar { it.uppercase() }, sprite, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate, genderRate = genderInfo,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat,generationNum,abilities,forms)
+
+                    //val st= serializeToJson(pk)
+                  //  var pk2:LocalPokemon= LocalPokemon(it.id,st,it.types[0].type.name,type2,generationNum,capture_rate,growth_rate)
+                    //dao.insert(pk2)
+
+
                     PokemonObject._pokeList.value = PokemonObject._pokeList.value.toMutableList().apply {
-                        add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, sprite, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate, genderRate = genderInfo,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat,generationNum,abilities,forms))
+                        add(pk)
                     } as ArrayList<Pokemon>
                 }}
 
@@ -349,3 +358,7 @@ private fun calculateGenderRate(genderRate: Int): GenderRate {
 }
 
 
+private fun serializeToJson(pokemon: Pokemon): String {
+    val gson = Gson()
+    return gson.toJson(pokemon)
+}
