@@ -66,7 +66,7 @@ factoryProducer =  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        RepositoryImpl(database.dao).addPokemon(1,1025,true,true)
+        RepositoryImpl(database.dao).addPokemon(1,5,true,true)
 viewmodel.initialize()
 
         setContent {
