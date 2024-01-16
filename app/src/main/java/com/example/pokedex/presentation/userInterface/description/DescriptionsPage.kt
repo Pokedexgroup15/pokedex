@@ -243,6 +243,9 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                                                     remove(it)
                                                 }
                                         }
+
+                                        viewModel.toggleFavourite(pokemon,Favorized)
+
                                         PokemonObject._faveList.value =
                                             updatedFaveList as ArrayList<Pokemon>
                                     }
