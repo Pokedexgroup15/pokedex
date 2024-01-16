@@ -57,6 +57,7 @@ Log.d("filterr",""+PokemonObject.filter)
 
 
 
+
     fun getPokemon(): Pokemon?{
         return selectedPokemon
     }

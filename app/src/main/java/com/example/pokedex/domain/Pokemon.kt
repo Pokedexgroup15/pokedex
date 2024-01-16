@@ -1,11 +1,6 @@
 package com.example.pokedex.domain
 
 
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import androidx.room.Relation
-import androidx.room.TypeConverters
 import com.example.pokedex.Gender
 
 
@@ -19,7 +14,7 @@ data class Pokemon(
     val pokedexText: String,
     val capture_rate: Int,
     val growth_rate: String,
-    var genderRate: Array<Float> ,
+    var genderRate: GenderRate ,
     val hp:Int,
     val attack:Int,
     val defense:Int,
@@ -36,10 +31,6 @@ data class GenderRate(
     val maleRatio: Double,
     val femaleRatio: Double,
 
-)
-@Entity("Trial")
-data class PokemonandGender(
- val tr :Int
 )
 
 

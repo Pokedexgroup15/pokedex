@@ -1,5 +1,6 @@
 package com.example.pokedex.data
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.pokedex.Gender
@@ -142,6 +143,7 @@ class RepositoryImpl: ViewModel() {
 //    load image
     //imageView.load("https://example.com/image.jpg")
 
+  @SuppressLint("SuspiciousIndentation")
   fun addPokemon(start:Int, end:Int, onlyDefaults:Boolean, cleanCopy:Boolean){
 
 

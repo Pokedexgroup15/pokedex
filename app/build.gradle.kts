@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
+
 }
 
 
@@ -148,5 +149,7 @@ dependencies {
 
     // optional - RxJava3 support for Room
     implementation("androidx.room:room-rxjava3:$room_version")
+
+
 
 }

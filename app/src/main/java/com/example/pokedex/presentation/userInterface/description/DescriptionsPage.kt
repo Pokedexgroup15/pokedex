@@ -69,7 +69,7 @@ import androidx.compose.ui.window.Popup
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.pokedex.data.GenderRate
+import com.example.pokedex.domain.GenderRate
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.presentation.navigation.Route
 import com.example.pokedex.presentation.userInterface.HomePage.EvolutionBar
@@ -108,7 +108,7 @@ fun ShowcasePage(navController: NavHostController,viewModel: searchPageViewModel
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             IconButton(onClick = {
-                navController.navigate(Route.POKEDEX.path){
+                navController.navigate(Route.POKEDEX.path) {
                     // avoid building up a large stack of destinations
                     // on the back stack as users select items
                     popUpTo(navController.graph.findStartDestination().id) {
@@ -156,6 +156,7 @@ fun ShowcasePage(navController: NavHostController,viewModel: searchPageViewModel
                 }
             }
         }
+
         Divider(
             color = Color.Black,
             thickness = 1.5.dp,
@@ -720,7 +721,7 @@ fun GenderDisplay(genderRate: GenderRate) {
 
 @Composable
 fun GenderIcon(imageResId: Int, ratio: Double, color: Color) {
-    Column (horizontalAlignment = Alignment.CenterHorizontally){
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
             contentAlignment = Alignment.Center, modifier = Modifier
                 .border(width = 1.dp, color, shape = RoundedCornerShape(50))
@@ -743,8 +744,9 @@ fun GenderIcon(imageResId: Int, ratio: Double, color: Color) {
                 .size(36.dp)
         )
     }
-
 }
+
+
 
 
 
