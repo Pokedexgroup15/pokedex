@@ -59,6 +59,7 @@ import com.example.pokedex.presentation.searchPageViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.SortOption
 import androidx.compose.runtime.collectAsState
+import com.example.pokedex.data.local.LocalPokemon
 
 
 @Composable
@@ -281,12 +282,19 @@ fun pokemonPictureAndLogo(modifier: Modifier, pokemon: Pokemon, viewModel: searc
                 .clickable {
                     Favorized = !Favorized
                     if (Favorized) {
-                        pokemon?.let { viewModel.PokemonsFave.value.add(it) }
-                    } else {viewModel.PokemonsFave.value.remove(pokemon)
-                        //viewModel.toggleFavourite(pokemon)
+                        pokemon?.let { viewModel.PokemonsFave.value.add(it)
+
+                        }
+                    } else
+                    {viewModel.PokemonsFave.value.remove(pokemon)
 
 
                     }
+
+                    viewModel.toggleFavourite(pokemon,Favorized)
+
+
+
                 }
         )
     }

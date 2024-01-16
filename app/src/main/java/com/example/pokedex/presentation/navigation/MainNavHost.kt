@@ -14,6 +14,7 @@ import com.example.pokedex.presentation.userInterface.filterPage.FilterPageConte
 import com.example.pokedex.ShowcasePage
 import com.example.pokedex.data.PokeApi
 import com.example.pokedex.data.RetrofitBase
+import com.example.pokedex.data.local.PokemonDatabase
 import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 
 import com.example.pokedex.presentation.userInterface.HomePage.BottomBar
@@ -28,8 +29,11 @@ import com.example.pokedex.presentation.userInterface.whosthat.WhosThatPokemonVi
 
 
 @Composable
-fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
-    val viewModel = viewModel<searchPageViewModel>()
+fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier,
+                viewModel:searchPageViewModel) {
+
+
+
     val filterviewModel = viewModel<FilterViewModel>()
     val resetViewModel = viewModel<ResetViewModel>()
 
@@ -69,14 +73,15 @@ fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun navStart() {
+fun navStart(viewModel: searchPageViewModel) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomBar(navController) }
     ) { paddingValues ->
         MainNavHost(
             navController = navController,
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier.padding(paddingValues),
+            viewModel
         )
     }
 }
