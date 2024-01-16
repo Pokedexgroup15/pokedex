@@ -77,8 +77,7 @@ fun SearchPageFun(navController: NavHostController, viewModel: searchPageViewMod
 
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "backArrow",
                   modifier =  Modifier.clickable {
-                        val intent = Intent(context, MainActivity::class.java)
-                        context.startActivity(intent)
+                      navController.navigate(Route.POKEDEX.path)
 
                     }
                       .size(36.dp))
