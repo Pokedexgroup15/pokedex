@@ -14,29 +14,29 @@ class FilterViewModel : ViewModel() {
 
     var pokemonList: List<Pokemon> = listOf()
 
-    /*fun sortPokemonList(sortOption: SortOption): List<Pokemon> {
-        return when (sortOption) {
-            SortOption.LowToHigh -> pokemonList.sortedBy { it.id }
-            SortOption.HighToLow -> pokemonList.sortedByDescending { it.id }
-        }
-    }
+//    fun sortPokemonList(sortOption: SortOption): List<Pokemon> {
+//        return when (sortOption) {
+//            SortOption.LowToHigh -> pokemonList.sortedBy { it.id }
+//            SortOption.HighToLow -> pokemonList.sortedByDescending { it.id }
+//        }
+//    }
+//
+//
+//
+//
+//    fun setSortOption(sortOption: SortOption?) {
+//        _selectedSortOption.value = sortOption
+//       pokemonList = sortOption?.let { sortPokemonList(it) } ?: pokemonList
+//       // pokemonList = getSortedPokemonList()
+//    }
+//
+//    fun getSortedPokemonList(): List<Pokemon> {
+//        return when (_selectedSortOption.value) {
+//            SortOption.LowToHigh -> pokemonList.sortedBy { it.id }
+//            SortOption.HighToLow -> pokemonList.sortedByDescending { it.id }
+//            null -> pokemonList
+//        }
+//    }
 
 
-
-
-    fun setSortOption(sortOption: SortOption?) {
-        _selectedSortOption.value = sortOption
-       pokemonList = sortOption?.let { sortPokemonList(it) } ?: pokemonList
-       // pokemonList = getSortedPokemonList()
-    }
-
-    fun getSortedPokemonList(): List<Pokemon> {
-        return when (_selectedSortOption.value) {
-            SortOption.LowToHigh -> pokemonList.sortedBy { it.id }
-            SortOption.HighToLow -> pokemonList.sortedByDescending { it.id }
-            null -> pokemonList
-        }
-    }
-
-     */
 }
