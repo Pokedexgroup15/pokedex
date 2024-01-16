@@ -226,15 +226,20 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                                     Favorized = !Favorized
                                     pokemon?.let {
                                         val updatedFaveList = if (Favorized) {
-                                            PokemonObject._faveList.value.toMutableList().apply {
-                                                add(it)
-                                            }
+                                            PokemonObject._faveList.value
+                                                .toMutableList()
+                                                .apply {
+                                                    add(it)
+                                                }
                                         } else {
-                                            PokemonObject._faveList.value.toMutableList().apply {
-                                                remove(it)
-                                            }
+                                            PokemonObject._faveList.value
+                                                .toMutableList()
+                                                .apply {
+                                                    remove(it)
+                                                }
                                         }
-                                        PokemonObject._faveList.value = updatedFaveList as ArrayList<Pokemon>
+                                        PokemonObject._faveList.value =
+                                            updatedFaveList as ArrayList<Pokemon>
                                     }
                                 }
                                 .requiredSize(36.dp, 36.dp)
@@ -726,7 +731,10 @@ fun GenderDisplay(genderRate: GenderRate) {
                 }
             }
             Gender.NONE -> {
-                GenderIcon(imageResId = R.drawable.male, ratio = 0.0, color = Color(0xFF51BAEE))
+                GenderIcon(
+                    imageResId = R.drawable.male,
+                    ratio = 0.0,
+                    color = Color(0xFF51BAEE))
                 Spacer(modifier = Modifier.width(4.dp))
                 GenderIcon(imageResId = R.drawable.female, ratio = 0.0, color = Color(0xFFFF007F))
             }
@@ -753,6 +761,7 @@ fun GenderIcon(imageResId: Int, ratio: Double, color: Color) {
                 fontFamily = Font.rudaFontFamily,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
+                    .padding(4.dp)
             )
         }
         Spacer(modifier = Modifier.height(4.dp))
