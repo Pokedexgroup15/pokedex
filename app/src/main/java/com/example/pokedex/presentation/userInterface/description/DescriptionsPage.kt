@@ -163,7 +163,7 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                     thickness = 1.5.dp,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 4.dp)
+                        //.padding(vertical = 4.dp)
                 )
                 val backgroundColor = when (pokemon?.genderRate?.gender) {
                     Gender.MIXED -> mixedColor
@@ -177,6 +177,7 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
+
                         .background(backgroundColor)
                 ) {
                     if (pokemon != null) {
@@ -184,10 +185,14 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                             model = pokemon.pictureURL,
                             contentDescription = null,
                             modifier = Modifier
+
                                 .fillMaxWidth()
+                                .padding(10.dp)
                                 .height(350.dp),
-                            contentScale = ContentScale.Crop
+                            contentScale = ContentScale.Crop,
+
                         )
+
                     }
                     Row(
                         modifier = Modifier
@@ -226,15 +231,20 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                                     Favorized = !Favorized
                                     pokemon?.let {
                                         val updatedFaveList = if (Favorized) {
-                                            PokemonObject._faveList.value.toMutableList().apply {
-                                                add(it)
-                                            }
+                                            PokemonObject._faveList.value
+                                                .toMutableList()
+                                                .apply {
+                                                    add(it)
+                                                }
                                         } else {
-                                            PokemonObject._faveList.value.toMutableList().apply {
-                                                remove(it)
-                                            }
+                                            PokemonObject._faveList.value
+                                                .toMutableList()
+                                                .apply {
+                                                    remove(it)
+                                                }
                                         }
-                                        PokemonObject._faveList.value = updatedFaveList as ArrayList<Pokemon>
+                                        PokemonObject._faveList.value =
+                                            updatedFaveList as ArrayList<Pokemon>
                                     }
                                 }
                                 .requiredSize(36.dp, 36.dp)
@@ -726,7 +736,10 @@ fun GenderDisplay(genderRate: GenderRate) {
                 }
             }
             Gender.NONE -> {
-                GenderIcon(imageResId = R.drawable.male, ratio = 0.0, color = Color(0xFF51BAEE))
+                GenderIcon(
+                    imageResId = R.drawable.male,
+                    ratio = 0.0,
+                    color = Color(0xFF51BAEE))
                 Spacer(modifier = Modifier.width(4.dp))
                 GenderIcon(imageResId = R.drawable.female, ratio = 0.0, color = Color(0xFFFF007F))
             }
@@ -753,6 +766,7 @@ fun GenderIcon(imageResId: Int, ratio: Double, color: Color) {
                 fontFamily = Font.rudaFontFamily,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
+                    .padding(4.dp)
             )
         }
         Spacer(modifier = Modifier.height(4.dp))
