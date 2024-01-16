@@ -117,6 +117,7 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                 modifier = Modifier
                     .size(400.dp)
                     .align(Alignment.CenterHorizontally)
+                    .border(2.dp,Color.Black)
             ) {
                 Image(
                     painterResource(id = R.drawable.whosthatpokemonbackground),
@@ -137,7 +138,25 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                         modifier = Modifier.matchParentSize()
                     )
                 }
+                Text(
+                    text = "Score: ${viewModel.totalPoints}",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .align(Alignment.BottomEnd)
+                )
             }
+            Divider(
+                color = Color.Black,
+                thickness = 1.5.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp)
+            )
+
+
         }
 
         /* pokemonInfo?.sprites?.other?.text?.frontdefault?.let{imageUrl ->
@@ -167,6 +186,7 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 4.dp)
                     .clip(RoundedCornerShape(20.dp))
+                    .border(2.dp, Color.Black, RoundedCornerShape(20.dp))
             )
             Button(
                 onClick = { viewModel.checkGuess()
