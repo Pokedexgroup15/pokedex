@@ -136,7 +136,7 @@ fun PokemonList(navController: NavHostController, viewModel: searchPageViewModel
                         modifier = Modifier
                             .weight(1f)
                             .background(
-                                color = Color(0xFFE0E0E0),
+                                color = Color(0xFFE6F3FF),
                                 shape = RoundedCornerShape(size = 10.dp)
                             )
                             .border(
