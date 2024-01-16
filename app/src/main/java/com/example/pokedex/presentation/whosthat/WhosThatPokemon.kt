@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -174,8 +175,8 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                 ),
                 modifier = Modifier
                     .padding(vertical = 1.dp)
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 4.dp)
+                    .wrapContentWidth()
+                    .padding(horizontal = 10.dp, vertical = 4.dp)
                     .clip(RoundedCornerShape(20.dp))
                     .border(
                         width = 1.dp,
@@ -184,7 +185,7 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                     )
                     )
              {
-                Text("Submit", color=Color.Black, fontSize = 25.sp,
+                Text("Submit", color=Color.Black, fontSize = 20.sp,
                     //modifier = Modifier
                       //  .border(
                         //    width = 1.dp,
@@ -201,7 +202,37 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
             )
-            Spacer(modifier = Modifier.height(16.dp))
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+
+            if (isGuessCorrect && pokemonInfo?.name != null) {
+                val displayName = pokemonInfo.name.replaceFirstChar{if (it.isLowerCase()) it.titlecase() else it.toString()}
+                Text("That's Right! It's ${displayName}!", fontSize = 25.sp, color = Color(0xFF38A552))
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(onClick = { viewModel.resetGame() },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFE6F3FF)),
+                    modifier = Modifier
+                        .border(width = 1.dp,
+                            color = Color.Black,
+                            shape = RoundedCornerShape(25.dp))
+
+
+                ) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text("Play again?", color=Color.Black, fontSize = 15.sp)
+                }
+            } else {
+                if (showIncorrectMessage){
+                    Text(text = "That is incorrect... try again?", fontSize= 25.sp, color=Color.Red)
+                }
+
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+
             Button(
                 onClick = { viewModel.resetGame()
                             showIncorrectMessage=false},
@@ -213,41 +244,23 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                     .border(
                         width = 1.dp,
                         color = Color.Black,
-                        shape = RoundedCornerShape(20.dp)
+                        shape = RoundedCornerShape(25.dp)
                     )
 
             )
 
             {
-                Text("Try a different Pokemon?", color=Color.Black, fontSize = 20.sp)
+                Text("Try a different Pokemon?", color=Color.Black, fontSize = 15.sp)
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
-            if (isGuessCorrect) {
-                Text("That's Right! It's ${pokemonInfo?.name}!", fontSize = 25.sp, color = Color(0xFF38A552))
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { viewModel.resetGame() },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFE6F3FF)),
-                    modifier = Modifier
-                        .border(width = 1.dp,
-                            color = Color.Black,
-                            shape = RoundedCornerShape(25.dp))
-                    
-                ) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text("Play again?", color=Color.Black, fontSize = 20.sp)
-                }
-            } else {
-                if (showIncorrectMessage){
-                    Text(text = "That is incorrect... try again?", color=Color.Red)
-                }
 
             }
         }
     }
-}
+
+
 
 
 
