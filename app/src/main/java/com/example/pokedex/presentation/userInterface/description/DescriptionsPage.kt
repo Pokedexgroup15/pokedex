@@ -873,12 +873,12 @@ fun HeadlineAndInfoBox() {
                 color = Color.Black
             )
 
-            Image(
-                painter = painterResource(id = R.drawable.questionmark),
+            Icon(
+                imageVector = Icons.Default.Info,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(18.dp)
-                    .offset(x = -8.dp)
+                    .size(24.dp)
+                    .offset(x = -4.dp)
                     .clickable { infoBox = !infoBox }
             )
         }
