@@ -21,7 +21,6 @@ class ResetViewModel : ViewModel() {
     val selectedName = mutableStateOf<String?>(null)
     val selectedCatchRate = mutableStateOf<List<String>>(emptyList())
 
-    var Pokemons = PokemonObject.pokeList.value
     init {
         viewModelScope.launch {
             // Trigger the flow and consume its elements using collect
