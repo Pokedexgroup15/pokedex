@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.example.pokedex.Gender
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.PokemonObject
+import com.example.pokedex.domain.GenderRate
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.*
 import retrofit2.Retrofit
@@ -68,6 +69,7 @@ data class PokemonSpecies(
     val gender_rate: Int,
     val generation: Generation
 )
+
 data class Generation(
     val name: String
 )
@@ -134,11 +136,6 @@ data class Type(
     val url:String
 )
 
-data class GenderRate(
-    val gender: Gender,
-    val maleRatio: Double,
-    val femaleRatio: Double
-)
 
 
 class RepositoryImpl: ViewModel() {
@@ -234,7 +231,6 @@ class RepositoryImpl: ViewModel() {
                         }
                         capture_rate = it.capture_rate
                         growth_rate = it.growth_rate.name
-                        val genderInfo=calculateGenderRate(it.gender_rate)
 
                 result.body()?.let { Log.d("test5", it.types[0].type.name+" "+it.name)
                    var i3=0
@@ -254,6 +250,7 @@ class RepositoryImpl: ViewModel() {
                     }
                     else  type2 = "null"
 
+                    val genderInfo=calculateGenderRate(result.body()!!.id, result2.body()!!.gender_rate)
 
                     var sprite:String =""
                     if(it.sprites.other.text.frontdefault!= null)
@@ -276,21 +273,21 @@ class RepositoryImpl: ViewModel() {
 
     }}
 
-private fun calculateGenderRate(genderRate: Int): GenderRate {
+private fun calculateGenderRate(id:Int,genderRate: Int,): Array<Float> {
     return when (genderRate) {
-        -1 ->GenderRate(Gender.NONE, 0.0, 0.0)
-        0 ->GenderRate(Gender.MALE, 100.0, 0.0)
-        8 ->GenderRate(Gender.FEMALE, 0.0, 100.0)
+        -1 -> arrayOf(id.toFloat(),0.0f, 0.0f, 0.0f)
+        0 ->arrayOf(id.toFloat(),1.0f, 100.0f, 0.0f)
+        8 ->arrayOf(id.toFloat(),2.0f, 0.0f, 100.0f)
         in 1..7 -> {
             val femaleRatio =genderRate * 12.5
             val maleRatio= 100.0 - femaleRatio
             val gender=when{
-                genderRate< 4 ->Gender.MALE
-                genderRate > 4->Gender.FEMALE
-                else ->Gender.MIXED
+                genderRate< 4 ->1.0f
+                genderRate > 4->2.0f
+                else ->3.0f
             }
-            GenderRate(gender, maleRatio, femaleRatio)
-        } else -> GenderRate(Gender.UNKNOWN, 0.0, 0.0)
+            arrayOf(id.toFloat(),gender, maleRatio.toFloat(), femaleRatio.toFloat())
+        } else -> arrayOf(id.toFloat(),5.0f, 0.0f, 0.0f)
     }
 }
 

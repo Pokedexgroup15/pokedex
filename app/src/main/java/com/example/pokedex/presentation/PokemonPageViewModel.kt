@@ -18,7 +18,9 @@ import kotlinx.coroutines.launch
 
 //    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 
-class searchPageViewModel(database: PokemonDatabase) : ViewModel() {
+class searchPageViewModel(
+    private val dao: PokemonDAO
+) : ViewModel() {
 
     private var selectedPokemon: Pokemon? = null
 
@@ -29,7 +31,7 @@ class searchPageViewModel(database: PokemonDatabase) : ViewModel() {
     var PokemonsFilter = PokemonObject.filteredList
 
     var repository = RepositoryImpl()
-   var database: PokemonDatabase? = null
+   var Dao = dao
 
     fun getData(isFavorite: Boolean, sortOption: SortOption? = null): StateFlow<ArrayList<Pokemon>> {
         var list = Pokemons
@@ -67,16 +69,20 @@ Log.d("filterr",""+PokemonObject.filter)
         if (PokemonsFave.value.contains(pokemon)) {
             PokemonsFave.value.remove(pokemon)
 
-            viewModelScope.launch(Dispatchers.IO) {
+          /*  viewModelScope.launch(Dispatchers.IO) {
                 database?.dao?.insert(pokemon)
             }
+
+           */
         }
         else {
             PokemonsFave.value.add(pokemon)
 
-            viewModelScope.launch(Dispatchers.IO) {
+            /*viewModelScope.launch(Dispatchers.IO) {
                 database?.dao?.delete(pokemon)
             }
+
+             */
         }
     }
 

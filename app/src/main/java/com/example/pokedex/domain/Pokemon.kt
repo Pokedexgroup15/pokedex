@@ -1,23 +1,25 @@
 package com.example.pokedex.domain
 
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.pokedex.data.GenderRate
+import androidx.room.Relation
+import androidx.room.TypeConverters
+import com.example.pokedex.Gender
 
 
-@Entity("Favourite")
+
 data class Pokemon(
     val name: String,
     val pictureURL: String,
-    @PrimaryKey(autoGenerate = true)
     val id: Int,
     val type1: String,
     val type2: String,
     val pokedexText: String,
     val capture_rate: Int,
     val growth_rate: String,
-    val genderRate: GenderRate,
+    var genderRate: Array<Float> ,
     val hp:Int,
     val attack:Int,
     val defense:Int,
@@ -25,5 +27,29 @@ data class Pokemon(
     val special_defense: Int,
     val speed: Int,
     val generation: Int,
-    val abilities: ArrayList<String>
+    val abilities: List<String>
 )
+
+data class GenderRate(
+    val id: Int,
+    val gender: Gender,
+    val maleRatio: Double,
+    val femaleRatio: Double,
+
+)
+@Entity("Trial")
+data class PokemonandGender(
+ val tr :Int
+)
+
+
+
+/*
+@Entity("Pokemons")
+data class Favourite(
+    @PrimaryKey(autoGenerate = true)
+
+    val name: String
+)
+
+ */

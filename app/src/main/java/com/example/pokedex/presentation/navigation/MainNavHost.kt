@@ -30,10 +30,10 @@ import com.example.pokedex.presentation.userInterface.whosthat.WhosThatPokemonVi
 
 @Composable
 fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier,
-                database: PokemonDatabase?) {
+                viewModel:searchPageViewModel) {
 
 
-    val viewModel = viewModel<searchPageViewModel>()
+
     val filterviewModel = viewModel<FilterViewModel>()
     val resetViewModel = viewModel<ResetViewModel>()
 
@@ -73,7 +73,7 @@ fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier,
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun navStart(database: PokemonDatabase?) {
+fun navStart(viewModel: searchPageViewModel) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomBar(navController) }
@@ -81,7 +81,7 @@ fun navStart(database: PokemonDatabase?) {
         MainNavHost(
             navController = navController,
             modifier = Modifier.padding(paddingValues),
-            database
+            viewModel
         )
     }
 }
