@@ -163,7 +163,7 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                     thickness = 1.5.dp,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 4.dp)
+                        //.padding(vertical = 4.dp)
                 )
                 val backgroundColor = when (pokemon?.genderRate?.gender) {
                     Gender.MIXED -> mixedColor
@@ -177,6 +177,7 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
+
                         .background(backgroundColor)
                 ) {
                     if (pokemon != null) {
@@ -184,10 +185,14 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                             model = pokemon.pictureURL,
                             contentDescription = null,
                             modifier = Modifier
+
                                 .fillMaxWidth()
+                                .padding(10.dp)
                                 .height(350.dp),
-                            contentScale = ContentScale.Crop
+                            contentScale = ContentScale.Crop,
+
                         )
+
                     }
                     Row(
                         modifier = Modifier
