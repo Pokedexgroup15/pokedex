@@ -24,12 +24,14 @@ object PokemonObject{
     var _pokeList = MutableStateFlow(ArrayList<Pokemon>())
     var pokeList = _pokeList.asStateFlow()
     var count = 0
+
     var filter:Boolean = false
     var _faveList = MutableStateFlow(ArrayList<Pokemon>())
     var faveList = _faveList.asStateFlow()
     var eveList = Array(549) {Array(3) {ArrayList<String>()} }
     var _filteredList = MutableStateFlow(ArrayList<Pokemon>())
     var filteredList = _filteredList.asStateFlow()
+    var abilMap =HashMap<String, String>()
 }
 class MainActivity : ComponentActivity() {
  private   val database by lazy {
