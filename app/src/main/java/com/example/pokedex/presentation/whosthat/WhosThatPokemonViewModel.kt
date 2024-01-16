@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.pokedex.data.PokeApi
 import com.example.pokedex.data.PokemonInfo
 import kotlinx.coroutines.launch
+import kotlin.math.pow
 
 
 class WhosThatPokemonViewModel (
@@ -20,7 +21,7 @@ class WhosThatPokemonViewModel (
 
     fun fetchRandomPokemon(){
         viewModelScope.launch {
-            val randomId = (1..898).random()
+            val randomId = (1..25).random()
             val response = pokeApi.getPokemonInfo(randomId)
             if(response.isSuccessful){
                 _pokemon.value = response.body()
@@ -29,9 +30,23 @@ class WhosThatPokemonViewModel (
             }
         }
     }
+private var correctGuessesInARow by mutableStateOf(0)
+    var totalPoints by mutableStateOf(0)
 
-    fun checkGuess(){
-        isGuessCorrect = guessAttempt.equals(pokemon.value?.name, ignoreCase = true)
+    fun checkGuess() {
+        if (guessAttempt.equals(pokemon.value?.name, ignoreCase = true)) {
+            isGuessCorrect = true
+            correctGuessesInARow++
+            totalPoints += calculatePoints(correctGuessesInARow)
+        } else {
+            isGuessCorrect = false
+            correctGuessesInARow = 0
+        }
+    }
+
+private fun calculatePoints(correctGuesses: Int): Int{
+    return 2.0.pow(correctGuesses - 1).toInt()
+    // isGuessCorrect = guessAttempt.equals(pokemon.value?.name, ignoreCase = true)
     }
     fun resetGame(){
         fetchRandomPokemon()
@@ -43,3 +58,5 @@ class WhosThatPokemonViewModel (
         fetchRandomPokemon()
     }
 }
+
+
