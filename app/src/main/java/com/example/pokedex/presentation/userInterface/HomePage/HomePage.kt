@@ -100,10 +100,10 @@ fun homePage(navController: NavHostController, viewModel: searchPageViewModel, f
             Spacer(modifier = Modifier.width(34.dp))
 
             Icon(imageVector = Icons.Default.Search, contentDescription = "search",
-                modifier = Modifier.clickable {
+                modifier = Modifier
+                    .size(32.dp)
+                    .clickable {
                     navController.navigate(Route.Search.path)
-
-
                 })
         }
         //PokemonList(navController,viewModel, false)
