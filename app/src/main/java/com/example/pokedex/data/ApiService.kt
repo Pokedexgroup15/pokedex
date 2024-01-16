@@ -141,7 +141,7 @@ data class Other(
 data class Offical(
     @SerializedName("front_default")
     val frontdefault: String
-)
+    )
 
 
 
@@ -171,13 +171,13 @@ class RepositoryImpl: ViewModel() {
 //    load image
     //imageView.load("https://example.com/image.jpg")
 
-    fun addPokemon(start:Int, end:Int, onlyDefaults:Boolean, cleanCopy:Boolean){
+  fun addPokemon(start:Int, end:Int, onlyDefaults:Boolean, cleanCopy:Boolean){
 
 
-        val quotesApi = RetrofitBase.getInstance().create(PokeApi::class.java)
-        val speciesApi = RetrofitBase.getInstance().create(PokeApiSpecies::class.java)
-        val eveApi = RetrofitBase.getInstance().create(PokeEveChain::class.java)
-        val abilApi = RetrofitBase.getInstance().create(PokeAbility::class.java)
+    val quotesApi = RetrofitBase.getInstance().create(PokeApi::class.java)
+    val speciesApi = RetrofitBase.getInstance().create(PokeApiSpecies::class.java)
+    val eveApi = RetrofitBase.getInstance().create(PokeEveChain::class.java)
+      val abilApi = RetrofitBase.getInstance().create(PokeAbility::class.java)
 
         viewModelScope.launch(Dispatchers.IO){
 //            val fileName = "json/pokemonCache.json"
@@ -188,40 +188,40 @@ class RepositoryImpl: ViewModel() {
             var i : Int = start
             GlobalScope.launch {
                 while(i <= end) {
-                    val result = quotesApi.getPokemonInfo(i)
-                    val result2 = speciesApi.getPokemonSpeciesInfo(i)
+                val result = quotesApi.getPokemonInfo(i)
+                val result2 = speciesApi.getPokemonSpeciesInfo(i)
 
-                    if(i<549){
-                        val result3 = eveApi.getPokemonEveInfo(i)
-                        result3.body()?.let {
+                if(i<549){
+                    val result3 = eveApi.getPokemonEveInfo(i)
+                    result3.body()?.let {
 
-                            PokemonObject.eveList[i][0].add(it.chain.species.name)
+                        PokemonObject.eveList[i][0].add(it.chain.species.name)
 
-                            var i2: Int =0
-                            var i3: Int =0
+                        var i2: Int =0
+                        var i3: Int =0
 
 
-                            while( i2<it.chain.evolves_to.size){
-                                PokemonObject.eveList[i][1].add(it.chain.evolves_to[i2].species.name)
-                                i3 =0
-                                while( i3<it.chain.evolves_to[i2].evolves_to.size) {
+                        while( i2<it.chain.evolves_to.size){
+                            PokemonObject.eveList[i][1].add(it.chain.evolves_to[i2].species.name)
+                            i3 =0
+                            while( i3<it.chain.evolves_to[i2].evolves_to.size) {
 
-                                    PokemonObject.eveList[i][2].add(it.chain.evolves_to[i2].evolves_to[i3].species.name)
-                                    i3++
-                                }
-                                i2++
+                                PokemonObject.eveList[i][2].add(it.chain.evolves_to[i2].evolves_to[i3].species.name)
+                                i3++
                             }
-                            Log.d("eve",PokemonObject.eveList[i][0].toString() +" -> "+PokemonObject.eveList[i][1].toString()+" -> "+ PokemonObject.eveList[i][2])
-                            PokemonObject.eveList
-
-
-
-
-
+                            i2++
                         }
+                        Log.d("eve",PokemonObject.eveList[i][0].toString() +" -> "+PokemonObject.eveList[i][1].toString()+" -> "+ PokemonObject.eveList[i][2])
+                        PokemonObject.eveList
+
+
+
 
 
                     }
+
+
+                }
 
                     if (i<310){
                         val result4= abilApi.getPokemonAbilInfo(i)
@@ -233,7 +233,7 @@ class RepositoryImpl: ViewModel() {
 
                                 if(it.effect_entries[i2].language.name=="en"){
                                     PokemonObject.abilMap.put(it.name,it.effect_entries[i2].effect)
-                                    break
+break
                                 }
                                 i2++
                             }
@@ -241,44 +241,44 @@ class RepositoryImpl: ViewModel() {
                         }
 
 
-                    }
+                        }
 
                     result2.body()?.let {
 
-                        var forms = ArrayList<String>()
+                    var forms = ArrayList<String>()
                         var i3=0
                         while(i3<it.varieties.size){
                             forms.add(it.varieties[i3].pokemon.name)
                             i3++
                         }
 
-                        var generationNum=-1
-                        when(it.generation.name){
-                            "generation-i" ->  generationNum = 1
-                            "generation-ii" ->  generationNum = 2
-                            "generation-iii" ->  generationNum = 3
-                            "generation-iv" ->  generationNum = 4
-                            "generation-v" ->  generationNum = 5
-                            "generation-vi" ->  generationNum = 6
-                            "generation-vii" ->  generationNum = 7
-                            "generation-viii" ->  generationNum = 8
-                            "generation-ix" ->  generationNum = 9
-                        }
+                    var generationNum=-1
+                    when(it.generation.name){
+                       "generation-i" ->  generationNum = 1
+                        "generation-ii" ->  generationNum = 2
+                        "generation-iii" ->  generationNum = 3
+                        "generation-iv" ->  generationNum = 4
+                        "generation-v" ->  generationNum = 5
+                        "generation-vi" ->  generationNum = 6
+                        "generation-vii" ->  generationNum = 7
+                        "generation-viii" ->  generationNum = 8
+                        "generation-ix" ->  generationNum = 9
+                   }
 
-                        var pokedexEntry:String = " "
+                    var pokedexEntry:String = " "
                         var i2:Int = 0
                         if(it.flavor_text_entries.size>0){
-                            while(i2<it.flavor_text_entries.size-1){
-                                if(it.flavor_text_entries[i2].language.name =="en"){
+                        while(i2<it.flavor_text_entries.size-1){
+                            if(it.flavor_text_entries[i2].language.name =="en"){
 //                            Log.d("lan",it.flavor_text_entries[i2].language.name)
-                                    break;
-                                }
-                                i2++
+                                break;
+                            }
+                            i2++
 
 
-                            }}
+                        }}
 
-                        val capture_rate:Int
+                    val capture_rate:Int
 
                         val growth_rate:String
                         if(it.flavor_text_entries.isNotEmpty()) {
@@ -290,32 +290,32 @@ class RepositoryImpl: ViewModel() {
                         growth_rate = it.growth_rate.name
                         val genderInfo=calculateGenderRate(it.gender_rate)
 
-                        result.body()?.let { Log.d("test5", it.types[0].type.name+" "+it.name)
-                            var i3=0
+                result.body()?.let { Log.d("test5", it.types[0].type.name+" "+it.name)
+                   var i3=0
 
-                            var abilities = ArrayList<String>()
-                            Log.d("abil",""+it.abilities.size)
-                            while(i3<it.abilities.size){
-                                abilities.add(it.abilities[i3].ability.name)
-                                Log.d("abil",abilities[i3])
-                                i3++
-                            }
+                    var abilities = ArrayList<String>()
+                    Log.d("abil",""+it.abilities.size)
+                   while(i3<it.abilities.size){
+                       abilities.add(it.abilities[i3].ability.name)
+                       Log.d("abil",abilities[i3])
+                       i3++
+                   }
 
-                            var type2: String
+                    var type2: String
 
-                            if(it.types.size>1){
-                                type2 = it.types[1].type.name
-                            }
-                            else  type2 = "null"
+                    if(it.types.size>1){
+                         type2 = it.types[1].type.name
+                    }
+                    else  type2 = "null"
 
 
-                            var sprite:String =""
-                            if(it.sprites.other.text.frontdefault!= null)
-                                sprite = it.sprites.other.text.frontdefault
-                            PokemonObject._pokeList.value = PokemonObject._pokeList.value.toMutableList().apply {
-                                add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, sprite, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate, genderRate = genderInfo,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat,generationNum,abilities,forms))
-                            } as ArrayList<Pokemon>
-                        }}
+                    var sprite:String =""
+                    if(it.sprites.other.text.frontdefault!= null)
+                        sprite = it.sprites.other.text.frontdefault
+                    PokemonObject._pokeList.value = PokemonObject._pokeList.value.toMutableList().apply {
+                        add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, sprite, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate, genderRate = genderInfo,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat,generationNum,abilities,forms))
+                    } as ArrayList<Pokemon>
+                }}
 
                     PokemonObject.count++
 
@@ -347,3 +347,5 @@ private fun calculateGenderRate(genderRate: Int): GenderRate {
         } else -> GenderRate(Gender.UNKNOWN, 0.0, 0.0)
     }
 }
+
+

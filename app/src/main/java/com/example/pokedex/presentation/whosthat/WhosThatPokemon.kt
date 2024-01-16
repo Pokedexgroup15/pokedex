@@ -1,23 +1,33 @@
 package com.example.pokedex.presentation.userInterface.whosthat
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
@@ -26,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.toRect
@@ -52,6 +63,7 @@ import com.example.pokedex.presentation.searchPageViewModel
 import com.example.pokedex.presentation.theme.Font
 import com.example.pokedex.presentation.userInterface.HomePage.getTypeIconwithID
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import coil.compose.rememberImagePainter
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -97,33 +109,33 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
         }
 
 
-
         pokemonInfo?.sprites?.other?.text?.frontdefault?.let { imageUrl ->
-            val imageModifier = Modifier
-                .size(400.dp)
-                .align(Alignment.CenterHorizontally)
-                .then(
-                    if (!isGuessCorrect) {
-                        Modifier.drawWithContent {
-                            drawContent()
-                            drawRect(
-                                color = Color.Black.copy(alpha = 0.8f),
-                                size = this.size
-                            )
-                        }
-                    } else Modifier
-                )
-
-
-            AsyncImage(
-                model = imageUrl, contentDescription = "Pokemon",
+            Box(
                 modifier = Modifier
                     .size(400.dp)
                     .align(Alignment.CenterHorizontally)
-                    .then(imageModifier)
-            )
+            ) {
+                Image(
+                    painterResource(id = R.drawable.whosthatpokemonbackground),
+                    modifier = Modifier.fillMaxSize(),
+                    contentDescription = null,
+            contentScale = ContentScale.Crop
+                )
+                if (!isGuessCorrect) {
+                    AsyncImage(
+                        model = imageUrl,
+                        contentDescription = "Pokemon",
+                        colorFilter = ColorFilter.tint(Color.Black),
+                        modifier = Modifier.matchParentSize()
+                    )
+                } else {
+                    AsyncImage(
+                        model = imageUrl, contentDescription = "Pokemon",
+                        modifier = Modifier.matchParentSize()
+                    )
+                }
+            }
         }
-
 
         /* pokemonInfo?.sprites?.other?.text?.frontdefault?.let{imageUrl ->
             val imageModifier = if(!isGuessCorrect){
@@ -144,35 +156,72 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
         }*/
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             var text by remember { mutableStateOf("") }
-            OutlinedTextField(
+            TextField(
                 value = viewModel.guessAttempt, onValueChange = { viewModel.guessAttempt = it },
                 label = { Text("Enter Pokemon") },
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 18.dp)
+                    .padding(horizontal = 16.dp, vertical = 5.dp)
+                    .clip(RoundedCornerShape(20.dp))
             )
             Button(
-                onClick = { viewModel.checkGuess() },
-                modifier = Modifier.padding(vertical = 18.dp)
-            ) {
-                Text("Enter")
+                onClick = { viewModel.checkGuess()
+                            showIncorrectMessage=!viewModel.isGuessCorrect && viewModel.guessAttempt.isNotEmpty()},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent
+                ),
+                modifier = Modifier
+                    .padding(vertical = 1.dp)
+                    .background(color = Color.Transparent)
+
+                    )
+             {
+                Text("Submit", color=Color.Black, fontSize = 25.sp,
+                    modifier = Modifier
+                        .border(
+                            width = 1.dp,
+                            color = Color.Black,
+                            shape = RoundedCornerShape(20.dp)
+                        )
+                        .padding(10.dp)
+                )
             }
+            Divider(
+                color = Color.Black,
+                thickness = 1.5.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            )
 
             Button(
-                onClick = { viewModel.resetGame() },
+                onClick = { viewModel.resetGame()
+                            showIncorrectMessage=false},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent
+                ),
+                modifier = Modifier
+                    .padding(vertical= 1.dp)
+
             )
             {
-                Text("Try a different Pokemon?")
+                Text("Try a different Pokemon?", color=Color.Black, fontSize = 20.sp)
             }
 
 
             if (isGuessCorrect) {
-                Text("That's Right! It's ${pokemonInfo?.name}")
-                Button(onClick = { viewModel.resetGame() }) {
-                    Text("Play again?")
+                Text("That's Right! It's ${pokemonInfo?.name}!", fontSize = 25.sp, color = Color(0xFF38A552))
+                Button(onClick = { viewModel.resetGame() },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent)
+                ) {
+                    Text("Play again?", color=Color.Black, fontSize = 20.sp)
                 }
             } else {
+                if (showIncorrectMessage){
+                    Text(text = "That is incorrect... try again?", color=Color.Red)
+                }
 
             }
         }

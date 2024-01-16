@@ -1,8 +1,9 @@
 package com.example.pokedex.domain
 
 
-import com.example.pokedex.Gender
 import com.example.pokedex.data.GenderRate
+import com.example.pokedex.data.Abilities
+import com.example.pokedex.data.Generation
 
 
 data class Pokemon(
@@ -24,23 +25,4 @@ data class Pokemon(
     val generation: Int,
     val abilities: ArrayList<String>,
     val forms: ArrayList<String>
-)
-data class GenderRate(
-    val id: Int,
-    val gender: Gender,
-    val maleRatio: Double,
-    val femaleRatio: Double,
-
-)
-
-
-
-/*
-@Entity("Pokemons")
-data class Favourite(
-    @PrimaryKey(autoGenerate = true)
-
-    val name: String
-)
-
- */
+ )
