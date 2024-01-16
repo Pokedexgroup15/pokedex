@@ -103,6 +103,7 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
             }
             Text(
                 text = "Who's that Pokemon?!",
+                fontFamily= Font.rudaFontFamily,
                 fontWeight = FontWeight.Bold,
                 fontSize = 30.sp,
                 modifier = Modifier
@@ -185,7 +186,7 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                     )
                     )
              {
-                Text("Submit", color=Color.Black, fontSize = 20.sp,
+                Text("Submit", color=Color.Black, fontSize = 20.sp, fontFamily = Font.rudaFontFamily
                     //modifier = Modifier
                       //  .border(
                         //    width = 1.dp,
@@ -208,7 +209,7 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
 
             if (isGuessCorrect && pokemonInfo?.name != null) {
                 val displayName = pokemonInfo.name.replaceFirstChar{if (it.isLowerCase()) it.titlecase() else it.toString()}
-                Text("That's Right! It's ${displayName}!", fontSize = 25.sp, color = Color(0xFF38A552))
+                Text("That's Right! It's ${displayName}!", fontSize = 25.sp, fontFamily = Font.rudaFontFamily, color = Color(0xFF38A552))
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = { viewModel.resetGame() },
                     colors = ButtonDefaults.buttonColors(
@@ -221,11 +222,11 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
 
                 ) {
                     Spacer(modifier = Modifier.height(16.dp))
-                    Text("Play again?", color=Color.Black, fontSize = 15.sp)
+                    Text("Play again?", color=Color.Black, fontSize = 15.sp, fontFamily = Font.rudaFontFamily)
                 }
             } else {
                 if (showIncorrectMessage){
-                    Text(text = "That is incorrect... try again?", fontSize= 25.sp, color=Color.Red)
+                    Text(text = "That is incorrect... try again?", fontSize= 25.sp, fontFamily=Font.rudaFontFamily, color=Color.Red)
                 }
 
             }
@@ -250,7 +251,7 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
             )
 
             {
-                Text("Try a different Pokemon?", color=Color.Black, fontSize = 15.sp)
+                Text("Try a different Pokemon?", color=Color.Black, fontFamily = Font.rudaFontFamily, fontSize = 15.sp)
             }
 
             Spacer(modifier = Modifier.height(20.dp))
