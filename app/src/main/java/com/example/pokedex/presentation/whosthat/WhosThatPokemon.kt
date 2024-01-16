@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -162,29 +163,35 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 5.dp)
+                    .padding(horizontal = 16.dp, vertical = 4.dp)
                     .clip(RoundedCornerShape(20.dp))
             )
             Button(
                 onClick = { viewModel.checkGuess()
                             showIncorrectMessage=!viewModel.isGuessCorrect && viewModel.guessAttempt.isNotEmpty()},
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
+                    containerColor = Color(0xFFE6F3FF)
                 ),
                 modifier = Modifier
                     .padding(vertical = 1.dp)
-                    .background(color = Color.Transparent)
-
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 4.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .border(
+                        width = 1.dp,
+                        color = Color.Black,
+                        shape = RoundedCornerShape(20.dp)
+                    )
                     )
              {
                 Text("Submit", color=Color.Black, fontSize = 25.sp,
-                    modifier = Modifier
-                        .border(
-                            width = 1.dp,
-                            color = Color.Black,
-                            shape = RoundedCornerShape(20.dp)
-                        )
-                        .padding(10.dp)
+                    //modifier = Modifier
+                      //  .border(
+                        //    width = 1.dp,
+                          //  color = Color.Black,
+                            //shape = RoundedCornerShape(20.dp)
+                        //)
+                        //.padding(10.dp)
                 )
             }
             Divider(
@@ -194,28 +201,42 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
             )
-
+            Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = { viewModel.resetGame()
                             showIncorrectMessage=false},
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
+                    containerColor = Color(0xFFE6F3FF)
                 ),
                 modifier = Modifier
-                    .padding(vertical= 1.dp)
+                    .padding(vertical = 1.dp)
+                    .border(
+                        width = 1.dp,
+                        color = Color.Black,
+                        shape = RoundedCornerShape(20.dp)
+                    )
 
             )
+
             {
                 Text("Try a different Pokemon?", color=Color.Black, fontSize = 20.sp)
             }
 
+            Spacer(modifier = Modifier.height(16.dp))
 
             if (isGuessCorrect) {
                 Text("That's Right! It's ${pokemonInfo?.name}!", fontSize = 25.sp, color = Color(0xFF38A552))
+                Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = { viewModel.resetGame() },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Transparent)
+                        containerColor = Color(0xFFE6F3FF)),
+                    modifier = Modifier
+                        .border(width = 1.dp,
+                            color = Color.Black,
+                            shape = RoundedCornerShape(25.dp))
+                    
                 ) {
+                    Spacer(modifier = Modifier.height(16.dp))
                     Text("Play again?", color=Color.Black, fontSize = 20.sp)
                 }
             } else {
