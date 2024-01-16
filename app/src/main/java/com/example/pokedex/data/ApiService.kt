@@ -38,16 +38,26 @@ interface PokeApiSpecies{
 }
 
 interface PokeEveChain{
-    @GET("https://pokeapi.co/api/v2/evolution-chain/{id}")
+    @GET("evolution-chain/{id}")
 
     suspend fun getPokemonEveInfo(@Path("id") pathId: Int) : Response<PokemonEve>
 }
 
 interface PokeAbility{
-    @GET("https://pokeapi.co/api/v2/ability/{id}")
+    @GET("ability/{id}")
 
     suspend fun getPokemonAbilInfo(@Path("id") pathId: Int) : Response<PokeAbil>
 }
+interface PokeForms{
+    @GET("pokemon-form/{id}")
+
+    suspend fun getPokemonFormInfo(@Path("id") pathId: Int) : Response<PokeForm>
+}
+
+data class PokeForm(
+    val sprites : sprite,
+    val name :String
+)
 
 data class PokemonEve(
     val chain: Chain
@@ -115,7 +125,8 @@ data class PokemonInfo(
     val types: List<subType>,
     val sprites: sprite,
     val stats: List<Stats>,
-    val abilities: List<Abilities>
+    val abilities: List<Abilities>,
+    val forms: List<Species>
 )
 
 data class Abilities(
@@ -132,7 +143,8 @@ data class Stats(
 )
 
 data class sprite(
-    val other: Other
+    val other: Other,
+    val front_default: String?
 )
 data class Other(
     @SerializedName("official-artwork")
@@ -178,6 +190,7 @@ class RepositoryImpl: ViewModel() {
     val speciesApi = RetrofitBase.getInstance().create(PokeApiSpecies::class.java)
     val eveApi = RetrofitBase.getInstance().create(PokeEveChain::class.java)
       val abilApi = RetrofitBase.getInstance().create(PokeAbility::class.java)
+      val formApi =   RetrofitBase.getInstance().create(PokeForms::class.java)
 
         viewModelScope.launch(Dispatchers.IO){
 //            val fileName = "json/pokemonCache.json"
@@ -188,10 +201,46 @@ class RepositoryImpl: ViewModel() {
             var i : Int = start
             GlobalScope.launch {
                 while(i <= end) {
-                val result = quotesApi.getPokemonInfo(i)
-                val result2 = speciesApi.getPokemonSpeciesInfo(i)
 
-                if(i<549){
+                    var j =i+10000
+                    if(j<=10448){
+                        val resultForm = formApi.getPokemonFormInfo(j)
+                        resultForm.body()?.let {
+                            if (it.sprites.front_default != null) {
+                                PokemonObject.formMap.put(it.name, it.sprites.front_default)
+                            }
+                        }
+                        if(j<=10277) {
+                            val result = quotesApi.getPokemonInfo(j)
+                            result.body()?.let {
+                                if (it.sprites.other.text.frontdefault != null) {
+                                    PokemonObject.varianceMap.put(it.name, it.sprites.other.text.frontdefault)
+                                }
+                            }
+                        }
+                    }
+
+
+                    var forms = ArrayList<String>()
+
+                    val result = quotesApi.getPokemonInfo(i)
+                val result2 = speciesApi.getPokemonSpeciesInfo(i)
+                    val resultForm = formApi.getPokemonFormInfo(i)
+                    Log.d("form2", ""+resultForm)
+                    Log.d("form2", ""+resultForm.body())
+                    Log.d("form2",""+resultForm.body()?.sprites)
+
+                    resultForm.body()
+                            ?.let {
+                                if(it.sprites.front_default!=null) {
+                                    PokemonObject.formMap[resultForm.body()!!.name] =
+                                        it.sprites.front_default
+                                    Log.d("form2", it.name)
+                                }
+                    }
+
+
+                    if(i<549){
                     val result3 = eveApi.getPokemonEveInfo(i)
                     result3.body()?.let {
 
@@ -245,7 +294,6 @@ break
 
                     result2.body()?.let {
 
-                    var forms = ArrayList<String>()
                         var i3=0
                         while(i3<it.varieties.size){
                             forms.add(it.varieties[i3].pokemon.name)
@@ -291,6 +339,12 @@ break
                         val genderInfo=calculateGenderRate(it.gender_rate)
 
                 result.body()?.let { Log.d("test5", it.types[0].type.name+" "+it.name)
+                    var i4 = 0
+                    while (i4<it.forms.size){
+                        forms.add(it.forms[i4].name)
+                        i4++
+                    }
+
                    var i3=0
 
                     var abilities = ArrayList<String>()
@@ -318,10 +372,28 @@ break
                 }}
 
                     PokemonObject.count++
-
+Log.d("inf",""+i)
                     i++
                 }
 
+                var i =10001
+
+//                while(i<=10448){
+//                    val resultForm = formApi.getPokemonFormInfo(i)
+//                    resultForm.body()?.let {
+//                        if (it.sprites.front_default != null) {
+//                            PokemonObject.formMap.put(it.name, it.sprites.front_default)
+//                        }
+//                    }
+//                    if(i<=10277) {
+//                        val result = quotesApi.getPokemonInfo(i)
+//                        result.body()?.let {
+//                            if (it.sprites.other.text.frontdefault != null) {
+//                                PokemonObject.varianceMap.put(it.name, it.sprites.other.text.frontdefault)
+//                            }
+//                        }
+//                    }
+//                }
 
             }
 
