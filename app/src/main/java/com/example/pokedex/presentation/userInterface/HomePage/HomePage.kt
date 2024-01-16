@@ -59,6 +59,7 @@ import com.example.pokedex.presentation.searchPageViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.SortOption
 import androidx.compose.runtime.collectAsState
+import com.example.pokedex.data.local.LocalPokemon
 
 
 @Composable
@@ -156,8 +157,8 @@ fun PokemonList(navController: NavHostController, viewModel: searchPageViewModel
 fun getTypeIconwithID(type: String): Int {
     return when (type) {
         "bug" -> R.drawable.bug
-        "dar" -> R.drawable.dar
-        "dra" -> R.drawable.dra
+        "dark" -> R.drawable.dar
+        "dragon" -> R.drawable.dra
         "electric" -> R.drawable.ele
         "fairy" -> R.drawable.fai
         "fighting" -> R.drawable.fig
@@ -281,12 +282,19 @@ fun pokemonPictureAndLogo(modifier: Modifier, pokemon: Pokemon, viewModel: searc
                 .clickable {
                     Favorized = !Favorized
                     if (Favorized) {
-                        pokemon?.let { viewModel.PokemonsFave.value.add(it) }
-                    } else {viewModel.PokemonsFave.value.remove(pokemon)
-                        //viewModel.toggleFavourite(pokemon)
+                        pokemon?.let { viewModel.PokemonsFave.value.add(it)
+
+                        }
+                    } else
+                    {viewModel.PokemonsFave.value.remove(pokemon)
 
 
                     }
+
+                    viewModel.toggleFavourite(pokemon,Favorized)
+
+
+
                 }
         )
     }
