@@ -36,31 +36,7 @@ class searchPageViewModel(
     var PokemonsFilter = PokemonObject.filteredList
 
     init {
-        viewModelScope.launch {
-            val flow: Flow<List<LocalPokemon>> = dao.getAll()
 
-            // Collect the elements emitted by the Flow
-            flow.collect { localPokemonList ->
-                // Now you have the list of LocalPokemon
-                val arrayList = ArrayList(localPokemonList)
-
-                // Do something with the ArrayList
-                val data = arrayList
-                val slut = data.size
-
-                // Use indices instead of 1..slut to avoid index out-of-bounds error
-                for (gen in data.indices) {
-                    val pk = deserializeFromJson(data[gen].info)
-
-                    // Use viewModelScope.launch to update LiveData in the ViewModel
-                    viewModelScope.launch {
-                        PokemonObject._faveList.value = PokemonObject.faveList.value.toMutableList().apply {
-                            add(pk)
-                        } as ArrayList<Pokemon>
-                    }
-                }
-            }
-        }
     }
 
     fun getData(isFavorite: Boolean, sortOption: SortOption? = null): StateFlow<ArrayList<Pokemon>> {
@@ -130,7 +106,38 @@ Log.d("filterr",""+PokemonObject.filter)
             }
         }
 
-    }}
+    }
+
+fun initialize(){
+
+    viewModelScope.launch {
+        val flow: Flow<List<LocalPokemon>> = dao.getAll()
+
+        // Collect the elements emitted by the Flow
+        flow.collect { localPokemonList ->
+            // Now you have the list of LocalPokemon
+            val arrayList = ArrayList(localPokemonList)
+
+            // Do something with the ArrayList
+            val data = arrayList
+            val slut = data.size
+
+            // Use indices instead of 1..slut to avoid index out-of-bounds error
+            for (gen in data.indices) {
+                val pk = deserializeFromJson(data[gen].info)
+
+                // Use viewModelScope.launch to update LiveData in the ViewModel
+                viewModelScope.launch {
+                    PokemonObject._faveList.value = PokemonObject.faveList.value.toMutableList().apply {
+                        add(pk)
+                    } as ArrayList<Pokemon>
+                }
+            }
+        }
+    }
+
+
+}}
     fun serializeToJson(pokemon: Pokemon): String {
         val gson = Gson()
         return gson.toJson(pokemon)

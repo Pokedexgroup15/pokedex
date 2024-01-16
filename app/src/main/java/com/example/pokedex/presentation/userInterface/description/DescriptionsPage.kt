@@ -229,7 +229,6 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                                             PokemonObject._faveList.value.toMutableList().apply {
                                                 add(it)
                                             }
-                                            viewModel.toggleFavourite(pokemon, Favorized )
 
                                         } else {
                                             PokemonObject._faveList.value.toMutableList().apply {

@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
  private   val database by lazy {
      Room.databaseBuilder(
          applicationContext,
-         PokemonDatabase::class.java, "pokemon_database"
+         PokemonDatabase::class.java, "favourite_database"
      ).fallbackToDestructiveMigration()
          .build()
 
@@ -63,7 +63,7 @@ factoryProducer =  {
         super.onCreate(savedInstanceState)
 
         RepositoryImpl(database.dao).addPokemon(1,1025,true,true)
-
+viewmodel.initialize()
 
         setContent {
             PokedexTheme {
