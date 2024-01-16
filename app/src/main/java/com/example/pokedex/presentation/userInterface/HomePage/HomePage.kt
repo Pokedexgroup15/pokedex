@@ -156,8 +156,8 @@ fun PokemonList(navController: NavHostController, viewModel: searchPageViewModel
 fun getTypeIconwithID(type: String): Int {
     return when (type) {
         "bug" -> R.drawable.bug
-        "dar" -> R.drawable.dar
-        "dra" -> R.drawable.dra
+        "dark" -> R.drawable.dar
+        "dragon" -> R.drawable.dra
         "electric" -> R.drawable.ele
         "fairy" -> R.drawable.fai
         "fighting" -> R.drawable.fig
