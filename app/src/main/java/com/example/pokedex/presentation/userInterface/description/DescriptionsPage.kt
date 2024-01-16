@@ -380,6 +380,7 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
 
                         pokemon.abilities.forEach { ability ->
                             val isDescriptionVisible = descriptionVisibilityMap[ability] ?: false
+                            val abilityDescription = PokemonObject.abilMap[ability] ?: "No description available"
 
                             Row(
                                 verticalAlignment = Alignment.CenterVertically
@@ -404,10 +405,10 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                                 Box(
                                     modifier = Modifier
                                         .padding(8.dp)
-                                        .border(1.dp, Color.Gray)
+                                        .border(1.dp, Color.LightGray)
                                 ) {
                                     Text(
-                                        "Description for $ability",
+                                        text = abilityDescription,
                                         modifier = Modifier.padding(8.dp),
                                         fontFamily = Font.rudaFontFamily
                                     )
