@@ -104,8 +104,8 @@ fun homePage(navController: NavHostController, viewModel: searchPageViewModel, f
                 modifier = Modifier
                     .size(32.dp)
                     .clickable {
-                    navController.navigate(Route.Search.path)
-                })
+                        navController.navigate(Route.Search.path)
+                    })
         }
         //PokemonList(navController,viewModel, false)
             //PokemonList(navController,viewModel, filterViewModel = FilterViewModel(), false, pokemons1 =filterViewModel.getSortedPokemonList() )
@@ -185,19 +185,19 @@ fun pokemonBox(modifier: Modifier,
     Box(
         modifier = modifier
             .clickable {
-               viewModel.setPokemon(pokemon)
-                navController.navigate(Route.Pokemon.path){
-                // avoid building up a large stack of destinations
-                // on the back stack as users select items
-                popUpTo(navController.graph.findStartDestination().id) {
-                    saveState = true
+                viewModel.setPokemon(pokemon)
+                navController.navigate(Route.Pokemon.path) {
+                    // avoid building up a large stack of destinations
+                    // on the back stack as users select items
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    // Avoid multiple copies of the same destination when
+                    // reselecting the same item
+                    launchSingleTop = true
+                    // Restore state when reselecting a previously selected item
+                    restoreState = true
                 }
-                // Avoid multiple copies of the same destination when
-                // reselecting the same item
-                launchSingleTop = true
-                // Restore state when reselecting a previously selected item
-                restoreState = true
-            }
             }
             .background(Color(0xFFE6F3FF))
     ) {
@@ -282,8 +282,18 @@ fun pokemonPictureAndLogo(modifier: Modifier, pokemon: Pokemon, viewModel: searc
                 .clickable {
                     Favorized = !Favorized
 
+                    if (Favorized) {
+                        pokemon?.let {
+                            viewModel.PokemonsFave.value.add(it)
 
-                    viewModel.toggleFavourite(pokemon,Favorized)
+
+                        }
+                    } else {
+                        viewModel.PokemonsFave.value.remove(pokemon)
+
+
+                    }
+
 
 
 

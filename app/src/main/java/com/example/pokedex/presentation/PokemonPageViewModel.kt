@@ -1,6 +1,7 @@
 package com.example.pokedex.presentation
 
 import android.util.Log
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
@@ -18,6 +19,8 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -34,8 +37,10 @@ class searchPageViewModel(
     var PokemonsFave = PokemonObject.faveList
 
     var PokemonsFilter = PokemonObject.filteredList
+    lateinit var flow: Flow<List<LocalPokemon>>
 
     init {
+
 
     }
 
@@ -111,7 +116,7 @@ Log.d("filterr",""+PokemonObject.filter)
 fun initialize(){
 
     viewModelScope.launch {
-        val flow: Flow<List<LocalPokemon>> = dao.getAll()
+        flow = dao.getAll()
 
         // Collect the elements emitted by the Flow
         flow.collect { localPokemonList ->
