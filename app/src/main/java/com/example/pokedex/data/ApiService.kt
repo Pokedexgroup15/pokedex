@@ -235,8 +235,7 @@ class RepositoryImpl(  private val dao: PokemonDAO): ViewModel() {
                     resultForm.body()
                             ?.let {
                                 if(it.sprites.front_default!=null) {
-                                    PokemonObject.formMap[resultForm.body()!!.name] =
-                                        it.sprites.front_default
+                                    PokemonObject.formMap[resultForm.body()!!.name] = it.sprites.front_default
                                     Log.d("form2", it.name)
                                 }
                     }
@@ -298,7 +297,9 @@ break
 
                         var i3=0
                         while(i3<it.varieties.size){
+                            if(it.varieties[i3].pokemon.name!=result.body()!!.name){
                             forms.add(it.varieties[i3].pokemon.name)
+                            }
                             i3++
                         }
 
@@ -343,7 +344,9 @@ break
                 result.body()?.let { Log.d("test5", it.types[0].type.name+" "+it.name)
                     var i4 = 0
                     while (i4<it.forms.size){
-                        forms.add(it.forms[i4].name)
+                        if(it.forms[i4].name!= result.body()!!.name){
+                            forms.add(it.forms[i4].name)
+                        }
                         i4++
                     }
 
