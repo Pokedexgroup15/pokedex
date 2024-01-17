@@ -60,6 +60,7 @@ import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.SortOption
 import androidx.compose.runtime.collectAsState
 import com.example.pokedex.data.local.LocalPokemon
+import com.example.pokedex.presentation.serializeToJson
 
 
 @Composable
@@ -293,6 +294,7 @@ fun pokemonPictureAndLogo(modifier: Modifier, pokemon: Pokemon, viewModel: searc
 
 
                     }
+
 
 
 
