@@ -41,6 +41,7 @@ private var correctGuessesInARow by mutableStateOf(0)
         } else {
             isGuessCorrect = false
             correctGuessesInARow = 0
+            totalPoints = 0
         }
     }
 

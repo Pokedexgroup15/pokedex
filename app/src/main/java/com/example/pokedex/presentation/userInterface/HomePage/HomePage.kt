@@ -281,15 +281,7 @@ fun pokemonPictureAndLogo(modifier: Modifier, pokemon: Pokemon, viewModel: searc
                 .size(22.dp)
                 .clickable {
                     Favorized = !Favorized
-                    if (Favorized) {
-                        pokemon?.let { viewModel.PokemonsFave.value.add(it)
 
-                        }
-                    } else
-                    {viewModel.PokemonsFave.value.remove(pokemon)
-
-
-                    }
 
                     viewModel.toggleFavourite(pokemon,Favorized)
 

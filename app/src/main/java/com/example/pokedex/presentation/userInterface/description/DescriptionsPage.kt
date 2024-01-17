@@ -230,21 +230,11 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                                 .clickable {
                                     Favorized = !Favorized
                                     pokemon?.let {
-                                        val updatedFaveList = if (Favorized) {
-                                            PokemonObject._faveList.value
-                                                .toMutableList()
-                                                .apply {
-                                                    add(it)
-                                                }
-                                        } else {
-                                            PokemonObject._faveList.value
-                                                .toMutableList()
-                                                .apply {
-                                                    remove(it)
-                                                }
-                                        }
-                                        PokemonObject._faveList.value =
-                                            updatedFaveList as ArrayList<Pokemon>
+
+
+                                        viewModel.toggleFavourite(pokemon,Favorized)
+
+
                                     }
                                 }
                                 .requiredSize(36.dp, 36.dp)
