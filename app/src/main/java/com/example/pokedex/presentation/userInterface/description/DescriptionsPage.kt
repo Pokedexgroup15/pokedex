@@ -2,7 +2,6 @@ package com.example.pokedex
 
 
 
-import android.content.Intent
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -24,9 +23,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
@@ -34,7 +31,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,8 +39,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -59,19 +53,16 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Popup
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.pokedex.data.GenderRate
-import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.presentation.navigation.Route
 import com.example.pokedex.presentation.userInterface.HomePage.EvolutionBar
 import com.example.pokedex.presentation.userInterface.HomePage.getTypeIconwithID
@@ -579,12 +570,13 @@ fun SpiderChart(stats: Map<String, Int>, modifier: Modifier = Modifier, size: Dp
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            //Had to use toPx() because dp won't work on canvas with height and width.
+            //Had to use toPx() because dp won't work on canvas with height and width. so it's pixel based.
             val centerX = size.toPx() / 2f
             val centerY = size.toPx() / 2f
             val maxRadius = (size.toPx() / 3).coerceAtMost(size.toPx() / 3)
             val ringRadius = maxRadius / numberOfRings
-            // Draws 5 rings with size max 100
+            // Draw 5 ring within the canvas, based on pixel.
+            //If more time,try to go away from toPx()
             for (i in 1..numberOfRings) {
                 drawCircle(
                     color = Color.Gray.copy(alpha = 0.3f),
@@ -608,22 +600,23 @@ fun SpiderChart(stats: Map<String, Int>, modifier: Modifier = Modifier, size: Dp
                     end = Offset(x.toFloat(), y.toFloat()),
                     strokeWidth = 2f
                 )
-                // calc pos based on center y and x
-                val titleDistance = maxRadius + 40f
-                val titleX = centerX + titleDistance * cos(angle)
-                val titleY = centerY + titleDistance * sin(angle)
+                // calc pos of the text of "overtitle" such as special defense fx.
+                val titleDistance = maxRadius + 60f
+                val titleXpos = centerX + titleDistance * cos(angle)
+                val titleYpos = centerY + titleDistance * sin(angle)
                 // workaround hack, not the best, but works with key collection.
+                //ChatGPT helped created the below code, to paint onto the canvas with text drawing.
+                //ChatGPT was used since canvas was unknown territory.
                 drawContext.canvas.nativeCanvas.drawText(
                     pokeStatEntry.key,
-                    titleX.toFloat(),
-                    titleY.toFloat(),
+                    titleXpos.toFloat(),
+                    titleYpos.toFloat(),
                     Paint().apply {
                         color = Color.Black.toArgb()
                         textSize = 12.sp.toPx()
                         textAlign = Paint.Align.CENTER
                     }
                 )
-
 
                 val statValueX = centerX + titleDistance * cos(angle)
                 val statValueY = centerY + titleDistance * sin(angle) + 60f
@@ -645,6 +638,7 @@ fun SpiderChart(stats: Map<String, Int>, modifier: Modifier = Modifier, size: Dp
                     path.lineTo(x.toFloat(), y.toFloat())
                 }
             }
+            //ChatGPT generated code help stopped here.
             // important line, fragile.
             path.close()
 
