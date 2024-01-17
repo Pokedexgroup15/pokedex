@@ -334,8 +334,17 @@ fun VersionBar(navController: NavHostController,  viewModel: searchPageViewModel
                             Box(
                                 modifier = Modifier.padding(10.dp), // Increase the padding value as needed
                             ) {
-                                val imageUrl = /* Load the image URL for the selected version here */
-                                    EvolutionsPicture(pokemon.pictureURL)
+                                var imageUrl = pokemon.pictureURL
+                                Log.d("form",""+version)
+                                Log.d("form",""+PokemonObject.formMap[version])
+                                if (PokemonObject.formMap[version]!= null ) {
+                                    imageUrl = PokemonObject.formMap[version].toString()
+                                }
+                                if (PokemonObject.varianceMap[version]!= null ) {
+                                    imageUrl = PokemonObject.varianceMap[version].toString()
+                                }
+
+                                    EvolutionsPicture(imageUrl)
                             }
                         }
                     }

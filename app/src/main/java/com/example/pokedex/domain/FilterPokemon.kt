@@ -18,7 +18,7 @@ class FilterPokemon {
             var i = 0
         Log.d("filter"," "+selectedTypes.value+" "+ selectedCatchRate.value +" "+ selectedGeneration.value)
        while( PokemonObject.pokeList.value.size>i){
-           if((PokemonObject.pokeList.value[i].generation ==selectedGeneration.value || selectedGeneration.value==-1) &&(selectedTypes.value.isEmpty() ||selectedTypes.value.contains(convertNumberType(PokemonObject.pokeList.value[i].type1)) ||selectedTypes.value.contains(convertNumberType(PokemonObject.pokeList.value[i].type2))) && (selectedCatchRate.value.isEmpty() || selectedCatchRate.value.contains(convertNumberGrowthRate(PokemonObject.pokeList.value[i].growth_rate)) )) {
+           if((PokemonObject.pokeList.value[i].generation ==selectedGeneration.value || selectedGeneration.value==-1) &&((selectedTypes.value.isEmpty()) ||(selectedTypes.value.contains(convertNumberType(PokemonObject.pokeList.value[i].type1))&&(selectedTypes.value.size!=2)) ||(selectedTypes.value.contains(convertNumberType(PokemonObject.pokeList.value[i].type2)))&&(selectedTypes.value.size!=2)||((selectedTypes.value.contains(convertNumberType(PokemonObject.pokeList.value[i].type1)))&&((selectedTypes.value.contains(convertNumberType(PokemonObject.pokeList.value[i].type2)))))) && (selectedCatchRate.value.isEmpty() || selectedCatchRate.value.contains(convertNumberGrowthRate(PokemonObject.pokeList.value[i].growth_rate)) )) {
 
                PokemonObject._filteredList.value = PokemonObject.filteredList.value.toMutableList().apply {
                    add(PokemonObject.pokeList.value[i])
