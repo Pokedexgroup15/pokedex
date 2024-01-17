@@ -39,6 +39,7 @@ object PokemonObject{
     var abilMap =HashMap<String, String>()
     var formMap =HashMap<String, String?>()
     var varianceMap =HashMap<String, String?>()
+    var tempEnd = 20
 
 
 }

@@ -82,6 +82,8 @@ class FilterPokemon {
         return type
     }
 
+
+
     fun filterActive(selectedTypes: MutableState<List<Int>>, selectedCatchRate: MutableState<List<String>>, selectedGeneration: MutableState<Int>):Boolean{
         if (!(selectedTypes.value.isEmpty() && selectedCatchRate.value.isEmpty() && selectedGeneration.value ==-1)) {
             PokemonObject.filter = true

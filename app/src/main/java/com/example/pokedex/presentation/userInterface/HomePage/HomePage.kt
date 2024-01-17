@@ -1,5 +1,7 @@
 package com.example.pokedex.presentation.userInterface.HomePage
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -59,7 +62,9 @@ import com.example.pokedex.presentation.searchPageViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.SortOption
 import androidx.compose.runtime.collectAsState
+import com.example.pokedex.PokemonObject
 import com.example.pokedex.data.local.LocalPokemon
+import kotlinx.coroutines.flow.sample
 
 
 @Composable
@@ -115,13 +120,16 @@ fun homePage(navController: NavHostController, viewModel: searchPageViewModel, f
 }
 
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 
 fun PokemonList(navController: NavHostController, viewModel: searchPageViewModel, isFavorite: Boolean, sortOption: SortOption?) {
     val pokemons by viewModel.getData(isFavorite).collectAsState()
+    val listState = rememberLazyListState()
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        state=listState
     ) {
         items(pokemons.chunked(2)) { chunkedPokemons ->
             Row(
@@ -151,7 +159,20 @@ fun PokemonList(navController: NavHostController, viewModel: searchPageViewModel
                     )
                 }
             }
-        }
+//            Log.d("pag",""+listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index)
+//            Log.d("pag",""+pokemons.size)
+
+            if (listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index?.toDouble() == (pokemons.size*0.5 - 1)) {
+//               Log.d("pag","size"+pokemons.size*2)
+//                Log.d("pag","temp"+PokemonObject.tempEnd)
+
+                if((pokemons.size)==PokemonObject.tempEnd) {
+                    PokemonObject.tempEnd = pokemons.size  + 20
+                    Log.d("pag", "" + PokemonObject.tempEnd)
+                }
+
+            }
+            }
     }
 }
 fun getTypeIconwithID(type: String): Int {

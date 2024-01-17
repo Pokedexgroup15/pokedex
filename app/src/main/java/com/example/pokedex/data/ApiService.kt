@@ -3,20 +3,17 @@ package com.example.pokedex.data
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.pokedex.Gender
-import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.PokemonObject
 import com.example.pokedex.data.local.PokemonDAO
+import com.example.pokedex.domain.Pokemon
+import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.*
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
-import kotlin.math.log
-import com.example.pokedex.presentation.userInterface.filterPage.ResetViewModel
-import com.google.gson.Gson
-import retrofit2.create
 
 object RetrofitBase {
 
@@ -150,9 +147,11 @@ data class sprite(
 )
 data class Other(
     @SerializedName("official-artwork")
-    val text : Offical
+    val official : Official,
+    val home : Official
+
 )
-data class Offical(
+data class Official(
     @SerializedName("front_default")
     val frontdefault: String
     )
@@ -191,8 +190,8 @@ class RepositoryImpl(  private val dao: PokemonDAO): ViewModel() {
     val quotesApi = RetrofitBase.getInstance().create(PokeApi::class.java)
     val speciesApi = RetrofitBase.getInstance().create(PokeApiSpecies::class.java)
     val eveApi = RetrofitBase.getInstance().create(PokeEveChain::class.java)
-      val abilApi = RetrofitBase.getInstance().create(PokeAbility::class.java)
-      val formApi =   RetrofitBase.getInstance().create(PokeForms::class.java)
+    val abilApi = RetrofitBase.getInstance().create(PokeAbility::class.java)
+    val formApi =   RetrofitBase.getInstance().create(PokeForms::class.java)
 
         viewModelScope.launch(Dispatchers.IO){
 //            val fileName = "json/pokemonCache.json"
@@ -204,6 +203,7 @@ class RepositoryImpl(  private val dao: PokemonDAO): ViewModel() {
             GlobalScope.launch {
                 while(i <= end) {
 
+                    while(i<=PokemonObject.tempEnd||(PokemonObject.filter&&PokemonObject.filteredList.value.size<PokemonObject.tempEnd)){
                     var j =i+10000
                     if(j<=10448){
                         val resultForm = formApi.getPokemonFormInfo(j)
@@ -215,8 +215,8 @@ class RepositoryImpl(  private val dao: PokemonDAO): ViewModel() {
                         if(j<=10277) {
                             val result = quotesApi.getPokemonInfo(j)
                             result.body()?.let {
-                                if (it.sprites.other.text.frontdefault != null) {
-                                    PokemonObject.varianceMap.put(it.name, it.sprites.other.text.frontdefault)
+                                if (it.sprites.other.official.frontdefault != null) {
+                                    PokemonObject.varianceMap.put(it.name, it.sprites.other.official.frontdefault)
                                 }
                             }
                         }
@@ -283,7 +283,7 @@ class RepositoryImpl(  private val dao: PokemonDAO): ViewModel() {
 
                                 if(it.effect_entries[i2].language.name=="en"){
                                     PokemonObject.abilMap.put(it.name,it.effect_entries[i2].effect)
-break
+                                    break
                                 }
                                 i2++
                             }
@@ -368,8 +368,10 @@ break
 
 
                     var sprite:String =""
-                    if(it.sprites.other.text.frontdefault!= null)
-                        sprite = it.sprites.other.text.frontdefault
+                    if(it.sprites.other.official.frontdefault!= null)
+                        sprite = it.sprites.other.official.frontdefault
+                    else
+                        sprite = it.sprites.other.home.frontdefault
                     var pk=Pokemon(it.name.replaceFirstChar { it.uppercase() }, sprite, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate, genderRate = genderInfo,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat,generationNum,abilities,forms)
 
                     //val st= serializeToJson(pk)
@@ -385,26 +387,7 @@ break
                     PokemonObject.count++
 Log.d("inf",""+i)
                     i++
-                }
-
-                var i =10001
-
-//                while(i<=10448){
-//                    val resultForm = formApi.getPokemonFormInfo(i)
-//                    resultForm.body()?.let {
-//                        if (it.sprites.front_default != null) {
-//                            PokemonObject.formMap.put(it.name, it.sprites.front_default)
-//                        }
-//                    }
-//                    if(i<=10277) {
-//                        val result = quotesApi.getPokemonInfo(i)
-//                        result.body()?.let {
-//                            if (it.sprites.other.text.frontdefault != null) {
-//                                PokemonObject.varianceMap.put(it.name, it.sprites.other.text.frontdefault)
-//                            }
-//                        }
-//                    }
-//                }
+                }}
 
             }
 
@@ -431,6 +414,14 @@ private fun calculateGenderRate(genderRate: Int): GenderRate {
     }
 }
 
+fun InternetIsConnected(): Boolean {
+    return try {
+        val command = "ping -c 1 google.com"
+        Runtime.getRuntime().exec(command).waitFor() == 0
+    } catch (e: Exception) {
+        false
+    }
+}
 
 private fun serializeToJson(pokemon: Pokemon): String {
     val gson = Gson()
