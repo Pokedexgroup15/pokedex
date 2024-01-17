@@ -59,6 +59,7 @@ import com.example.pokedex.presentation.searchPageViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.SortOption
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.graphics.RectangleShape
 import com.example.pokedex.data.local.LocalPokemon
 import com.example.pokedex.presentation.serializeToJson
 
@@ -129,8 +130,7 @@ fun PokemonList(navController: NavHostController, viewModel: searchPageViewModel
                 modifier = Modifier
                     .height(178.dp)
                     .fillMaxWidth()
-                    .padding(0.dp)
-                ,
+                    .padding(4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 chunkedPokemons.forEach { pokemon ->
@@ -139,14 +139,17 @@ fun PokemonList(navController: NavHostController, viewModel: searchPageViewModel
                             .weight(1f)
                             .background(
                                 color = Color(0xFFE6F3FF),
-                                shape = RoundedCornerShape(size = 10.dp)
+                                shape = RectangleShape
+                                //shape = RoundedCornerShape(10.dp)
                             )
                             .border(
                                 width = 1.dp,
-                                shape = RoundedCornerShape(10.dp),
-                                color = Color.Black
+                                shape = RectangleShape,
+                                //shape = RoundedCornerShape(10.dp),
+                                color = Color.LightGray
                             )
                             .padding(4.dp),
+
                         navController,
                         pokemon,viewModel
                     )
