@@ -30,6 +30,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
@@ -73,7 +74,7 @@ import coil.compose.rememberImagePainter
 fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewModel) {
     val pokemonInfo = viewModel.pokemon.value
     val isGuessCorrect = viewModel.isGuessCorrect
-    var showIncorrectMessage by remember{ mutableStateOf(false) }
+    var showIncorrectMessage by remember { mutableStateOf(false) }
 
 
     Column(
@@ -103,7 +104,7 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
             }
             Text(
                 text = "Who's that Pokemon?!",
-                fontFamily= Font.rudaFontFamily,
+                fontFamily = Font.rudaFontFamily,
                 fontWeight = FontWeight.Bold,
                 fontSize = 30.sp,
                 modifier = Modifier
@@ -117,13 +118,13 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                 modifier = Modifier
                     .size(400.dp)
                     .align(Alignment.CenterHorizontally)
-                    .border(2.dp,Color.Black)
+                    .border(2.dp, Color.Black)
             ) {
                 Image(
                     painterResource(id = R.drawable.whosthatpokemonbackground),
                     modifier = Modifier.fillMaxSize(),
                     contentDescription = null,
-            contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop
                 )
                 if (!isGuessCorrect) {
                     AsyncImage(
@@ -149,7 +150,7 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                 )
             }
             Divider(
-                color = Color.Black,
+                color = Color.LightGray,
                 thickness = 1.5.dp,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -178,108 +179,157 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
         }*/
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             var text by remember { mutableStateOf("") }
-            TextField(
-                value = viewModel.guessAttempt, onValueChange = { viewModel.guessAttempt = it },
-                label = { Text("Enter Pokemon") },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 4.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .border(2.dp, Color.Black, RoundedCornerShape(20.dp))
-            )
-            Button(
-                onClick = { viewModel.checkGuess()
-                            showIncorrectMessage=!viewModel.isGuessCorrect && viewModel.guessAttempt.isNotEmpty()},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFE6F3FF)
-                ),
-                modifier = Modifier
-                    .padding(vertical = 1.dp)
-                    .wrapContentWidth()
-                    .padding(horizontal = 10.dp, vertical = 4.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .border(
-                        width = 1.dp,
+
+            Row() {
+                TextField(
+                    value = viewModel.guessAttempt, onValueChange = { viewModel.guessAttempt = it },
+                    label = { Text("Enter Pokemon") },
+                    singleLine = true,
+                    colors = TextFieldDefaults.textFieldColors(
+                        containerColor = Color.Transparent // Set your desired background color here
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth(0.6f)
+                        .width(30.dp)
+                        .padding(horizontal = 16.dp, vertical = 4.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(2.dp, Color.LightGray, RoundedCornerShape(20.dp))
+                )
+                Button(
+                    onClick = {
+                        viewModel.checkGuess()
+                        showIncorrectMessage =
+                            !viewModel.isGuessCorrect && viewModel.guessAttempt.isNotEmpty()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFE6F3FF)
+                    ),
+                    modifier = Modifier
+                        .padding(vertical = 1.dp)
+                        .wrapContentWidth()
+                        .padding(horizontal = 10.dp, vertical = 7.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(
+                            width = 1.dp,
+                            color = Color.Gray,
+                            shape = RoundedCornerShape(20.dp)
+                        )
+                )
+                {
+                    Text(
+                        "Submit",
                         color = Color.Black,
-                        shape = RoundedCornerShape(20.dp)
-                    )
-                    )
-             {
-                Text("Submit", color=Color.Black, fontSize = 20.sp, fontFamily = Font.rudaFontFamily
-                    //modifier = Modifier
-                      //  .border(
+                        fontSize = 16.sp,
+                        fontFamily = Font.rudaFontFamily
+                        //modifier = Modifier
+                        //  .border(
                         //    width = 1.dp,
-                          //  color = Color.Black,
-                            //shape = RoundedCornerShape(20.dp)
+                        //  color = Color.Black,
+                        //shape = RoundedCornerShape(20.dp)
                         //)
                         //.padding(10.dp)
-                )
+                    )
+                }
             }
             Divider(
-                color = Color.Black,
+                color = Color.LightGray,
                 thickness = 1.5.dp,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
             )
+           // Spacer(modifier = Modifier.height(20.dp))
 
-            Spacer(modifier = Modifier.height(20.dp))
 
 
             if (isGuessCorrect && pokemonInfo?.name != null) {
-                val displayName = pokemonInfo.name.replaceFirstChar{if (it.isLowerCase()) it.titlecase() else it.toString()}
-                Text("That's Right! It's ${displayName}!", fontSize = 25.sp, fontFamily = Font.rudaFontFamily, color = Color(0xFF38A552))
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { viewModel.resetGame() },
+                val displayName =
+                    pokemonInfo.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+                Row(horizontalArrangement = Arrangement.Center) {
+                    Text(
+                        "That's Right! It's ${displayName}!",
+                        fontSize = 25.sp,
+                        fontFamily = Font.rudaFontFamily,
+                        color = Color(0xFF38A552)
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(
+                    onClick = { viewModel.resetGame() },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFE6F3FF)),
+                        containerColor = Color(0xFFE6F3FF)
+                    ),
                     modifier = Modifier
-                        .border(width = 1.dp,
+                        .border(
+                            width = 1.dp,
                             color = Color.Black,
-                            shape = RoundedCornerShape(25.dp))
+                            shape = RoundedCornerShape(25.dp)
+                        )
 
 
                 ) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text("Play again?", color=Color.Black, fontSize = 15.sp, fontFamily = Font.rudaFontFamily)
-                }
-            } else {
-                if (showIncorrectMessage){
-                    Text(text = "That is incorrect... try again?", fontSize= 25.sp, fontFamily=Font.rudaFontFamily, color=Color.Red)
-                }
-
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-
-            Button(
-                onClick = { viewModel.resetGame()
-                            showIncorrectMessage=false},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFE6F3FF)
-                ),
-                modifier = Modifier
-                    .padding(vertical = 1.dp)
-                    .border(
-                        width = 1.dp,
+                    //Spacer(modifier = Modifier.height(5.dp))
+                    Text(
+                        "Play again?",
                         color = Color.Black,
-                        shape = RoundedCornerShape(25.dp)
+                        fontSize = 15.sp,
+                        fontFamily = Font.rudaFontFamily
                     )
+                }
+                Spacer(modifier = Modifier.height(6.dp))
 
-            )
-
-            {
-                Text("Try a different Pokemon?", color=Color.Black, fontFamily = Font.rudaFontFamily, fontSize = 15.sp)
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
+            } else {
+                if (showIncorrectMessage) {
+                    Text(
+                        text = "That is incorrect... try again?",
+                        fontSize = 25.sp,
+                        fontFamily = Font.rudaFontFamily,
+                        color = Color.Red
+                    )
+                    Spacer(modifier = Modifier.height(5.dp))
+                }
 
             }
         }
+
+        //Spacer(modifier = Modifier.height(20.dp))
+
+
+        Button(
+            onClick = {
+                viewModel.resetGame()
+                showIncorrectMessage = false
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFE6F3FF)
+            ),
+            modifier = Modifier
+                .padding(vertical = 1.dp)
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = Color.Gray,
+                    shape = RoundedCornerShape(25.dp)
+                )
+
+        )
+
+        {
+            Text(
+                "Try a different Pokemon?",
+                color = Color.Black,
+                fontFamily = Font.rudaFontFamily,
+                fontSize = 15.sp
+            )
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+
     }
+}
+
+
 
 
 
