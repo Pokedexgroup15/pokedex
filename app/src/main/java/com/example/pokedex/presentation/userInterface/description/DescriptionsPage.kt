@@ -626,7 +626,7 @@ fun SpiderChart(stats: Map<String, Int>, modifier: Modifier = Modifier, size: Dp
 
 
                 val statValueX = centerX + titleDistance * cos(angle)
-                val statValueY = centerY + titleDistance * sin(angle) + 20f
+                val statValueY = centerY + titleDistance * sin(angle) + 60f
                 drawContext.canvas.nativeCanvas.drawText(
                     pokeStatValue.toString(),
                     statValueX.toFloat(),

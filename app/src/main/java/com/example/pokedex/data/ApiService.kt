@@ -297,9 +297,8 @@ break
 
                         var i3=0
                         while(i3<it.varieties.size){
-                            if(it.varieties[i3].pokemon.name!=result.body()!!.name){
                             forms.add(it.varieties[i3].pokemon.name)
-                            }
+""
                             i3++
                         }
 
