@@ -129,8 +129,8 @@ fun PokemonList(navController: NavHostController, viewModel: searchPageViewModel
             Row(
                 modifier = Modifier
                     .height(178.dp)
-                    .fillMaxWidth()
-                    .padding(4.dp),
+                    .fillMaxWidth(),
+                    //.padding(4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 chunkedPokemons.forEach { pokemon ->
