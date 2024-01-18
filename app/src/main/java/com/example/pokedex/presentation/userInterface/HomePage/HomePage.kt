@@ -74,7 +74,7 @@ fun homePage(navController: NavHostController, viewModel: searchPageViewModel, f
     //val sortedPokemons = filterViewModel.getSortedPokemonList()
     //PokemonList(navController = navController, viewModel = viewModel, pokemons = sortedPokemons, isFavorite = false)
     val currentSortOption = filterViewModel.selectedSortOption.value
-
+PokemonObject.filterFaveBool=false
 
     Column(
         modifier = Modifier
@@ -100,6 +100,7 @@ fun homePage(navController: NavHostController, viewModel: searchPageViewModel, f
                 contentDescription = "filter", modifier = Modifier
                     .size(24.dp)
                     .clickable {
+                        PokemonObject.switch=false
                         navController.navigate(Route.Filter.path)
 
                     }

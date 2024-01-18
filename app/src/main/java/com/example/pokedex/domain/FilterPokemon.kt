@@ -13,7 +13,7 @@ class FilterPokemon {
 
     fun filterList(selectedTypes: MutableState<List<Int>>, selectedCatchRate: MutableState<List<String>>, selectedGeneration: MutableState<Int>, boolean: Boolean){
 if(boolean ==true ) {
-    if(filterActive(selectedTypes,selectedCatchRate,selectedGeneration)){
+    if(filterActive(selectedTypes,selectedCatchRate,selectedGeneration,boolean)){
         PokemonObject.FaveFilter.value.clear()
         var i = 0
         Log.d("filter"," "+selectedTypes.value+" "+ selectedCatchRate.value +" "+ selectedGeneration.value)
@@ -28,7 +28,7 @@ if(boolean ==true ) {
             i++
         }}
 }else {
-    if(filterActive(selectedTypes,selectedCatchRate,selectedGeneration)){
+    if(filterActive(selectedTypes,selectedCatchRate,selectedGeneration,boolean)){
         PokemonObject.filteredList.value.clear()
         var i = 0
         Log.d("filter"," "+selectedTypes.value+" "+ selectedCatchRate.value +" "+ selectedGeneration.value)
@@ -101,19 +101,30 @@ if(boolean ==true ) {
         return type
     }
 
-    fun filterActive(selectedTypes: MutableState<List<Int>>, selectedCatchRate: MutableState<List<String>>, selectedGeneration: MutableState<Int>):Boolean{
-        if (!(selectedTypes.value.isEmpty() && selectedCatchRate.value.isEmpty() && selectedGeneration.value ==-1)) {
-            PokemonObject.filter = true
-            return true
-        }
-        else{
-            PokemonObject.filter = false
+    fun filterActive(selectedTypes: MutableState<List<Int>>, selectedCatchRate: MutableState<List<String>>, selectedGeneration: MutableState<Int>,kage:Boolean):Boolean {
+        if (kage) {
+            if (!(selectedTypes.value.isEmpty() && selectedCatchRate.value.isEmpty() && selectedGeneration.value == -1)) {
+                PokemonObject.filterFaveBool = true
+                return true
+            } else {
+                PokemonObject.filterFaveBool = false
 
-            return true}
+                return true
+            }
+
+        } else {
+            if (!(selectedTypes.value.isEmpty() && selectedCatchRate.value.isEmpty() && selectedGeneration.value == -1)) {
+                PokemonObject.filter = true
+                return true
+            } else {
+                PokemonObject.filter = false
+
+                return true
+            }
+
+
+        }
 
 
     }
-
-
-
 }

@@ -73,6 +73,7 @@ fun Favorites(navHostController: NavHostController, viewModel: searchPageViewMod
                 contentDescription = "filter", modifier = Modifier
                     .size(24.dp)
                     .clickable {
+                        PokemonObject.switch=true
                         navHostController.navigate(Route.Filter.path)
 
                     }
