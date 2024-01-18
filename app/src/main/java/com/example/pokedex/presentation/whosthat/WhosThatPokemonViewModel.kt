@@ -36,8 +36,9 @@ private var correctGuessesInARow by mutableStateOf(0)
     fun checkGuess() {
         if (guessAttempt.equals(pokemon.value?.name, ignoreCase = true)) {
             isGuessCorrect = true
-            correctGuessesInARow++
-            totalPoints += calculatePoints(correctGuessesInARow)
+            totalPoints++
+            //correctGuessesInARow++
+            //totalPoints += calculatePoints(correctGuessesInARow)
         } else {
             isGuessCorrect = false
             correctGuessesInARow = 0
