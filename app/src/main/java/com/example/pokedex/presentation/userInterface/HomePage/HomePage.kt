@@ -74,7 +74,7 @@ fun homePage(navController: NavHostController, viewModel: searchPageViewModel, f
     //val sortedPokemons = filterViewModel.getSortedPokemonList()
     //PokemonList(navController = navController, viewModel = viewModel, pokemons = sortedPokemons, isFavorite = false)
     val currentSortOption = filterViewModel.selectedSortOption.value
-
+PokemonObject.filterFaveBool=false
 
     Column(
         modifier = Modifier
@@ -100,6 +100,7 @@ fun homePage(navController: NavHostController, viewModel: searchPageViewModel, f
                 contentDescription = "filter", modifier = Modifier
                     .size(24.dp)
                     .clickable {
+                        PokemonObject.switch=false
                         navController.navigate(Route.Filter.path)
 
                     }
@@ -126,8 +127,9 @@ fun homePage(navController: NavHostController, viewModel: searchPageViewModel, f
 @Composable
 
 fun PokemonList(navController: NavHostController, viewModel: searchPageViewModel, isFavorite: Boolean, sortOption: SortOption?) {
-    val pokemons by viewModel.getData(isFavorite).collectAsState()
-    val listState = rememberLazyListState()
+
+     val listState = rememberLazyListState()
+    val pokemons by viewModel.getData(isFavorite,PokemonObject.filterFaveBool).collectAsState()
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),

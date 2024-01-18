@@ -43,7 +43,8 @@ class ResetViewModel : ViewModel() {
         FilterPokemon().filterList(
             selectedTypes,
             selectedCatchRate,
-            selectedGeneration
+            selectedGeneration,
+            PokemonObject.switch
         )
     }
 
