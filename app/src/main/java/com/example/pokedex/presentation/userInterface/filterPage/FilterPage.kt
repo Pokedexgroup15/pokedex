@@ -46,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -434,8 +435,7 @@ fun growRateButton(sharedViewModel: ResetViewModel) {
             for (columnCatchRates in groupedCatchRates) {
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp, vertical = 3.dp),
+                        .width(LocalConfiguration.current.screenWidthDp.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     for (catchRate in columnCatchRates) {
@@ -523,8 +523,7 @@ fun TypeButton(sharedViewModel: ResetViewModel) {
             for (columnTypes in groupedTypes) {
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp, vertical = 2.dp),// Add padding to the row itself
+                        .width(LocalConfiguration.current.screenWidthDp.dp),
                     horizontalArrangement = Arrangement.SpaceBetween // This will add equal spacing between the items
                 ) {
                     for (type in columnTypes) {
