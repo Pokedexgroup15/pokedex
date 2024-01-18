@@ -219,8 +219,7 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
             )
-           // Spacer(modifier = Modifier.height(20.dp))
-
+            // Spacer(modifier = Modifier.height(20.dp))
 
 
             if (isGuessCorrect && pokemonInfo?.name != null) {
@@ -268,6 +267,36 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                         color = Color.Red
                     )
                     Spacer(modifier = Modifier.height(5.dp))
+
+
+                }
+
+                Button(
+                    onClick = {
+                        viewModel.resetGame()
+                        showIncorrectMessage = false
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFE6F3FF)
+                    ),
+                    modifier = Modifier
+                        .padding(vertical = 1.dp)
+                        .fillMaxWidth()
+                        .border(
+                            width = 1.dp,
+                            color = Color.Gray,
+                            shape = RoundedCornerShape(25.dp)
+                        )
+
+                )
+
+                {
+                    Text(
+                        "Try a different Pokemon?",
+                        color = Color.Black,
+                        fontFamily = Font.rudaFontFamily,
+                        fontSize = 15.sp
+                    )
                 }
 
             }
@@ -276,39 +305,10 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
         //Spacer(modifier = Modifier.height(20.dp))
 
 
-        Button(
-            onClick = {
-                viewModel.resetGame()
-                showIncorrectMessage = false
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFE6F3FF)
-            ),
-            modifier = Modifier
-                .padding(vertical = 1.dp)
-                .fillMaxWidth()
-                .border(
-                    width = 1.dp,
-                    color = Color.Gray,
-                    shape = RoundedCornerShape(25.dp)
-                )
-
-        )
-
-        {
-            Text(
-                "Try a different Pokemon?",
-                color = Color.Black,
-                fontFamily = Font.rudaFontFamily,
-                fontSize = 15.sp
-            )
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-
     }
+
 }
+
 
 
 
