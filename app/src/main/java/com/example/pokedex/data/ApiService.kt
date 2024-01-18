@@ -411,6 +411,7 @@ Log.d("inf",""+i)
 
     }}
 
+// ChatGPT helped with gender logic
 private fun calculateGenderRate(genderRate: Int): GenderRate {
     return when (genderRate) {
         -1 ->GenderRate(Gender.NONE, 0.0, 0.0)
