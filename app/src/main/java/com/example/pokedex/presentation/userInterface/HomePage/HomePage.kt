@@ -311,16 +311,17 @@ fun pokemonPictureAndLogo(modifier: Modifier, pokemon: Pokemon, viewModel: searc
                     pokemon?.let {
                         if (Favorized) {
                             viewModel.toggleFavourite(pokemon, Favorized)
-                            viewModel.PokemonsFave.value.remove(it)
+                         viewModel.PokemonsFave.value.remove(it)
 
 
                         } else {
                             viewModel.toggleFavourite(pokemon, Favorized)
-                            viewModel.PokemonsFave.value.remove(it)
+                        viewModel.PokemonsFave.value.remove(it)
 
 
                         }
-                    }}
+                    }
+                }
         )
     }
 
