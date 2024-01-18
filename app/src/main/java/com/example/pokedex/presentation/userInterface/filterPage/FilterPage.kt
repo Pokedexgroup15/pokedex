@@ -436,6 +436,7 @@ fun growRateButton(sharedViewModel: ResetViewModel) {
                 Row(
                     modifier = Modifier
                         .width(LocalConfiguration.current.screenWidthDp.dp),
+
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     for (catchRate in columnCatchRates) {
@@ -525,6 +526,7 @@ fun TypeButton(sharedViewModel: ResetViewModel) {
                     modifier = Modifier
                         .width(LocalConfiguration.current.screenWidthDp.dp),
                     horizontalArrangement = Arrangement.SpaceBetween // This will add equal spacing between the items
+
                 ) {
                     for (type in columnTypes) {
                         TypeItemButton(type, sharedViewModel) { selected ->
