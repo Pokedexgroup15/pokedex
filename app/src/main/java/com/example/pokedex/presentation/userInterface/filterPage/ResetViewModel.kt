@@ -44,7 +44,7 @@ class ResetViewModel : ViewModel() {
             selectedTypes,
             selectedCatchRate,
             selectedGeneration,
-            true
+            false
         )
     }
 
