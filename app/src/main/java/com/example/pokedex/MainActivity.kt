@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
  private   val database by lazy {
      Room.databaseBuilder(
          applicationContext,
-         PokemonDatabase::class.java, "favourite_database1"
+         PokemonDatabase::class.java, "favourite_database15"
      ).fallbackToDestructiveMigration()
          .build()
 
