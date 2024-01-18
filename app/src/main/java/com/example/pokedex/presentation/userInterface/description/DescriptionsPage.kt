@@ -426,14 +426,7 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                         .fillMaxWidth()
                         .padding(vertical = 4.dp)
                 )
-                FormUI(viewModel = viewModel)
-                Divider(
-                    color = Color.Black,
-                    thickness = 1.5.dp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp)
-                )
+
 //This is a spiderchart hackworkaround, because Canvas can't directly take align inputs.
                 Box(
                     modifier = Modifier
@@ -502,68 +495,7 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
         }
     }
 }
-@Composable
-fun FormUI(viewModel: searchPageViewModel) {
-    val pokemon = viewModel.getPokemon()
 
-    Text(
-        text = "Form",
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Bold,
-        fontFamily = Font.rudaFontFamily,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(6.dp)
-    )
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(2.dp)
-        ) {
-            Text(
-                text = "SuperSejform Placeholder text", // Placeholder text, erstat med pokemon.formdescription
-                fontSize = 18.sp,
-                fontFamily = Font.rudaFontFamily,
-                fontWeight = FontWeight.Normal
-            )
-            Row(
-                modifier = Modifier,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                if (pokemon != null) {
-                    Image(
-                        painter = painterResource(id = getTypeIconwithID(pokemon.type1)),
-                        contentDescription = "type1",
-                        modifier = Modifier.size(30.dp)
-                    )
-                }
-                if (pokemon != null) {
-                    if (pokemon.type2 != "null") {
-                        Image(
-                            painter = painterResource(id = getTypeIconwithID(pokemon.type2)),
-                            contentDescription = "type2",
-                            modifier = Modifier.size(30.dp)
-                        )
-                    }
-                }
-            }
-        }
-        AsyncImage(
-            model = pokemon?.pictureURL,
-            contentDescription = null,
-            modifier = Modifier
-                .size(150.dp)
-                .clip(RoundedCornerShape(8.dp)),
-            contentScale = ContentScale.Crop
-        )
-    }
-}
 @Composable
 fun SpiderChart(stats: Map<String, Int>, modifier: Modifier = Modifier, size: Dp = 255.dp) {
     val maxValue = 255
