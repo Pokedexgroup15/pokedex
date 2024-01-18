@@ -3,17 +3,17 @@ package com.example.pokedex.data
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.pokedex.Gender
-import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.PokemonObject
+import com.example.pokedex.data.local.PokemonDAO
+import com.example.pokedex.domain.Pokemon
+import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.*
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
-import kotlin.math.log
-import com.example.pokedex.presentation.userInterface.filterPage.ResetViewModel
 
 object RetrofitBase {
 
@@ -37,14 +37,40 @@ interface PokeApiSpecies{
 }
 
 interface PokeEveChain{
-    @GET("https://pokeapi.co/api/v2/evolution-chain/{id}")
+    @GET("evolution-chain/{id}")
 
     suspend fun getPokemonEveInfo(@Path("id") pathId: Int) : Response<PokemonEve>
 }
 
+interface PokeAbility{
+    @GET("ability/{id}")
+
+    suspend fun getPokemonAbilInfo(@Path("id") pathId: Int) : Response<PokeAbil>
+}
+interface PokeForms{
+    @GET("pokemon-form/{id}")
+
+    suspend fun getPokemonFormInfo(@Path("id") pathId: Int) : Response<PokeForm>
+}
+
+data class PokeForm(
+    val sprites : sprite,
+    val name :String
+)
+
 data class PokemonEve(
     val chain: Chain
 
+)
+
+data class PokeAbil(
+    val name:String,
+    val effect_entries :List<Ent>
+)
+
+data class Ent(
+    val effect : String,
+    val language: Language
 )
 
 data class Chain(
@@ -66,7 +92,13 @@ data class PokemonSpecies(
     val capture_rate: Int,
     val growth_rate: Growth,
     val gender_rate: Int,
-    val generation: Generation
+    val generation: Generation,
+    val varieties: List<Varieties>
+)
+
+data class Varieties(
+    val pokemon: Species
+
 )
 data class Generation(
     val name: String
@@ -92,7 +124,8 @@ data class PokemonInfo(
     val types: List<subType>,
     val sprites: sprite,
     val stats: List<Stats>,
-    val abilities: List<Abilities>
+    val abilities: List<Abilities>,
+    val forms: List<Species>
 )
 
 data class Abilities(
@@ -109,13 +142,16 @@ data class Stats(
 )
 
 data class sprite(
-    val other: Other
+    val other: Other,
+    val front_default: String?
 )
 data class Other(
     @SerializedName("official-artwork")
-    val text : Offical
+    val official : Official,
+    val home : Official
+
 )
-data class Offical(
+data class Official(
     @SerializedName("front_default")
     val frontdefault: String
     )
@@ -141,7 +177,10 @@ data class GenderRate(
 )
 
 
-class RepositoryImpl: ViewModel() {
+
+
+
+class RepositoryImpl(  private val dao: PokemonDAO): ViewModel() {
 //    load image
     //imageView.load("https://example.com/image.jpg")
 
@@ -151,6 +190,8 @@ class RepositoryImpl: ViewModel() {
     val quotesApi = RetrofitBase.getInstance().create(PokeApi::class.java)
     val speciesApi = RetrofitBase.getInstance().create(PokeApiSpecies::class.java)
     val eveApi = RetrofitBase.getInstance().create(PokeEveChain::class.java)
+    val abilApi = RetrofitBase.getInstance().create(PokeAbility::class.java)
+    val formApi =   RetrofitBase.getInstance().create(PokeForms::class.java)
 
         viewModelScope.launch(Dispatchers.IO){
 //            val fileName = "json/pokemonCache.json"
@@ -161,10 +202,46 @@ class RepositoryImpl: ViewModel() {
             var i : Int = start
             GlobalScope.launch {
                 while(i <= end) {
-                val result = quotesApi.getPokemonInfo(i)
-                val result2 = speciesApi.getPokemonSpeciesInfo(i)
 
-                if(i<549){
+                    while(i<=PokemonObject.tempEnd||(PokemonObject.filter&&PokemonObject.filteredList.value.size<PokemonObject.tempEnd)){
+                    var j =i+10000
+                    if(j<=10448){
+                        val resultForm = formApi.getPokemonFormInfo(j)
+                        resultForm.body()?.let {
+                            if (it.sprites.front_default != null) {
+                                PokemonObject.formMap.put(it.name, it.sprites.front_default)
+                            }
+                        }
+                        if(j<=10277) {
+                            val result = quotesApi.getPokemonInfo(j)
+                            result.body()?.let {
+                                if (it.sprites.other.official.frontdefault != null) {
+                                    PokemonObject.varianceMap.put(it.name, it.sprites.other.official.frontdefault)
+                                }
+                            }
+                        }
+                    }
+
+
+                    var forms = ArrayList<String>()
+
+                    val result = quotesApi.getPokemonInfo(i)
+                val result2 = speciesApi.getPokemonSpeciesInfo(i)
+                    val resultForm = formApi.getPokemonFormInfo(i)
+                    Log.d("form2", ""+resultForm)
+                    Log.d("form2", ""+resultForm.body())
+                    Log.d("form2",""+resultForm.body()?.sprites)
+
+                    resultForm.body()
+                            ?.let {
+                                if(it.sprites.front_default!=null) {
+                                    PokemonObject.formMap[resultForm.body()!!.name] = it.sprites.front_default
+                                    Log.d("form2", it.name)
+                                }
+                    }
+
+
+                    if(i<549){
                     val result3 = eveApi.getPokemonEveInfo(i)
                     result3.body()?.let {
 
@@ -196,7 +273,34 @@ class RepositoryImpl: ViewModel() {
 
                 }
 
+                    if (i<310){
+                        val result4= abilApi.getPokemonAbilInfo(i)
+                        var i2=0
+                        result4.body()?.let {
+
+
+                            while(i2<it.effect_entries.size){
+
+                                if(it.effect_entries[i2].language.name=="en"){
+                                    PokemonObject.abilMap.put(it.name,it.effect_entries[i2].effect)
+                                    break
+                                }
+                                i2++
+                            }
+
+                        }
+
+
+                        }
+
                     result2.body()?.let {
+
+                        var i3=0
+                        while(i3<it.varieties.size){
+                            forms.add(it.varieties[i3].pokemon.name)
+""
+                            i3++
+                        }
 
                     var generationNum=-1
                     when(it.generation.name){
@@ -237,6 +341,14 @@ class RepositoryImpl: ViewModel() {
                         val genderInfo=calculateGenderRate(it.gender_rate)
 
                 result.body()?.let { Log.d("test5", it.types[0].type.name+" "+it.name)
+                    var i4 = 0
+                    while (i4<it.forms.size){
+                        if(it.forms[i4].name!= result.body()!!.name){
+                            forms.add(it.forms[i4].name)
+                        }
+                        i4++
+                    }
+
                    var i3=0
 
                     var abilities = ArrayList<String>()
@@ -256,18 +368,26 @@ class RepositoryImpl: ViewModel() {
 
 
                     var sprite:String =""
-                    if(it.sprites.other.text.frontdefault!= null)
-                        sprite = it.sprites.other.text.frontdefault
+                    if(it.sprites.other.official.frontdefault!= null)
+                        sprite = it.sprites.other.official.frontdefault
+                    else
+                        sprite = it.sprites.other.home.frontdefault
+                    var pk=Pokemon(it.name.replaceFirstChar { it.uppercase() }, sprite, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate, genderRate = genderInfo,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat,generationNum,abilities,forms)
+
+                    //val st= serializeToJson(pk)
+                  //  var pk2:LocalPokemon= LocalPokemon(it.id,st,it.types[0].type.name,type2,generationNum,capture_rate,growth_rate)
+                    //dao.insert(pk2)
+
+
                     PokemonObject._pokeList.value = PokemonObject._pokeList.value.toMutableList().apply {
-                        add(Pokemon(it.name.replaceFirstChar { it.uppercase() }, sprite, it.id,it.types[0].type.name,type2, pokedexEntry,capture_rate,growth_rate, genderRate = genderInfo,it.stats[0].base_stat,it.stats[1].base_stat,it.stats[2].base_stat,it.stats[3].base_stat,it.stats[4].base_stat,it.stats[5].base_stat,generationNum,abilities))
+                        add(pk)
                     } as ArrayList<Pokemon>
                 }}
 
                     PokemonObject.count++
-
+Log.d("inf",""+i)
                     i++
-                }
-
+                }}
 
             }
 
@@ -294,4 +414,16 @@ private fun calculateGenderRate(genderRate: Int): GenderRate {
     }
 }
 
+fun InternetIsConnected(): Boolean {
+    return try {
+        val command = "ping -c 1 google.com"
+        Runtime.getRuntime().exec(command).waitFor() == 0
+    } catch (e: Exception) {
+        false
+    }
+}
 
+private fun serializeToJson(pokemon: Pokemon): String {
+    val gson = Gson()
+    return gson.toJson(pokemon)
+}

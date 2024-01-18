@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.pokedex.PokemonObject
 import com.example.pokedex.R
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.presentation.navigation.Route
@@ -112,12 +113,10 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                         SortButtons(
                             sharedViewModel = resetViewModel,
                             onLowToHighClick = {
-                                resetViewModel.Pokemons =resetViewModel.Pokemons.toMutableList().apply {
-                                    sortBy { it.id }  } as ArrayList<Pokemon>
+                                PokemonObject.pokeList.value.sortBy {it.id }
                             },
                             onHighToLowClick = {
-                                resetViewModel.Pokemons= resetViewModel.Pokemons.toMutableList().apply {
-                                    sortByDescending { it.id }  } as ArrayList<Pokemon>
+                                PokemonObject.pokeList.value.sortByDescending {it.id }
                             }
                         )
                     }

@@ -2,7 +2,6 @@ package com.example.pokedex
 
 
 
-import android.content.Intent
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -24,9 +23,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
@@ -34,7 +31,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,8 +39,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -59,24 +53,22 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Popup
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.pokedex.data.GenderRate
-import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.presentation.navigation.Route
 import com.example.pokedex.presentation.userInterface.HomePage.EvolutionBar
 import com.example.pokedex.presentation.userInterface.HomePage.getTypeIconwithID
 import com.example.pokedex.presentation.searchPageViewModel
 import com.example.pokedex.presentation.theme.Font
+import com.example.pokedex.presentation.userInterface.HomePage.VersionBar
 import java.lang.Math.PI
 import java.lang.Math.cos
 import java.lang.Math.sin
@@ -162,7 +154,7 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                     thickness = 1.5.dp,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 4.dp)
+                        //.padding(vertical = 4.dp)
                 )
                 val backgroundColor = when (pokemon?.genderRate?.gender) {
                     Gender.MIXED -> mixedColor
@@ -176,6 +168,7 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
+
                         .background(backgroundColor)
                 ) {
                     if (pokemon != null) {
@@ -183,10 +176,14 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                             model = pokemon.pictureURL,
                             contentDescription = null,
                             modifier = Modifier
+
                                 .fillMaxWidth()
+                                .padding(10.dp)
                                 .height(350.dp),
-                            contentScale = ContentScale.Crop
+                            contentScale = ContentScale.Crop,
+
                         )
+
                     }
                     Row(
                         modifier = Modifier
@@ -224,16 +221,19 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                                 .clickable {
                                     Favorized = !Favorized
                                     pokemon?.let {
-                                        val updatedFaveList = if (Favorized) {
-                                            PokemonObject._faveList.value.toMutableList().apply {
-                                                add(it)
+
+
+                                        if (Favorized) {
+                                            pokemon?.let { viewModel.PokemonsFave.value.add(it)
+
                                             }
-                                        } else {
-                                            PokemonObject._faveList.value.toMutableList().apply {
-                                                remove(it)
-                                            }
+                                        } else
+                                        {viewModel.PokemonsFave.value.remove(pokemon)
+
+
                                         }
-                                        PokemonObject._faveList.value = updatedFaveList as ArrayList<Pokemon>
+
+
                                     }
                                 }
                                 .requiredSize(36.dp, 36.dp)
@@ -242,28 +242,52 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                     }
                 }
 
-                Divider(
-                    color = Color.Black,
-                    thickness = 1.5.dp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp)
-                )
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.BottomCenter
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 10.dp)
-                    ) {
-                        Text(text = "", modifier = Modifier.align(CenterHorizontally))
-                        Spacer(modifier = Modifier.weight(4f))
-                        EvolutionBar(navController)
-                        Spacer(modifier = Modifier.weight(1f))
-                    }
+        Divider(
+            color = Color.Black,
+            thickness = 1.5.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)
+        )
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp)
+            ) {
+                Text(text = "", modifier = Modifier.align(Alignment.CenterHorizontally))
+                Spacer(modifier = Modifier.weight(4f))
+                if (pokemon != null) {
+                    EvolutionBar(navController,pokemon,viewModel)
                 }
+                Spacer(modifier = Modifier.weight(1f))
+            }
+        }
+        Divider(
+            color = Color.LightGray,
+            thickness = 1.5.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)
+        )
+
+        Box(modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.BottomCenter
+        ){
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp)
+            ) {
+                Text(text = "", modifier = Modifier.align(Alignment.CenterHorizontally))
+                Spacer(modifier = Modifier.weight(4f))
+                VersionBar(navController, viewModel)
+                Spacer(modifier = Modifier.weight(1f))
+            }
+        }
                 Divider(
                     color = Color.Black,
                     thickness = 1.5.dp,
@@ -355,6 +379,7 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
 
                         pokemon.abilities.forEach { ability ->
                             val isDescriptionVisible = descriptionVisibilityMap[ability] ?: false
+                            val abilityDescription = PokemonObject.abilMap[ability] ?: "No description available"
 
                             Row(
                                 verticalAlignment = Alignment.CenterVertically
@@ -379,10 +404,10 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                                 Box(
                                     modifier = Modifier
                                         .padding(8.dp)
-                                        .border(1.dp, Color.Gray)
+                                        .border(1.dp, Color.LightGray)
                                 ) {
                                     Text(
-                                        "Description for $ability",
+                                        text = abilityDescription,
                                         modifier = Modifier.padding(8.dp),
                                         fontFamily = Font.rudaFontFamily
                                     )
@@ -553,12 +578,13 @@ fun SpiderChart(stats: Map<String, Int>, modifier: Modifier = Modifier, size: Dp
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            //Had to use toPx() because dp won't work on canvas with height and width.
+            //Had to use toPx() because dp won't work on canvas with height and width. so it's pixel based.
             val centerX = size.toPx() / 2f
             val centerY = size.toPx() / 2f
             val maxRadius = (size.toPx() / 3).coerceAtMost(size.toPx() / 3)
             val ringRadius = maxRadius / numberOfRings
-            // Draws 5 rings with size max 100
+            // Draw 5 ring within the canvas, based on pixel.
+            //If more time,try to go away from toPx()
             for (i in 1..numberOfRings) {
                 drawCircle(
                     color = Color.Gray.copy(alpha = 0.3f),
@@ -582,15 +608,17 @@ fun SpiderChart(stats: Map<String, Int>, modifier: Modifier = Modifier, size: Dp
                     end = Offset(x.toFloat(), y.toFloat()),
                     strokeWidth = 2f
                 )
-                // calc pos based on center y and x
-                val titleDistance = maxRadius + 40f
-                val titleX = centerX + titleDistance * cos(angle)
-                val titleY = centerY + titleDistance * sin(angle)
+                // calc pos of the text of "overtitle" such as special defense fx.
+                val titleDistance = maxRadius + 60f
+                val titleXpos = centerX + titleDistance * cos(angle)
+                val titleYpos = centerY + titleDistance * sin(angle)
                 // workaround hack, not the best, but works with key collection.
+                //ChatGPT helped created the below code, to paint onto the canvas with text drawing.
+                //ChatGPT was used since canvas was unknown territory.
                 drawContext.canvas.nativeCanvas.drawText(
                     pokeStatEntry.key,
-                    titleX.toFloat(),
-                    titleY.toFloat(),
+                    titleXpos.toFloat(),
+                    titleYpos.toFloat(),
                     Paint().apply {
                         color = Color.Black.toArgb()
                         textSize = 12.sp.toPx()
@@ -598,9 +626,8 @@ fun SpiderChart(stats: Map<String, Int>, modifier: Modifier = Modifier, size: Dp
                     }
                 )
 
-
                 val statValueX = centerX + titleDistance * cos(angle)
-                val statValueY = centerY + titleDistance * sin(angle) + 20f
+                val statValueY = centerY + titleDistance * sin(angle) + 60f
                 drawContext.canvas.nativeCanvas.drawText(
                     pokeStatValue.toString(),
                     statValueX.toFloat(),
@@ -619,6 +646,7 @@ fun SpiderChart(stats: Map<String, Int>, modifier: Modifier = Modifier, size: Dp
                     path.lineTo(x.toFloat(), y.toFloat())
                 }
             }
+            //ChatGPT generated code help stopped here.
             // important line, fragile.
             path.close()
 
@@ -700,7 +728,10 @@ fun GenderDisplay(genderRate: GenderRate) {
                 }
             }
             Gender.NONE -> {
-                GenderIcon(imageResId = R.drawable.male, ratio = 0.0, color = Color(0xFF51BAEE))
+                GenderIcon(
+                    imageResId = R.drawable.male,
+                    ratio = 0.0,
+                    color = Color(0xFF51BAEE))
                 Spacer(modifier = Modifier.width(4.dp))
                 GenderIcon(imageResId = R.drawable.female, ratio = 0.0, color = Color(0xFFFF007F))
             }
@@ -727,6 +758,7 @@ fun GenderIcon(imageResId: Int, ratio: Double, color: Color) {
                 fontFamily = Font.rudaFontFamily,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
+                    .padding(4.dp)
             )
         }
         Spacer(modifier = Modifier.height(4.dp))
@@ -762,65 +794,44 @@ fun CatchAndGrowthRateBoxes(viewModel: searchPageViewModel) {
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
-
     ) {
-        /*Image(
-            painter = painterResource(id = R.drawable.catchrate),
-            contentDescription = null,
-            modifier = Modifier
-                .size(35.dp)
-                .clickable { catchRateTextBox = !catchRateTextBox }
-
-      )*/
-
         Box(
             modifier = Modifier
                 .padding(8.dp)
-                .width(120.dp)
-                .height(40.dp)
-                .offset(y=-5.dp)
-                //.offset(x = 4.dp)
-                .clip(RoundedCornerShape(25.dp))
                 .border(
-                    width = 2.dp,
+                    width = 1.dp,
                     color = Color.LightGray,
                     shape = RoundedCornerShape(20.dp)
                 )
-                .clickable { catchRateTextBox = !catchRateTextBox },
-            contentAlignment = Alignment.Center
-        ) {
-            if (pokemon != null) {
-                Text(
-                    text = pokemon.capture_rate.toString(),
-                    color = Color.Gray,
-                    fontSize = 15.sp,
-                    fontFamily = Font.rudaFontFamily,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
-        Box(
-            modifier = Modifier
-                .padding(8.dp)
-                .width(120.dp)
-                .height(40.dp)
-                .offset(y = -5.dp)
-                // .offset(x = 4.dp)
-                .clip(RoundedCornerShape(25.dp))
-                .border(
-                    width = 2.dp,
-                    color = Color.LightGray,
-                    shape = RoundedCornerShape(20.dp)
-                )
-                .clickable { growthRateTextBox = !growthRateTextBox },
-            contentAlignment = Alignment.Center
         ) {
             Text(
-                text = pokemon?.growth_rate.toString(),
+                text = "Catch Rate: ${pokemon?.capture_rate ?: "N/A"}",
                 color = Color.Gray,
-                fontSize = 14.sp,
+                fontSize = 15.sp,
                 fontFamily = Font.rudaFontFamily,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(8.dp)
+                    )
+        }
+        Spacer(modifier = Modifier.width(8.dp))
+        Box(
+            modifier = Modifier
+                .padding(8.dp)
+                .border(
+                    width = 1.dp,
+                    color = Color.LightGray,
+                    shape = RoundedCornerShape(20.dp)
+                )
+        ) {
+            Text(
+                text = "Growth Rate: ${pokemon?.growth_rate ?: "N/A"}",
+                color = Color.Gray,
+                fontSize = 15.sp,
+                fontFamily = Font.rudaFontFamily,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(8.dp)
             )
         }
     }
@@ -868,12 +879,12 @@ fun HeadlineAndInfoBox() {
                 color = Color.Black
             )
 
-            Image(
-                painter = painterResource(id = R.drawable.questionmark),
+            Icon(
+                imageVector = Icons.Default.Info,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(18.dp)
-                    .offset(x = -8.dp)
+                    .size(24.dp)
+                    .offset(x = -4.dp)
                     .clickable { infoBox = !infoBox }
             )
         }

@@ -1,5 +1,7 @@
 package com.example.pokedex.presentation.userInterface.HomePage
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,11 +19,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -59,6 +63,10 @@ import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.SortOption
 import androidx.compose.runtime.collectAsState
 import com.example.pokedex.PokemonObject
+import com.example.pokedex.data.local.LocalPokemon
+import kotlinx.coroutines.flow.sample
+import androidx.compose.ui.graphics.RectangleShape
+import com.example.pokedex.presentation.serializeToJson
 
 
 @Composable
@@ -100,11 +108,11 @@ fun homePage(navController: NavHostController, viewModel: searchPageViewModel, f
             Spacer(modifier = Modifier.width(34.dp))
 
             Icon(imageVector = Icons.Default.Search, contentDescription = "search",
-                modifier = Modifier.clickable {
-                    navController.navigate(Route.Search.path)
-
-
-                })
+                modifier = Modifier
+                    .size(32.dp)
+                    .clickable {
+                        navController.navigate(Route.Search.path)
+                    })
         }
         //PokemonList(navController,viewModel, false)
             //PokemonList(navController,viewModel, filterViewModel = FilterViewModel(), false, pokemons1 =filterViewModel.getSortedPokemonList() )
@@ -114,21 +122,24 @@ fun homePage(navController: NavHostController, viewModel: searchPageViewModel, f
 }
 
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 
 fun PokemonList(navController: NavHostController, viewModel: searchPageViewModel, isFavorite: Boolean, sortOption: SortOption?) {
+
+     val listState = rememberLazyListState()
     val pokemons by viewModel.getData(isFavorite,PokemonObject.filterFaveBool).collectAsState()
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        state=listState
     ) {
         items(pokemons.chunked(2)) { chunkedPokemons ->
             Row(
                 modifier = Modifier
                     .height(178.dp)
-                    .fillMaxWidth()
-                    .padding(0.dp)
-                ,
+                    .fillMaxWidth(),
+                    //.padding(4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 chunkedPokemons.forEach { pokemon ->
@@ -136,28 +147,44 @@ fun PokemonList(navController: NavHostController, viewModel: searchPageViewModel
                         modifier = Modifier
                             .weight(1f)
                             .background(
-                                color = Color(0xFFE0E0E0),
-                                shape = RoundedCornerShape(size = 10.dp)
+                                color = Color(0xFFE6F3FF),
+                                shape = RectangleShape
+                                //shape = RoundedCornerShape(10.dp)
                             )
                             .border(
                                 width = 1.dp,
-                                shape = RoundedCornerShape(10.dp),
-                                color = Color.Black
+                                shape = RectangleShape,
+                                //shape = RoundedCornerShape(10.dp),
+                                color = Color.LightGray
                             )
                             .padding(4.dp),
+
                         navController,
                         pokemon,viewModel
                     )
                 }
             }
-        }
+//            Log.d("pag",""+listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index)
+//            Log.d("pag",""+pokemons.size)
+
+            if (listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index?.toDouble() == (pokemons.size*0.5 - 1)) {
+//               Log.d("pag","size"+pokemons.size*2)
+//                Log.d("pag","temp"+PokemonObject.tempEnd)
+
+                if((pokemons.size)==PokemonObject.tempEnd) {
+                    PokemonObject.tempEnd = pokemons.size  + 20
+                    Log.d("pag", "" + PokemonObject.tempEnd)
+                }
+
+            }
+            }
     }
 }
 fun getTypeIconwithID(type: String): Int {
     return when (type) {
         "bug" -> R.drawable.bug
-        "dar" -> R.drawable.dar
-        "dra" -> R.drawable.dra
+        "dark" -> R.drawable.dar
+        "dragon" -> R.drawable.dra
         "electric" -> R.drawable.ele
         "fairy" -> R.drawable.fai
         "fighting" -> R.drawable.fig
@@ -184,20 +211,21 @@ fun pokemonBox(modifier: Modifier,
     Box(
         modifier = modifier
             .clickable {
-               viewModel.setPokemon(pokemon)
-                navController.navigate(Route.Pokemon.path){
-                // avoid building up a large stack of destinations
-                // on the back stack as users select items
-                popUpTo(navController.graph.findStartDestination().id) {
-                    saveState = true
+                viewModel.setPokemon(pokemon)
+                navController.navigate(Route.Pokemon.path) {
+                    // avoid building up a large stack of destinations
+                    // on the back stack as users select items
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    // Avoid multiple copies of the same destination when
+                    // reselecting the same item
+                    launchSingleTop = true
+                    // Restore state when reselecting a previously selected item
+                    restoreState = true
                 }
-                // Avoid multiple copies of the same destination when
-                // reselecting the same item
-                launchSingleTop = true
-                // Restore state when reselecting a previously selected item
-                restoreState = true
             }
-            }
+            .background(Color(0xFFE6F3FF))
     ) {
 
         Column(
@@ -279,13 +307,23 @@ fun pokemonPictureAndLogo(modifier: Modifier, pokemon: Pokemon, viewModel: searc
                 .size(22.dp)
                 .clickable {
                     Favorized = !Favorized
+
                     if (Favorized) {
-                        pokemon?.let { viewModel.PokemonsFave.value.add(it) }
-                    } else {viewModel.PokemonsFave.value.remove(pokemon)
-                        //viewModel.toggleFavourite(pokemon)
+                        pokemon?.let {
+                            viewModel.PokemonsFave.value.add(it)
+
+
+                        }
+                    } else {
+                        viewModel.PokemonsFave.value.remove(pokemon)
 
 
                     }
+
+
+
+
+
                 }
         )
     }
@@ -302,15 +340,16 @@ fun BottomBar(navController: NavController) {
                 rootRoute = Route.POKEDEX
             ),
             Tab(
-                title = "Who's That Pokemon?",
-                icon = Icons.Default.Home,
-                rootRoute = Route.Game
-            ),
-            Tab(
                 title = "Favorites",
                 icon = Icons.Default.Favorite,
                 rootRoute = Route.FAVORITES
+            ),
+            Tab(
+                title = "Who's That Pokemon?",
+                icon = Icons.Default.PlayArrow,
+                rootRoute = Route.Game
             )
+
         )
 
         val isFavoritesTabSelected = navController.currentBackStack

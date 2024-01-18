@@ -23,5 +23,6 @@ data class Pokemon(
     val special_defense: Int,
     val speed: Int,
     val generation: Int,
-    val abilities: ArrayList<String>
+    val abilities: ArrayList<String>,
+    val forms: ArrayList<String>
  )
