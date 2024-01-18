@@ -278,13 +278,12 @@ fun EvolutionsPicture(imageUrl: String ){
 }
 
 @Composable
-fun VersionBar(navController: NavHostController,  viewModel: searchPageViewModel) {
+fun VersionBar(navController: NavHostController, viewModel: searchPageViewModel) {
     var isButtonClicked by remember { mutableStateOf(false) }
     val pokemon = viewModel.getPokemon()
     val versions = pokemon?.forms ?: emptyList()
     val (selectedVersion, setSelectedVersion) = remember { mutableStateOf<String?>(null) }
 
-    //val descriptionVisibilityMap = remember { mutableStateMapOf<String, Boolean>() }
     Column {
         Row {
             Text(
@@ -292,8 +291,7 @@ fun VersionBar(navController: NavHostController,  viewModel: searchPageViewModel
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = Font.rudaFontFamily,
-                modifier = Modifier
-                    .padding(10.dp)
+                modifier = Modifier.padding(10.dp)
             )
         }
         Column {
@@ -330,26 +328,57 @@ fun VersionBar(navController: NavHostController,  viewModel: searchPageViewModel
                             modifier = Modifier
                                 .padding(8.dp)
                                 .border(1.dp, Color.LightGray, shape = RoundedCornerShape(20.dp))
-                        ) {
-                            Box(
-                                modifier = Modifier.padding(10.dp), // Increase the padding value as needed
-                            ) {
-                                var imageUrl = pokemon.pictureURL
-                                Log.d("form",""+version)
-                                Log.d("form",""+PokemonObject.formMap[version])
-                                if (PokemonObject.formMap[version]!= null ) {
-                                    imageUrl = PokemonObject.formMap[version].toString()
+                        )
+                        if (PokemonObject.formMap[version] != null) {
+                            Row {
+                                if (PokemonObject.formMap[version]?.type1 != null) {
+                                    Image(
+                                        painter = painterResource(
+                                            id = getTypeIconwithID(
+                                                PokemonObject.formMap[version]?.type1.toString()
+                                            )
+                                        ),
+                                        contentDescription = "type1",
+                                        modifier = Modifier.size(30.dp)
+                                    )
                                 }
-                                if (PokemonObject.varianceMap[version]!= null ) {
-                                    imageUrl = PokemonObject.varianceMap[version].toString()
+                                if (PokemonObject.formMap[version]?.type2 != "null") {
+                                    Image(
+                                        painter = painterResource(
+                                            id = getTypeIconwithID(
+                                                PokemonObject.formMap[version]?.type2.toString()
+                                            )
+                                        ),
+                                        contentDescription = "type2",
+                                        modifier = Modifier.size(30.dp)
+                                    )
                                 }
+                            }
+                        }
+
+
+                                Box(
+                                    modifier = Modifier.padding(10.dp), // Increase the padding value as needed
+                                ) {
+                                    var imageUrl = pokemon.pictureURL
+                                    Log.d("form", "" + version)
+                                    Log.d("form", "" + PokemonObject.formMap[version])
+                                    if (PokemonObject.formMap[version] != null) {
+                                        imageUrl =
+                                            PokemonObject.formMap[version]?.pictureURL.toString()
+                                    }
+
 
                                     EvolutionsPicture(imageUrl)
+
+                                    // Add Pokémon type icons
+
+
                             }
+
                         }
                     }
                 }
             }
         }
     }
-}

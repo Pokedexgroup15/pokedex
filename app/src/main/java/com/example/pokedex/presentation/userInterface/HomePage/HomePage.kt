@@ -309,22 +309,18 @@ fun pokemonPictureAndLogo(modifier: Modifier, pokemon: Pokemon, viewModel: searc
                 .clickable {
                     Favorized = !Favorized
 
-                    if (Favorized) {
-                        pokemon?.let {
-                            viewModel.PokemonsFave.value.add(it)
+
+                    pokemon?.let {
+                        if (Favorized) {
+                            viewModel.toggleFavourite(pokemon, Favorized)
+
+
+                        } else {
+                            viewModel.toggleFavourite(pokemon, Favorized)
 
 
                         }
-                    } else {
-                        viewModel.PokemonsFave.value.remove(pokemon)
-
-
                     }
-
-
-
-
-
                 }
         )
     }

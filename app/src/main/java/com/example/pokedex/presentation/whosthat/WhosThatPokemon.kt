@@ -2,6 +2,7 @@ package com.example.pokedex.presentation.userInterface.whosthat
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -34,6 +37,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -49,8 +53,10 @@ import com.example.pokedex.R
 import com.example.pokedex.presentation.navigation.Route
 import com.example.pokedex.presentation.theme.Font
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewModel) {
     val pokemonInfo = viewModel.pokemon.value
@@ -72,17 +78,11 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-            IconButton(onClick = {
-                navController.navigate(Route.POKEDEX.path) {
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        saveState = true
-                    }
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            }) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-            }
+
+            Icon(Icons.Default.ArrowBack, contentDescription = "Back",
+                modifier=Modifier.clickable {
+                    navController.popBackStack()
+                })
             Text(
                 text = "Who's that Pokemon?!",
                 fontFamily = Font.rudaFontFamily,
@@ -160,12 +160,19 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
         }*/
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             var text by remember { mutableStateOf("") }
-
+val keyboardController = LocalSoftwareKeyboardController.current
             Row() {
                 TextField(
                     value = viewModel.guessAttempt, onValueChange = { viewModel.guessAttempt = it },
                     label = { Text("Enter Pokemon") },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = {
+                        viewModel.checkGuess()
+                        keyboardController?.hide()
+                        showIncorrectMessage =
+                            !viewModel.isGuessCorrect && viewModel.guessAttempt.isNotEmpty()
+                    }),
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Color.Transparent // Set your desired background color here
                     ),
@@ -176,49 +183,53 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
                         .clip(RoundedCornerShape(20.dp))
                         .border(2.dp, Color.LightGray, RoundedCornerShape(20.dp))
                 )
-                Button(
-                    onClick = {
-                        viewModel.checkGuess()
-                        showIncorrectMessage =
-                            !viewModel.isGuessCorrect && viewModel.guessAttempt.isNotEmpty()
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFE6F3FF)
-                    ),
-                    modifier = Modifier
-                        .padding(vertical = 1.dp)
-                        .wrapContentWidth()
-                        .padding(horizontal = 10.dp, vertical = 7.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .border(
-                            width = 1.dp,
-                            color = Color.Gray,
-                            shape = RoundedCornerShape(20.dp)
-                        )
-                )
-                {
-                    Text(
-                        "Submit",
-                        color = Color.Black,
-                        fontSize = 16.sp,
-                        fontFamily = Font.rudaFontFamily
-                        //modifier = Modifier
-                        //  .border(
-                        //    width = 1.dp,
-                        //  color = Color.Black,
-                        //shape = RoundedCornerShape(20.dp)
-                        //)
-                        //.padding(10.dp)
+                if (!isGuessCorrect) {
+                    Button(
+                        onClick = {
+                            viewModel.checkGuess()
+                            showIncorrectMessage =
+                                !viewModel.isGuessCorrect && viewModel.guessAttempt.isNotEmpty()
+                            keyboardController?.hide()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFFE6F3FF)
+                        ),
+                        modifier = Modifier
+                            .padding(vertical = 1.dp)
+                            .wrapContentWidth()
+                            .padding(horizontal = 10.dp, vertical = 7.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .border(
+                                width = 1.dp,
+                                color = Color.Gray,
+                                shape = RoundedCornerShape(20.dp)
+                            )
                     )
+                    {
+                        Text(
+                            "Submit",
+                            color = Color.Black,
+                            fontSize = 16.sp,
+                            fontFamily = Font.rudaFontFamily
+                            //modifier = Modifier
+                            //  .border(
+                            //    width = 1.dp,
+                            //  color = Color.Black,
+                            //shape = RoundedCornerShape(20.dp)
+                            //)
+                            //.padding(10.dp)
+                        )
+                    }
                 }
             }
-            Divider(
-                color = Color.LightGray,
-                thickness = 1.5.dp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            )
+
+                Divider(
+                    color = Color.LightGray,
+                    thickness = 1.5.dp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp)
+                )
             // Spacer(modifier = Modifier.height(20.dp))
 
 

@@ -319,7 +319,7 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                 modifier = Modifier
                     .size(36.dp)
                     .clickable {
-                        navController.popBackStack()
+                       navController.popBackStack()
                     }
             ) {
                 Icon(

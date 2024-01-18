@@ -1,6 +1,7 @@
 package com.example.pokedex.presentation
 
 import android.util.Log
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -39,10 +40,8 @@ class searchPageViewModel(
     var PokemonsFilter = PokemonObject.filteredList
     lateinit var flow: Flow<List<LocalPokemon>>
 
-    init {
 
 
-    }
 
     fun getData(isFavorite: Boolean, isFavoriteFilter : Boolean): StateFlow<ArrayList<Pokemon>> {
         var list = Pokemons
@@ -76,8 +75,7 @@ class searchPageViewModel(
     fun toggleFavourite(pokemon: Pokemon,Favorized:Boolean) {
         viewModelScope.launch {
 
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) { // Switch to IO dispatcher for database operation
+                withContext(Dispatchers.IO) {
                     if (Favorized) {
                         dao.insert(
                             LocalPokemon(
@@ -103,42 +101,34 @@ class searchPageViewModel(
                             )
                         )
                     }
-                }
+
             }
         }
 
     }
+    fun initialize() {
+        viewModelScope.launch {
+            flow = dao.getAll()
 
-fun initialize(){
+            flow.collect { localPokemonList ->
+                val arrayList = ArrayList(localPokemonList)
 
-    viewModelScope.launch {
-        flow = dao.getAll()
+                val data = arrayList
 
-        // Collect the elements emitted by the Flow
-        flow.collect { localPokemonList ->
-            // Now you have the list of LocalPokemon
-            val arrayList = ArrayList(localPokemonList)
+                val updateList = ArrayList<Pokemon>()
 
-            // Do something with the ArrayList
-            val data = arrayList
-            val slut = data.size
-
-            // Use indices instead of 1..slut to avoid index out-of-bounds error
-            for (gen in data.indices) {
-                val pk = deserializeFromJson(data[gen].info)
-
-                // Use viewModelScope.launch to update LiveData in the ViewModel
-                viewModelScope.launch {
-                    PokemonObject._faveList.value = PokemonObject.faveList.value.toMutableList().apply {
-                        add(pk)
-                    } as ArrayList<Pokemon>
+                for (gen in data.indices) {
+                    val pk = deserializeFromJson(data[gen].info)
+                    updateList.add(pk)
                 }
+
+
+                    PokemonObject._faveList.value = updateList
+
+
             }
-        }
-    }
+        }}}
 
-
-}}
     fun serializeToJson(pokemon: Pokemon): String {
         val gson = Gson()
         return gson.toJson(pokemon)

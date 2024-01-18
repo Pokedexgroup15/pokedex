@@ -78,7 +78,7 @@ fun SearchPageFun(navController: NavHostController, viewModel: searchPageViewMod
 
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "backArrow",
                   modifier =  Modifier.clickable {
-                      navController.navigate(Route.POKEDEX.path)
+                      navController.popBackStack()
 
                     }
                       .size(36.dp))
