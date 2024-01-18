@@ -39,7 +39,7 @@ object PokemonObject{
     var filteredList = _filteredList.asStateFlow()
     var abilMap =HashMap<String, String>()
     var formMap =HashMap<String, PokemonForm>()
-    var varianceMap =HashMap<String, PokemonForm>()
+    //var varianceMap =HashMap<String, PokemonForm>()
     var tempEnd = 20
 
 

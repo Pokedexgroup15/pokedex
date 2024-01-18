@@ -228,7 +228,7 @@ class RepositoryImpl(  private val dao: PokemonDAO): ViewModel() {
                                     if(it.types.size>1){
                                         type2 = it.types[1].type.name
                                     }
-                                    PokemonObject.varianceMap.put(it.name, PokemonForm(it.name,it.sprites.front_default,it.id,it.types[0].type.name,type2))
+                                    PokemonObject.formMap.put(it.name, PokemonForm(it.name,it.sprites.front_default,it.id,it.types[0].type.name,type2))
                                 }
                             }
                         }
@@ -244,13 +244,17 @@ class RepositoryImpl(  private val dao: PokemonDAO): ViewModel() {
                     Log.d("form2", ""+resultForm.body())
                     Log.d("form2",""+resultForm.body()?.sprites)
 
-//                    resultForm.body()
-//                            ?.let {
-//                                if(it.sprites.front_default!=null) {
-//                                    PokemonObject.formMap[resultForm.body()!!.name] = it.sprites.front_default
-//                                    Log.d("form2", it.name)
-//                                }
-//                    }
+                   resultForm.body()
+                          ?.let {
+                              if(it.sprites.front_default!=null) {
+                                  var type2 ="null"
+                                  if(it.types.size>1) {
+                                      type2 = it.types[1].type.name
+                                  }
+                                   PokemonObject.formMap[resultForm.body()!!.name] = PokemonForm(it.name,it.sprites.front_default,it.id,it.types[0].type.name,type2)
+                                   Log.d("form2", it.name)
+                               }
+                 }
 
 
                     if(i<549){
