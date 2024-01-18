@@ -2,6 +2,7 @@ package com.example.pokedex.presentation.userInterface.favourite
 import com.example.pokedex.presentation.theme.Font.Companion
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,7 @@ import androidx.navigation.NavHostController
 import com.example.pokedex.PokemonObject
 import com.example.pokedex.presentation.userInterface.HomePage.PokemonList
 import com.example.pokedex.R
+import com.example.pokedex.presentation.navigation.Route
 import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 import com.example.pokedex.presentation.searchPageViewModel
 import com.example.pokedex.presentation.theme.Font
@@ -65,6 +67,15 @@ fun Favorites(navHostController: NavHostController, viewModel: searchPageViewMod
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = Companion.rudaFontFamily
+            )
+            Spacer(modifier = Modifier.width(81.dp))
+            Image(painter = painterResource(id = R.drawable.img_filter),
+                contentDescription = "filter", modifier = Modifier
+                    .size(24.dp)
+                    .clickable {
+                        navHostController.navigate(Route.Filter.path)
+
+                    }
             )
         }
         if (pokemonsFaveList.isEmpty()) {

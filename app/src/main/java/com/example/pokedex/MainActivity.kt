@@ -21,11 +21,15 @@ object PokemonObject{
     var count = 0
 
     var filter:Boolean = false
+    var filterFaveBool :Boolean = false
     var _faveList = MutableStateFlow(ArrayList<Pokemon>())
     var faveList = _faveList.asStateFlow()
     var eveList = Array(549) {Array(3) {ArrayList<String>()} }
     var _filteredList = MutableStateFlow(ArrayList<Pokemon>())
     var filteredList = _filteredList.asStateFlow()
+
+    var _FaveFilter = MutableStateFlow(ArrayList<Pokemon>())
+    var FaveFilter = _FaveFilter.asStateFlow()
 
 
 }

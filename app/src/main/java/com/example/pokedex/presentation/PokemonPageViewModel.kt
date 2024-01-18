@@ -24,15 +24,19 @@ class searchPageViewModel : ViewModel() {
     var repository = RepositoryImpl()
 
 
-    fun getData(isFavorite: Boolean, sortOption: SortOption? = null): StateFlow<ArrayList<Pokemon>> {
+    fun getData(isFavorite: Boolean, isFavoriteFilter : Boolean): StateFlow<ArrayList<Pokemon>> {
         var list = Pokemons
-        if (isFavorite)
-        { list =PokemonsFave}
-        else if (PokemonObject.filter){
-            list = PokemonsFilter }
-Log.d("filterr",""+PokemonObject.filter)
-        // Apply sorting if a sort option is provided
-        return list as StateFlow<ArrayList<Pokemon>>
+        if (isFavorite) {
+            list = PokemonsFave
+        } else if (PokemonObject.filter) {
+            list = PokemonsFilter
+        }
+        Log.d("filterr", "" + PokemonObject.filter)
+        if (isFavoriteFilter == true)
+            list = PokemonObject.FaveFilter
+            // Apply sorting if a sort option is provided
+            return list as StateFlow<ArrayList<Pokemon>>
+
     }
 
 

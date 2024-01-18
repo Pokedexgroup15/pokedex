@@ -44,7 +44,8 @@ class ResetViewModel : ViewModel() {
         FilterPokemon().filterList(
             selectedTypes,
             selectedCatchRate,
-            selectedGeneration
+            selectedGeneration,
+            true
         )
     }
 

@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.pokedex.MainActivity
+import com.example.pokedex.PokemonObject
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.presentation.navigation.Route
 
@@ -54,7 +55,7 @@ import com.example.pokedex.presentation.searchPageViewModel
 @Composable
 fun SearchPageFun(navController: NavHostController, viewModel: searchPageViewModel) {
     var name by remember { mutableStateOf("") }
-    var Pokemons= viewModel.getData(false)
+    var Pokemons= viewModel.getData(false,PokemonObject.filterFaveBool)
     val context = LocalContext.current // Get the current context
     var searchList by remember { mutableStateOf(mutableListOf<Pokemon>()) }
 
