@@ -44,7 +44,7 @@ import com.example.pokedex.presentation.userInterface.filterPage.SortOption
 @OptIn(ExperimentalMaterial3Api::class)
 //@Preview(showBackground = true)
 @Composable
-fun Favorites(navHostController: NavHostController, viewModel: searchPageViewModel, filterViewModel: FilterViewModel) {
+fun Favorites(navHostController: NavHostController, viewModel: searchPageViewModel, filterViewModel: FilterViewModel, boolean: Boolean = PokemonObject.filterFaveBool) {
     val currentSortOption = filterViewModel.selectedSortOption.value
     val pokemonsFaveList by viewModel.PokemonsFave.collectAsState(initial = arrayListOf())
 

@@ -103,13 +103,13 @@ if(boolean ==true ) {
 
     fun filterActive(selectedTypes: MutableState<List<Int>>, selectedCatchRate: MutableState<List<String>>, selectedGeneration: MutableState<Int>):Boolean{
         if (!(selectedTypes.value.isEmpty() && selectedCatchRate.value.isEmpty() && selectedGeneration.value ==-1)) {
-            PokemonObject.filter = true
+            //PokemonObject.filter = true
             PokemonObject.filterFaveBool = true
             return true
         }
         else{
             PokemonObject.filterFaveBool = false
-            PokemonObject.filter = false
+            //PokemonObject.filter = false
 
             return true}
 

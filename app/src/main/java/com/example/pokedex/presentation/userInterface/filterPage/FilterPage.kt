@@ -319,7 +319,12 @@ fun FilterPageContent(navController: NavHostController, viewModel: FilterViewMod
                 modifier = Modifier
                     .size(36.dp)
                     .clickable {
-                        navController.navigate(Route.POKEDEX.path)
+                        if (PokemonObject.filterFaveBool == false) {
+                            navController.navigate(Route.POKEDEX.path)
+                            //PokemonObject.filterFaveBool = false
+                        }else{
+                            navController.navigate(Route.FAVORITES.path)
+                        }
                     }
             ) {
                 Icon(

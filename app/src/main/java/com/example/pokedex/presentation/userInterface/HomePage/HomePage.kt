@@ -70,12 +70,13 @@ import com.example.pokedex.presentation.serializeToJson
 
 
 @Composable
-fun homePage(navController: NavHostController, viewModel: searchPageViewModel, filterViewModel: FilterViewModel) {
+fun homePage(navController: NavHostController, viewModel: searchPageViewModel, filterViewModel: FilterViewModel,  boolean: Boolean = false) {
     //val sortedPokemons = filterViewModel.getSortedPokemonList()
     //PokemonList(navController = navController, viewModel = viewModel, pokemons = sortedPokemons, isFavorite = false)
     val currentSortOption = filterViewModel.selectedSortOption.value
 
-
+    //PokemonObject.filterFaveBool = false
+    //PokemonObject.filter = false
     Column(
         modifier = Modifier
             .fillMaxSize()

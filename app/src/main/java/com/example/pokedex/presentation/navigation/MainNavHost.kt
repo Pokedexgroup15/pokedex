@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.pokedex.PokemonObject
 import com.example.pokedex.presentation.userInterface.filterPage.ResetViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.FilterPageContent
 import com.example.pokedex.ShowcasePage
@@ -49,13 +50,13 @@ fun MainNavHost(navController: NavHostController, modifier: Modifier = Modifier,
 
 
 
-            homePage(navController,viewModel, filterviewModel)
+            homePage(navController,viewModel, filterviewModel, PokemonObject.filterFaveBool)
         }
         composable(Route.Search.path) {
             SearchPageFun(navController,viewModel )
         }
         composable(Route.FAVORITES.path) {
-           Favorites(navController, viewModel, filterviewModel)
+           Favorites(navController, viewModel, filterviewModel, PokemonObject.filterFaveBool)
         }
         composable(Route.Filter.path) {
             FilterPageContent(navController, FilterViewModel(), resetViewModel)

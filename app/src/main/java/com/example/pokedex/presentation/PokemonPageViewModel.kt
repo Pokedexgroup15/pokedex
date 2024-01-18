@@ -1,5 +1,6 @@
 package com.example.pokedex.presentation
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
@@ -44,6 +45,7 @@ class searchPageViewModel(
 
     }
 
+    @SuppressLint("SuspiciousIndentation")
     fun getData(isFavorite: Boolean, isFavoriteFilter : Boolean): StateFlow<ArrayList<Pokemon>> {
         var list = Pokemons
         if (isFavorite) {
@@ -55,12 +57,9 @@ class searchPageViewModel(
         if (isFavoriteFilter == true)
             list = PokemonObject.FaveFilter
             // Apply sorting if a sort option is provided
-            return list as StateFlow<ArrayList<Pokemon>>
+            return list
 
     }
-
-
-
 
 
 
