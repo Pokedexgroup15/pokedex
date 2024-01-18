@@ -26,7 +26,10 @@ class FilterPokemon {
                Log.d("filter", "" + PokemonObject.pokeList.value[i].name)
            }
            i++
-       }}
+       }
+            PokemonObject.count = PokemonObject.filteredList.value.size
+
+        }
 
 
 

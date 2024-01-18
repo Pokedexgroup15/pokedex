@@ -338,10 +338,10 @@ fun VersionBar(navController: NavHostController,  viewModel: searchPageViewModel
                                 Log.d("form",""+version)
                                 Log.d("form",""+PokemonObject.formMap[version])
                                 if (PokemonObject.formMap[version]!= null ) {
-                                    imageUrl = PokemonObject.formMap[version].toString()
+                                    imageUrl = PokemonObject.formMap[version]?.pictureURL.toString()
                                 }
                                 if (PokemonObject.varianceMap[version]!= null ) {
-                                    imageUrl = PokemonObject.varianceMap[version].toString()
+                                    imageUrl = PokemonObject.varianceMap[version]?.pictureURL.toString()
                                 }
 
                                     EvolutionsPicture(imageUrl)

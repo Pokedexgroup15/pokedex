@@ -26,3 +26,12 @@ data class Pokemon(
     val abilities: ArrayList<String>,
     val forms: ArrayList<String>
  )
+
+data class PokemonForm(
+    val name: String,
+    val pictureURL: String?,
+    val id: Int,
+    val type1: String,
+    val type2: String,
+
+)

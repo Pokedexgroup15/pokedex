@@ -17,6 +17,7 @@ import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.presentation.theme.PokedexTheme
 import com.example.pokedex.presentation.navigation.navStart
 import com.example.pokedex.data.local.PokemonDatabase
+import com.example.pokedex.domain.PokemonForm
 import com.example.pokedex.presentation.searchPageViewModel
 import com.google.gson.Gson
 import kotlinx.coroutines.delay
@@ -37,8 +38,8 @@ object PokemonObject{
     var _filteredList = MutableStateFlow(ArrayList<Pokemon>())
     var filteredList = _filteredList.asStateFlow()
     var abilMap =HashMap<String, String>()
-    var formMap =HashMap<String, String?>()
-    var varianceMap =HashMap<String, String?>()
+    var formMap =HashMap<String, PokemonForm>()
+    var varianceMap =HashMap<String, PokemonForm>()
     var tempEnd = 20
 
 

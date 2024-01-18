@@ -6,6 +6,7 @@ import com.example.pokedex.Gender
 import com.example.pokedex.PokemonObject
 import com.example.pokedex.data.local.PokemonDAO
 import com.example.pokedex.domain.Pokemon
+import com.example.pokedex.domain.PokemonForm
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.*
@@ -55,7 +56,9 @@ interface PokeForms{
 
 data class PokeForm(
     val sprites : sprite,
-    val name :String
+    val name :String,
+    val types:List<subType>,
+    val id: Int
 )
 
 data class PokemonEve(
@@ -203,20 +206,29 @@ class RepositoryImpl(  private val dao: PokemonDAO): ViewModel() {
             GlobalScope.launch {
                 while(i <= end) {
 
-                    while(i<=PokemonObject.tempEnd||(PokemonObject.filter&&PokemonObject.filteredList.value.size<PokemonObject.tempEnd)){
+                    while(i<=PokemonObject.tempEnd||(PokemonObject.filter&&PokemonObject.count<PokemonObject.tempEnd)){
+                        Log.d("pag"," filterSize "+PokemonObject.filteredList.value.size)
                     var j =i+10000
                     if(j<=10448){
                         val resultForm = formApi.getPokemonFormInfo(j)
                         resultForm.body()?.let {
                             if (it.sprites.front_default != null) {
-                                PokemonObject.formMap.put(it.name, it.sprites.front_default)
+                                var type2 ="null"
+                                if(it.types.size>1){
+                                    type2 = it.types[1].type.name
+                                }
+                                PokemonObject.formMap.put(it.name,PokemonForm(it.name,it.sprites.front_default,it.id,it.types[0].type.name,type2))
                             }
                         }
                         if(j<=10277) {
                             val result = quotesApi.getPokemonInfo(j)
                             result.body()?.let {
                                 if (it.sprites.other.official.frontdefault != null) {
-                                    PokemonObject.varianceMap.put(it.name, it.sprites.other.official.frontdefault)
+                                    var type2 ="null"
+                                    if(it.types.size>1){
+                                        type2 = it.types[1].type.name
+                                    }
+                                    PokemonObject.varianceMap.put(it.name, PokemonForm(it.name,it.sprites.front_default,it.id,it.types[0].type.name,type2))
                                 }
                             }
                         }
@@ -232,13 +244,13 @@ class RepositoryImpl(  private val dao: PokemonDAO): ViewModel() {
                     Log.d("form2", ""+resultForm.body())
                     Log.d("form2",""+resultForm.body()?.sprites)
 
-                    resultForm.body()
-                            ?.let {
-                                if(it.sprites.front_default!=null) {
-                                    PokemonObject.formMap[resultForm.body()!!.name] = it.sprites.front_default
-                                    Log.d("form2", it.name)
-                                }
-                    }
+//                    resultForm.body()
+//                            ?.let {
+//                                if(it.sprites.front_default!=null) {
+//                                    PokemonObject.formMap[resultForm.body()!!.name] = it.sprites.front_default
+//                                    Log.d("form2", it.name)
+//                                }
+//                    }
 
 
                     if(i<549){
@@ -384,7 +396,6 @@ class RepositoryImpl(  private val dao: PokemonDAO): ViewModel() {
                     } as ArrayList<Pokemon>
                 }}
 
-                    PokemonObject.count++
 Log.d("inf",""+i)
                     i++
                 }}
