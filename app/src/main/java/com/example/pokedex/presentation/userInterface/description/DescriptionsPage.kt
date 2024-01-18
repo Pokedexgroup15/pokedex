@@ -152,6 +152,7 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
                         .fillMaxWidth()
                         //.padding(vertical = 4.dp)
                 )
+                //ChatGPT helped with gender logic
                 val backgroundColor = when (pokemon?.genderRate?.gender) {
                     Gender.MIXED -> mixedColor
                     Gender.NONE -> genderlessColor
@@ -631,6 +632,7 @@ fun GenderIcon(
     }
 }
 
+//ChatGPT helped with gender logic
 @Composable
 fun GenderDisplay(genderRate: GenderRate) {
     Row(
