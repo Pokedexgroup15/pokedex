@@ -62,7 +62,7 @@ import com.example.pokedex.presentation.searchPageViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.FilterViewModel
 import com.example.pokedex.presentation.userInterface.filterPage.SortOption
 import androidx.compose.runtime.collectAsState
-import com.example.pokedex.PokemonObject
+import com.example.pokedex.presentation.PokemonObject
 import com.example.pokedex.data.local.LocalPokemon
 import kotlinx.coroutines.flow.sample
 import androidx.compose.ui.graphics.RectangleShape

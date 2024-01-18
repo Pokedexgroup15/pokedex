@@ -63,6 +63,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.pokedex.data.GenderRate
+import com.example.pokedex.presentation.PokemonObject
 import com.example.pokedex.presentation.navigation.Route
 import com.example.pokedex.presentation.userInterface.HomePage.EvolutionBar
 import com.example.pokedex.presentation.userInterface.HomePage.getTypeIconwithID

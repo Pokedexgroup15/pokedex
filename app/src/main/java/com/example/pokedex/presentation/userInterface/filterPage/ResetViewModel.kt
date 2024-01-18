@@ -3,7 +3,7 @@ package com.example.pokedex.presentation.userInterface.filterPage
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pokedex.PokemonObject
+import com.example.pokedex.presentation.PokemonObject
 import com.example.pokedex.domain.Pokemon
 import kotlinx.coroutines.flow.StateFlow
 import com.example.pokedex.domain.FilterPokemon

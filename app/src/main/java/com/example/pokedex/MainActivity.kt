@@ -26,28 +26,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 
 
-object PokemonObject{
-    var _pokeList = MutableStateFlow(ArrayList<Pokemon>())
-    var pokeList = _pokeList.asStateFlow()
-    var count = 0
-    var switch=false
-    var filter:Boolean = false
-    var filterFaveBool :Boolean = false
-    var _faveList = MutableStateFlow(ArrayList<Pokemon>())
-    var faveList = _faveList.asStateFlow()
-    var eveList = Array(549) {Array(3) {ArrayList<String>()} }
-    var _filteredList = MutableStateFlow(ArrayList<Pokemon>())
-    var filteredList = _filteredList.asStateFlow()
-    var abilMap =HashMap<String, String>()
-    var formMap =HashMap<String, PokemonForm>()
-    //var varianceMap =HashMap<String, PokemonForm>()
-    var tempEnd = 20
 
-    var _FaveFilter = MutableStateFlow(ArrayList<Pokemon>())
-    var FaveFilter = _FaveFilter.asStateFlow()
-
-
-}
 class MainActivity : ComponentActivity() {
  private   val database by lazy {
      Room.databaseBuilder(

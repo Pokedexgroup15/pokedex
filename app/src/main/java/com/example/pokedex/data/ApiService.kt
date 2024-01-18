@@ -3,10 +3,10 @@ package com.example.pokedex.data
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.pokedex.Gender
-import com.example.pokedex.PokemonObject
 import com.example.pokedex.data.local.PokemonDAO
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.domain.PokemonForm
+import com.example.pokedex.presentation.PokemonObject
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.*
@@ -206,7 +206,7 @@ class RepositoryImpl(  private val dao: PokemonDAO): ViewModel() {
             GlobalScope.launch {
                 while(i <= end) {
 
-                    while(i<=PokemonObject.tempEnd||(PokemonObject.filter&&PokemonObject.count<PokemonObject.tempEnd)){
+                    while(i<= PokemonObject.tempEnd||(PokemonObject.filter&&PokemonObject.count<PokemonObject.tempEnd)){
                         Log.d("pag"," filterSize "+PokemonObject.filteredList.value.size)
                     var j =i+10000
                     if(j<=10448){

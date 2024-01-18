@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.pokedex.MainActivity
-import com.example.pokedex.PokemonObject
+import com.example.pokedex.presentation.PokemonObject
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.presentation.navigation.Route
 

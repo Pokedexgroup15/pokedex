@@ -2,7 +2,7 @@ package com.example.pokedex.domain
 
 import android.util.Log
 import androidx.compose.runtime.MutableState
-import com.example.pokedex.PokemonObject
+import com.example.pokedex.presentation.PokemonObject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.take

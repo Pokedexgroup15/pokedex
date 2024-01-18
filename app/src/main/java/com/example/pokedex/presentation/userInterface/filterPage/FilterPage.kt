@@ -54,7 +54,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.pokedex.PokemonObject
+import com.example.pokedex.presentation.PokemonObject
 import com.example.pokedex.R
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.presentation.navigation.Route

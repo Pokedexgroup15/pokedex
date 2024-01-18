@@ -30,7 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.pokedex.PokemonObject
+import com.example.pokedex.presentation.PokemonObject
 import com.example.pokedex.presentation.userInterface.HomePage.PokemonList
 import com.example.pokedex.R
 import com.example.pokedex.presentation.navigation.Route

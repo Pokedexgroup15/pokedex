@@ -7,13 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import com.example.pokedex.domain.Pokemon
-import com.example.pokedex.PokemonObject
+import com.example.pokedex.presentation.PokemonObject
 import com.example.pokedex.presentation.userInterface.filterPage.SortOption
 import com.example.pokedex.data.RepositoryImpl
 import com.example.pokedex.data.local.LocalPokemon
 import com.example.pokedex.data.local.PokemonDAO
 import com.example.pokedex.data.local.PokemonDatabase
 import com.example.pokedex.deserializeFromJson
+import com.example.pokedex.domain.PokemonForm
 import kotlinx.coroutines.flow.StateFlow
 import com.example.pokedex.presentation.userInterface.filterPage.ResetViewModel
 import com.google.gson.Gson
@@ -21,12 +22,34 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 //    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+object PokemonObject{
+    var _pokeList = MutableStateFlow(ArrayList<Pokemon>())
+    var pokeList = _pokeList.asStateFlow()
+    var count = 0
+    var switch=false
+    var filter:Boolean = false
+    var filterFaveBool :Boolean = false
+    var _faveList = MutableStateFlow(ArrayList<Pokemon>())
+    var faveList = _faveList.asStateFlow()
+    var eveList = Array(549) {Array(3) {ArrayList<String>()} }
+    var _filteredList = MutableStateFlow(ArrayList<Pokemon>())
+    var filteredList = _filteredList.asStateFlow()
+    var abilMap =HashMap<String, String>()
+    var formMap =HashMap<String, PokemonForm>()
+    //var varianceMap =HashMap<String, PokemonForm>()
+    var tempEnd = 20
 
+    var _FaveFilter = MutableStateFlow(ArrayList<Pokemon>())
+    var FaveFilter = _FaveFilter.asStateFlow()
+
+
+}
 class searchPageViewModel(
     private val dao: PokemonDAO
 ) : ViewModel() {

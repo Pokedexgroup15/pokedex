@@ -3,7 +3,8 @@ package com.example.pokedex.data
 import com.example.pokedex.domain.Pokemon
 import com.example.pokedex.domain.PokemonRepository
 import com.example.pokedex.data.api.PokemonApiService
-import com.example.pokedex.PokemonObject
+import com.example.pokedex.presentation.PokemonObject
+
 
 class PokemonRepositoryImpl(private val apiService: PokemonApiService) : PokemonRepository {
     var Pokemons = PokemonObject._pokeList
