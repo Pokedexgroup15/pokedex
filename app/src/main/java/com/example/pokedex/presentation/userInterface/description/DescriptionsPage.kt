@@ -223,12 +223,12 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
 
                                     pokemon?.let {
                                         if (Favorized) {
-                                            viewModel.toggleFavourite(pokemon, Favorized)
-                                            viewModel.PokemonsFave.value.remove(it)
+                                           // viewModel.toggleFavourite(pokemon, Favorized)
+                                            viewModel.PokemonsFave.value.add(it)
 
 
                                         } else {
-                                            viewModel.toggleFavourite(pokemon, Favorized)
+                                           // viewModel.toggleFavourite(pokemon, Favorized)
                                             viewModel.PokemonsFave.value.remove(it)
 
 
