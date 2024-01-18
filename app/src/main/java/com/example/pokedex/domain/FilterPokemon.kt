@@ -56,10 +56,10 @@ class FilterPokemon {
             "ice" -> type = 2131034153
             "normal" -> type = 2131034169
             "poison" -> type = 2131034184
-            "pyschic" -> type = 2131034188
-            "rock" -> type = 2131034192
-            "steel" -> type = 2131034194
-            "water" -> type = 2131034197
+            "psychic" -> type = 2131034188
+            "rock" -> type = 2131034193
+            "steel" -> type = 2131034195
+            "water" -> type = 2131034198
 
 
         }
