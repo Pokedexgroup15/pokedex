@@ -434,8 +434,7 @@ fun growRateButton(sharedViewModel: ResetViewModel) {
             for (columnCatchRates in groupedCatchRates) {
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp, vertical = 3.dp),
+                        .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     for (catchRate in columnCatchRates) {
@@ -524,8 +523,8 @@ fun TypeButton(sharedViewModel: ResetViewModel) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 8.dp, vertical = 2.dp),// Add padding to the row itself
-                    horizontalArrangement = Arrangement.SpaceBetween // This will add equal spacing between the items
+                       // .padding(horizontal = 8.dp, vertical = 2.dp),// Add padding to the row itself
+                    ,horizontalArrangement = Arrangement.SpaceBetween // This will add equal spacing between the items
                 ) {
                     for (type in columnTypes) {
                         TypeItemButton(type, sharedViewModel) { selected ->
