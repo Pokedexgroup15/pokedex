@@ -2,6 +2,7 @@ package com.example.pokedex.presentation.userInterface.whosthat
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -77,17 +78,11 @@ fun WTPGame(navController: NavHostController, viewModel: WhosThatPokemonViewMode
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-            IconButton(onClick = {
-                navController.navigate(Route.POKEDEX.path) {
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        saveState = true
-                    }
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            }) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-            }
+
+            Icon(Icons.Default.ArrowBack, contentDescription = "Back",
+                modifier=Modifier.clickable {
+                    navController.popBackStack()
+                })
             Text(
                 text = "Who's that Pokemon?!",
                 fontFamily = Font.rudaFontFamily,

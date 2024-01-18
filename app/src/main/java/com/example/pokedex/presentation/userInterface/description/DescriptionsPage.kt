@@ -97,18 +97,13 @@ fun ShowcasePage(navController: NavHostController, viewModel: searchPageViewMode
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            IconButton(onClick = {
-                navController.navigate(Route.POKEDEX.path) {
-                    popUpTo(navController.graph.findStartDestination().id) {
 
-                        //saveState = true //This line makes all pokemon scroll state remembered.
-                    }
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            }) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-            }
+
+                Icon(Icons.Default.ArrowBack, contentDescription = "Back",
+                modifier=Modifier.clickable {
+                  navController.popBackStack()
+                })
+
 
             viewModel.getPokemon()?.let {
                 Text(
